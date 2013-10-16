@@ -173,21 +173,14 @@ classdef allo_map < matlab.mixin.Copyable % handle + copyable
         end
         
         function obj = rotate(obj,angle)
-            % previous centre
-            station_positions = zeros(length(obj.main_stations),2);
-            for i_station = 1:length(obj.main_stations)
-                station_positions(i_station,:) = obj.main_stations(i_station).draw_position;
-            end
-            rect = [min(station_positions) max(station_positions)];
-            center = .5*(rect(1:2)+rect(3:4));
-
+            center = [0,0];
             % rotation
             for i_station = 1:length(obj.main_stations)
                 distance  = obj.main_stations(i_station).draw_position - center;
                 radius    = norm(distance);
                 old_angle = atan2(distance(2),distance(1));
                 new_angle = old_angle + (pi*angle/180);
-                obj.main_stations(i_station).draw_position = center + radius * [cos(new_angle), sin(new_angle)];
+                obj.main_stations(i_station).draw_position = round(center + radius * [cos(new_angle), sin(new_angle)]);
             end
         end
         

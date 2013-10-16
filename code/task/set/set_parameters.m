@@ -8,7 +8,7 @@ parameters.debug_mapload = 0;
 %% flag
     % permanent
 parameters.flag_audio   = 0;            % use audio
-parameters.flag_mail    = 1;            % alert with mails (for each mode)
+parameters.flag_mail    = 0;            % alert with mails (for each mode)
 
 parameters.flag_forward = 0;            % forward is an option
 parameters.flag_arrowthicks  = 1;       % forward is thicker
@@ -33,7 +33,7 @@ parameters.flag_disabledchanges = nan;  % switching lines requires an extra acti
 
 %% run
 parameters.run_by_min = 1;
-parameters.run_min    = 50;
+parameters.run_min    = 5;
 parameters.run_by_blocks = 0;
 parameters.run_blocks = 70;
 parameters.run_by_trials = 0;

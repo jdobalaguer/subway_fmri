@@ -1,4 +1,4 @@
-mapfile = 'allmap_10';
+mapfile = 'allmap_';
 
 % angles
 u_angle = [90,180, 270];
