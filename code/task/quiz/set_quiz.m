@@ -47,7 +47,7 @@ if do_quiz
             end
             % set stations
             tmp_dists = map.dists.exchanges_sublines(tmp_instations,tmp_tostations);
-            [i_tmpinstations,i_tmptostations] = tools_setstations(map.dists.exchanges_sublines,parameters,ptb,i_block,j_trial);
+            [i_tmpinstations,i_tmptostations] = tools_setstations(tmp_dists,parameters,ptb,i_block,j_trial);
             in_station = tmp_instations(i_tmpinstations);
             to_station = tmp_tostations(i_tmptostations);
             % in_subline

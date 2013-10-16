@@ -17,6 +17,7 @@ parameters.flag_optionscross = 1;       % use a cross form
 parameters.flag_randomize = 0;          % shuffle options (doesn't make sense with the cross)
 parameters.flag_showsublines = 1;       % show subline indicators under the labels
 parameters.flag_showdisabled = 1;       % show arrows even when options are disabled (in change points)
+parameters.flag_incdifficulty = 0;      % increasing difficulty over time (both for quiz and task)
 % variable
 parameters.flag_timelimit  = 0;         % limited response time
 parameters.flag_timechange = 1;         % waiting time when switching sublines
