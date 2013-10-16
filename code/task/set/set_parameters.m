@@ -7,8 +7,8 @@ parameters.debug_mapload = 0;
 
 %% flag
     % permanent
-parameters.flag_audio   = 1;            % use audio
-parameters.flag_mail    = 0;            % alert with mails (for each mode)
+parameters.flag_audio   = 0;            % use audio
+parameters.flag_mail    = 1;            % alert with mails (for each mode)
 
 parameters.flag_forward = 0;            % forward is an option
 parameters.flag_arrowthicks  = 1;       % forward is thicker
@@ -20,7 +20,7 @@ parameters.flag_showdisabled = 1;       % show arrows even when options are disa
 % variable
 parameters.flag_timelimit  = 0;         % limited response time
 parameters.flag_timechange = 1;         % waiting time when switching sublines
-parameters.flag_quiz = 0;               % have quizes between blocks
+parameters.flag_quiz = 1;               % have quizes between blocks
 parameters.flag_enum = 0;               % have enumerations between blocks
 
 %% session/modes
@@ -53,10 +53,10 @@ parameters.enum_nbsublines = 2;
 parameters.enum_nbstations = 5;
 
 %% quiz
-parameters.quiz_min    = (.55:.05:1)*parameters.run_min;
-parameters.quiz_blocks = (.55:.05:1)*parameters.run_blocks;
-parameters.quiz_trials = (.55:.05:1)*parameters.run_trials;
-parameters.quiz_nbquestions = 15;
+parameters.quiz_min    = (.55:.10:1)*parameters.run_min;
+parameters.quiz_blocks = (.55:.10:1)*parameters.run_blocks;
+parameters.quiz_trials = (.55:.10:1)*parameters.run_trials;
+parameters.quiz_nbquestions = 10;
 
 %% reward
 parameters.reward_high = 5;
