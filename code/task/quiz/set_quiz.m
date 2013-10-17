@@ -5,22 +5,22 @@ do_quiz = 1;
 
 %% QUIZ TIME?
 % minutes counter
-if i_quiz > length(parameters.quiz_min) || parameters.run_by_min
+if parameters.run_by_min
     gs = GetSecs - ptb.time_start;
     gm = gs/60;
-    if parameters.quiz_min(i_quiz) > gm
+    if i_quiz > length(parameters.quiz_min) || parameters.quiz_min(i_quiz) > gm
         do_quiz = 0;
     end
 end    
 % block counter
-if i_quiz > length(parameters.quiz_blocks) || parameters.run_by_blocks
-    if parameters.quiz_blocks(i_quiz) > i_block
+if parameters.run_by_blocks
+    if i_quiz > length(parameters.quiz_blocks) || parameters.quiz_blocks(i_quiz) > i_block
         do_quiz = 0;
     end
 end
 % trial counter
-if i_quiz > length(parameters.quiz_trials) || parameters.run_by_trials
-    if parameters.quiz_trials(i_quiz) > j_trial
+if parameters.run_by_trials
+    if i_quiz > length(parameters.quiz_trials) || parameters.quiz_trials(parameters.quiz_trials) > j_trial
         do_quiz = 0;
     end
 end
@@ -38,16 +38,16 @@ if do_quiz
         ok = 0;
         while ~ok
             % in_station (half exchange, half regular)
-            if mod(i_trial,2);  tmp_instations = participant.quiz_regular (randi(length(participant.quiz_regular)));  % regular
-            else                tmp_instations = participant.quiz_exchange(randi(length(participant.quiz_exchange))); % exchange
+            if mod(i_trial,2);  tmp_instations = participant.quiz_regular;  % regular
+            else                tmp_instations = participant.quiz_exchange; % exchange
             end
             % to_station
-            if mod(i_trial,2);  tmp_tostations = participant.quiz_regular (randi(length(participant.quiz_regular)));  % regular
-            else                tmp_tostations = participant.quiz_exchange(randi(length(participant.quiz_exchange))); % exchange
+            if mod(i_trial,4)<2;  tmp_tostations = participant.quiz_regular;  % regular
+            else                  tmp_tostations = participant.quiz_exchange; % exchange
             end
             % set stations
             tmp_dists = map.dists.exchanges_sublines(tmp_instations,tmp_tostations);
-            [i_tmpinstations,i_tmptostations] = tools_setstations(tmp_dists,parameters,ptb,i_block,j_trial);
+            [i_tmpinstations,i_tmptostations] = tools_setstations(tmp_dists,parameters,participant,ptb,i_block,j_trial,1);
             in_station = tmp_instations(i_tmpinstations);
             to_station = tmp_tostations(i_tmptostations);
             % in_subline
