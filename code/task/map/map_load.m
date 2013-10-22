@@ -16,6 +16,8 @@ if parameters.debug_mapload
     else
         load(['donefiles',   filesep,    'allmap_',participant.name,'.mat']);
     end
+    % resize
+    map_resize;
     return;
 end
 

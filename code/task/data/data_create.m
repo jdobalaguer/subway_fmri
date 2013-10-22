@@ -58,6 +58,7 @@ data.resp_station = [];
 data.resp_steptime = [];
 data.resp_dist    = [];
 data.resp_cor     = [];
+data.resp_maptime  = [];
 
 % avatar
 data.avatar_startstation = [];

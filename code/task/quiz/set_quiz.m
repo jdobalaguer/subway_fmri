@@ -92,7 +92,7 @@ if do_quiz
             % trial screen
             ptb_screen_trial;
             % get response
-            ptb_resp_kb;
+            ptb_resp_kbtrial;
             % wait for exchange
             ptb_screen_wait;
         end
