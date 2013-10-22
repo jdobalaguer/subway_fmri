@@ -21,6 +21,8 @@ enum_create;
 try
     % initialise psychtoolbox
     ptb_start;
+    % resize map
+    map_resize;
     % show introduction screen
     ptb_screen_intro;
     
@@ -37,6 +39,9 @@ try
         ptb_screen_block;
         
         %% TRIAL
+        % show map
+        ptb_screen_map;
+        % trial loop
         while (~end_of_task) && (~end_of_block)
             % new trial
             set_trial;
@@ -44,7 +49,7 @@ try
                 % trial screen
                 ptb_screen_trial;
                 % get response
-                ptb_resp_kb;
+                ptb_resp_kbtrial;
                 % wait for exchange
                 ptb_screen_wait;
             end
@@ -60,7 +65,7 @@ try
         end
         
         % clean
-        clear i_trial end_of_trial end_of_block options_enabled options_sublines options_stations options_dists options_symbols options_thicks options_sizes nb_options;
+        clear i_trial end_of_trial end_of_block options_enabled options_sublines options_stations options_dists options_symbols options_thicks options_sizes nb_options tmp_maptime;
         
         % block screen
         ptb_screen_blockend;

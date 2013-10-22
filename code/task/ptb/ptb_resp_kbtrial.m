@@ -45,6 +45,10 @@ resp.station = nan;
 resp.steptime = nan;
 resp.dist = nan;
 resp.cor = nan;
+resp.maptime = nan;
+if exist('tmp_maptime','var')
+    resp.maptime = tmp_maptime;
+end
 
 % press key
 while ~resp.bool

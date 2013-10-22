@@ -31,8 +31,6 @@ function values = plot_quiz_exch()
                     randv(end+1) = sum(allresults.trial_quiz.resp_optionsdists(:,i_trial)==nanmin(allresults.trial_quiz.resp_optionsdists(:,i_trial))); % good options
                     randv(end)   = randv(end) / allresults.trial_quiz.resp_nboptions(i_trial);                                                          % over total options
                 end
-                size(perfo)
-                size(randv)
                 value(i_participant, toexchange+1) = mean(perfo./randv);
             end
         end

@@ -43,6 +43,7 @@ data.resp_station(end+1)    = resp.station;
 data.resp_steptime(end+1)   = resp.steptime;
 data.resp_dist(end+1)       = resp.dist;
 data.resp_cor(end+1)        = resp.cor;
+data.resp_maptime(end+1)    = resp.maptime;
 
 % avatar
 data.avatar_startstation(end+1)   = map.avatar.start_station;

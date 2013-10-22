@@ -5,8 +5,7 @@ parameters.debug_subject = 1;
 parameters.debug_preload = '';
 parameters.debug_mapload = 0;
 
-%% flag
-    % permanent
+%% flags
 parameters.flag_audio   = 0;            % use audio
 parameters.flag_mail    = 0;            % alert with mails (for each mode)
 
@@ -17,10 +16,9 @@ parameters.flag_optionscross = 1;       % use a cross form
 parameters.flag_randomize = 0;          % shuffle options (doesn't make sense with the cross)
 parameters.flag_showsublines = 1;       % show subline indicators under the labels
 parameters.flag_showdisabled = 1;       % show arrows even when options are disabled (in change points)
-parameters.flag_tasksel = 'home';       % increasing difficulty over time (both for quiz and task)
-parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task)
-                                        % 'incr', 'home', 'rand'
-% variable
+parameters.flag_showmap = 1;            % show map at the beginning of each trial
+parameters.flag_tasksel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
+parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_timelimit  = 0;         % limited response time
 parameters.flag_timechange = 1;         % waiting time when switching sublines
 parameters.flag_quiz = 1;               % have quizes between blocks
@@ -48,6 +46,11 @@ parameters.run_trials = 1000;
     % if inf, prob is always 0
 parameters.stop_power = 0.5;
 
+
+%% map
+parameters.map_size  = [1080,720];
+parameters.map_thick = 7;
+
 %% enum
 parameters.enum_min    = (.05:.05:.5)*parameters.run_min;
 parameters.enum_blocks = (.05:.05:.5)*parameters.run_blocks;
@@ -56,9 +59,9 @@ parameters.enum_nbsublines = 2;
 parameters.enum_nbstations = 5;
 
 %% quiz
-parameters.quiz_min    = (.55:.10:1)*parameters.run_min;
-parameters.quiz_blocks = (.55:.10:1)*parameters.run_blocks;
-parameters.quiz_trials = (.55:.10:1)*parameters.run_trials;
+parameters.quiz_min    = (.1:.1:1)*parameters.run_min;
+parameters.quiz_blocks = (.1:.1:1)*parameters.run_blocks;
+parameters.quiz_trials = (.1:.1:1)*parameters.run_trials;
 parameters.quiz_nbquestions = 10;
 
 %% reward
@@ -69,6 +72,7 @@ parameters.reward_prop = 0.5;
 %% screen times
 parameters.time_response = 3;
 parameters.time_exchange = 1;
+parameters.time_map      = 10;
 
 %% screen structs
 %parameters.screen_rect   = [0,0,1080,810];
