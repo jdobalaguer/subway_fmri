@@ -12,33 +12,33 @@ parameters.flag_mail    = 0;            % alert with mails (for each mode)
 parameters.flag_forward = 0;            % forward is an option
 parameters.flag_arrowthicks  = 1;       % forward is thicker
 parameters.flag_arrowsizes  = 1;        % forward is bigger
-parameters.flag_optionscross = 1;       % use a cross form
-parameters.flag_randomize = 0;          % shuffle options (doesn't make sense with the cross)
 parameters.flag_showsublines = 1;       % show subline indicators under the labels
-parameters.flag_showdisabled = 1;       % show arrows even when options are disabled (in change points)
-parameters.flag_showmap = 1;            % show map at the beginning of each trial
 parameters.flag_tasksel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_timelimit  = 0;         % limited response time
 parameters.flag_timechange = 1;         % waiting time when switching sublines
-parameters.flag_quiz = 1;               % have quizes between blocks
 parameters.flag_enum = 0;               % have enumerations between blocks
 
 %% session/modes
-parameters.session = 1;                 % which session (defines the different modes in set_mode)
-parameters.mode = 0;
+parameters.session = 'debug';           % which session (defines the different modes in set_mode)
+parameters.mode = {};
+parameters.flag_blackandwhite = nan;    % identify sublines with different colours
+parameters.flag_showmap = nan;          % show map at the beginning of each trial
+parameters.flag_quiz = nan;             % have quizes between blocks
+parameters.flag_disabledchanges = nan;  % switching lines requires an extra action
+parameters.flag_showdisabled = nan;     % show arrows even when options are disabled (in change points)
 parameters.flag_stopprob = nan;         % stochastic probability of stopping after optimal nb of steps
 parameters.flag_showreward = nan;       % use rewards for each journey
-parameters.flag_blackandwhite = nan;    % identify sublines with different colours
-parameters.flag_disabledchanges = nan;  % switching lines requires an extra action
+parameters.flag_jittering = nan;        % jittering wait between trials
+parameters.flag_scanner = nan;          % interaction with fmri scanner
 
 %% run
-parameters.run_by_min = 1;
-parameters.run_min    = 45;
+parameters.run_by_min = 0;
+parameters.run_min    = nan;
 parameters.run_by_blocks = 0;
-parameters.run_blocks = 70;
+parameters.run_blocks = nan;
 parameters.run_by_trials = 0;
-parameters.run_trials = 1000;
+parameters.run_trials = nan;
 
 %% stop
     % needs to be >0
@@ -46,22 +46,21 @@ parameters.run_trials = 1000;
     % if inf, prob is always 0
 parameters.stop_power = 0.5;
 
-
 %% map
 parameters.map_size  = [1080,720];
 parameters.map_thick = 7;
 
 %% enum
-parameters.enum_min    = (.05:.05:.5)*parameters.run_min;
-parameters.enum_blocks = (.05:.05:.5)*parameters.run_blocks;
-parameters.enum_trials = (.05:.05:.5)*parameters.run_trials;
+parameters.enum_rmin    = (.05:.05:.5);
+parameters.enum_rblocks = (.05:.05:.5);
+parameters.enum_rtrials = (.05:.05:.5);
 parameters.enum_nbsublines = 2;
 parameters.enum_nbstations = 5;
 
 %% quiz
-parameters.quiz_min    = (.1:.1:1)*parameters.run_min;
-parameters.quiz_blocks = (.1:.1:1)*parameters.run_blocks;
-parameters.quiz_trials = (.1:.1:1)*parameters.run_trials;
+parameters.quiz_rmin    = (.1:.1:1);
+parameters.quiz_rblocks = (.1:.1:1);
+parameters.quiz_rtrials = (.1:.1:1);
 parameters.quiz_nbquestions = 10;
 
 %% reward
@@ -73,6 +72,13 @@ parameters.reward_prop = 0.5;
 parameters.time_response = 3;
 parameters.time_exchange = 1;
 parameters.time_map      = 10;
+
+%% response buttons
+parameters.resp_kbadmin   = 1;
+parameters.resp_kbcross   = 1;
+parameters.resp_kbline    = 1;
+parameters.resp_mouse     = 1;
+parameters.resp_buttonbox = 0;
 
 %% screen structs
 %parameters.screen_rect   = [0,0,1080,810];
@@ -138,68 +144,33 @@ parameters.screen_optionflags.exchange_size = 0.8;
 parameters.screen_optionflags.backward_size = 0.6;
 
     % cross options
-parameters.screen_optioncrossstation = struct();
-parameters.screen_optioncrossstation.labeldy = 20;
-parameters.screen_optioncrossstation.labelfontcolor = [128,128,128];
-parameters.screen_optioncrossstation.labelfontsize  = 20;
-parameters.screen_optioncrossstation.labelfontname  = 'Arial';
-parameters.screen_optioncrossstation.labelstr = 'exchange for';
-parameters.screen_optioncrossstation.boxcolorin = parameters.screen_bg_color;
-parameters.screen_optioncrossstation.boxcolorout = [0,0,0];
-parameters.screen_optioncrossstation.boxthick = 2;
-parameters.screen_optioncrossstation.boxround = 0.3;
-parameters.screen_optioncrossstation.boxdx = 135;
-parameters.screen_optioncrossstation.boxdy = 120;
-parameters.screen_optioncrossstation.stationstr = ' ';
-parameters.screen_optioncrossstation.stationry = 0.8;
-parameters.screen_optioncrossstation.stationfontcolor = [0,0,0];
-parameters.screen_optioncrossstation.stationfontsize  = 32;
-parameters.screen_optioncrossstation.stationfontname  = 'Arial';
+parameters.screen_crossstation = struct();
+parameters.screen_crossstation.labeldy = 20;
+parameters.screen_crossstation.labelfontcolor = [128,128,128];
+parameters.screen_crossstation.labelfontsize  = 20;
+parameters.screen_crossstation.labelfontname  = 'Arial';
+parameters.screen_crossstation.labelstr = 'exchange for';
+parameters.screen_crossstation.boxcolorin = parameters.screen_bg_color;
+parameters.screen_crossstation.boxcolorout = [0,0,0];
+parameters.screen_crossstation.boxthick = 2;
+parameters.screen_crossstation.boxround = 0.3;
+parameters.screen_crossstation.boxdx = 135;
+parameters.screen_crossstation.boxdy = 120;
+parameters.screen_crossstation.stationstr = ' ';
+parameters.screen_crossstation.stationry = 0.8;
+parameters.screen_crossstation.stationfontcolor = [0,0,0];
+parameters.screen_crossstation.stationfontsize  = 32;
+parameters.screen_crossstation.stationfontname  = 'Arial';
 
-parameters.screen_optionscross.labeldy = 10;
-parameters.screen_optionscross.nb = 4;
-parameters.screen_optionscross.sx = 60;
-parameters.screen_optionscross.dx = 80;
-parameters.screen_optionscross.ry = parameters.screen_optioncrossstation.stationry;
-parameters.screen_optionscross.keynames = {'RightArrow','UpArrow','LeftArrow','DownArrow'};
-parameters.screen_optionscross.exitkbname = 'ESCAPE';
-parameters.screen_optionscross.enablekbname = 'SPACE';
-parameters.screen_optionscross.fontcolor = [0,0,0];
-parameters.screen_optionscross.fontbgcolor = [0,0,0,0];
-parameters.screen_optionscross.fontsize  = 20;
-parameters.screen_optionscross.fontname  = 'Arial';
-
-    % line options
-parameters.screen_optionlinestation = struct();
-parameters.screen_optionlinestation.labeldy = 20;
-parameters.screen_optionlinestation.labelfontcolor = [128,128,128];
-parameters.screen_optionlinestation.labelfontsize  = 20;
-parameters.screen_optionlinestation.labelfontname  = 'Arial';
-parameters.screen_optionlinestation.labelstr = 'exchange for';
-parameters.screen_optionlinestation.boxcolorin = parameters.screen_bg_color;
-parameters.screen_optionlinestation.boxcolorout = [0,0,0];
-parameters.screen_optionlinestation.boxthick = 2;
-parameters.screen_optionlinestation.boxround = 1;
-parameters.screen_optionlinestation.boxdx = 350;
-parameters.screen_optionlinestation.boxdy = 50;
-parameters.screen_optionlinestation.stationstr = ' ';
-parameters.screen_optionlinestation.stationry = 0.8;
-parameters.screen_optionlinestation.stationfontcolor = [0,0,0];
-parameters.screen_optionlinestation.stationfontsize  = 32;
-parameters.screen_optionlinestation.stationfontname  = 'Arial';
-
-parameters.screen_optionsline.labeldy = 10;
-parameters.screen_optionsline.nb = 6;
-parameters.screen_optionsline.sx = 60;
-parameters.screen_optionsline.dx = 30;
-parameters.screen_optionsline.ry = parameters.screen_optionlinestation.stationry;
-parameters.screen_optionsline.keynames = {'X','C','V','B','N','M'};
-parameters.screen_optionsline.exitkbname = 'ESCAPE';
-parameters.screen_optionsline.enablekbname = 'SPACE';
-parameters.screen_optionsline.fontcolor = [0,0,0];
-parameters.screen_optionsline.fontbgcolor = [0,0,0,0];
-parameters.screen_optionsline.fontsize  = 20;
-parameters.screen_optionsline.fontname  = 'Arial';
+parameters.screen_cross.labeldy = 10;
+parameters.screen_cross.nb = 4;
+parameters.screen_cross.sx = 60;
+parameters.screen_cross.dx = 80;
+parameters.screen_cross.ry = parameters.screen_crossstation.stationry;
+parameters.screen_cross.fontcolor = [0,0,0];
+parameters.screen_cross.fontbgcolor = [0,0,0,0];
+parameters.screen_cross.fontsize  = 20;
+parameters.screen_cross.fontname  = 'Arial';
 
     % waiting screen
 parameters.screen_wait = struct();
@@ -226,4 +197,3 @@ parameters.screen_list.box_prx = 0.9;
 parameters.screen_list.box_pry = 0.5;
 parameters.screen_list.box_drx = 0.15;
 parameters.screen_list.box_dry = 0.8;
-parameters.screen_list.exitkbname = 'ESCAPE';

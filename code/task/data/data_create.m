@@ -12,8 +12,7 @@ data = struct();
 % experiment
 data.exp_sub = [];
 data.exp_map = [];
-data.exp_session = [];
-data.exp_mode = [];
+data.exp_session = {};
 data.exp_block = [];
 data.exp_trial = [];
 data.exp_jtrial = [];
@@ -26,8 +25,6 @@ data.flag_mail          = [];
 data.flag_forward       = [];
 data.flag_arrowthicks   = [];
 data.flag_arrowsizes    = [];
-data.flag_optionscross  = [];
-data.flag_randomize     = [];
 data.flag_showsublines  = [];
 data.flag_timelimit     = [];
 data.flag_timechange    = [];
@@ -44,15 +41,9 @@ data.resp_gs      = [];
 data.resp_rt      = [];
 data.resp_option  = [];
 data.resp_nboptions = [];
-if parameters.flag_optionscross
-    data.resp_optionssublines = nan(parameters.screen_optionscross.nb,0);
-    data.resp_optionsstations = nan(parameters.screen_optionscross.nb,0);
-    data.resp_optionsdists    = nan(parameters.screen_optionscross.nb,0);
-else
-    data.resp_optionssublines = nan(parameters.screen_optionsline.nb,0);
-    data.resp_optionsstations = nan(parameters.screen_optionsline.nb,0);
-    data.resp_optionsdists    = nan(parameters.screen_optionsline.nb,0);
-end
+data.resp_optionssublines = nan(parameters.screen_cross.nb,0);
+data.resp_optionsstations = nan(parameters.screen_cross.nb,0);
+data.resp_optionsdists    = nan(parameters.screen_cross.nb,0);
 data.resp_subline = [];
 data.resp_station = [];
 data.resp_steptime = [];

@@ -8,13 +8,6 @@ function ptb_screen_symbol(w,symbol,color,nx,sx,ny,arrow_thick)
             ny1 = ny - .5*sx;
             ny2 = ny + .5*sx;
             Screen(w, 'FillOval',color,[nx1,ny1,nx2,ny2]);
-        case 'S'
-            %% SQUARE
-            nx1 = nx - .5*sx;
-            nx2 = nx + .5*sx;
-            ny1 = ny - .5*sx;
-            ny2 = ny + .5*sx;
-            Screen(w, 'FillRect',color,[nx1,ny1,nx2,ny2]);
         case '*'
             %% STAR
             nb_spikes = 5;
@@ -35,7 +28,7 @@ function ptb_screen_symbol(w,symbol,color,nx,sx,ny,arrow_thick)
             y(2:2:(2*nb_spikes)) = y_in;
             % draw star
             Screen(w, 'FillPoly', color,[x;y]');
-        case 'L'
+        case 'W'
             %% LEFT ARROW
             % create arrow points
             t = - pi/6 + linspace(0,2*pi,4) + pi;
@@ -61,7 +54,7 @@ function ptb_screen_symbol(w,symbol,color,nx,sx,ny,arrow_thick)
                 tmp_y2 = y(i_t) + .5*arrow_thick;
                 Screen(w, 'FillOval', color,[tmp_x1,tmp_y1,tmp_x2,tmp_y2]);
             end
-        case 'R'
+        case 'E'
             %% RIGHT ARROW
             % create arrow points
             t = - pi/6 + linspace(0,2*pi,4);
@@ -87,7 +80,7 @@ function ptb_screen_symbol(w,symbol,color,nx,sx,ny,arrow_thick)
                 tmp_y2 = y(i_t) + .5*arrow_thick;
                 Screen(w, 'FillOval', color,[tmp_x1,tmp_y1,tmp_x2,tmp_y2]);
             end
-        case 'U'
+        case 'N'
             %% UP ARROW
             % create arrow points
             t = - pi/6 + linspace(0,2*pi,4) - pi/2;
@@ -113,7 +106,7 @@ function ptb_screen_symbol(w,symbol,color,nx,sx,ny,arrow_thick)
                 tmp_y2 = y(i_t) + .5*arrow_thick;
                 Screen(w, 'FillOval', color,[tmp_x1,tmp_y1,tmp_x2,tmp_y2]);
             end
-        case 'D'
+        case 'S'
             %% DOWN ARROW
             % create arrow points
             t = - pi/6 + linspace(0,2*pi,4) + pi/2;

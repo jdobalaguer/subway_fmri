@@ -120,6 +120,7 @@ end
 % clean
 clear gs gm;
 clear do_quiz;
+clear tmp_dists;
 clear tmp_block;
 clear ok questions;
 clear i_station tmp_regular tmp_exchange;

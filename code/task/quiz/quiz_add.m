@@ -1,5 +1,9 @@
 if ~parameters.debug_subject; return; end
 
+if ~exist('quiz','var')
+    quiz_create;
+end
+
 % exp
 quiz.exp_sub(end+1)   = participant.id;
 quiz.exp_map(end+1)   = map.id;

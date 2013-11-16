@@ -14,8 +14,6 @@ map_load;
 
 %% CREATE
 data_create;
-quiz_create;
-enum_create;
 
 %% TASK
 try
@@ -32,6 +30,7 @@ try
         % new block
         set_block;
         % modes
+        set_session;
         set_mode;
         % restart map
         map_reset;

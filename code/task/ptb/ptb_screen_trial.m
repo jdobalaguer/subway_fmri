@@ -60,11 +60,7 @@ end
 %% Set available options
 if ~end_of_trial
     % number of options
-    if parameters.flag_optionscross
-        nb_options = parameters.screen_optionscross.nb;
-    else
-        nb_options = parameters.screen_optionsline.nb;
-    end
+    nb_options = parameters.screen_cross.nb;
     % sublines
     options_sublines = map.links(map.avatar.in_station,:);
     options_sublines(~options_sublines) = [];
@@ -95,13 +91,13 @@ if ~end_of_trial
             tmp_thispos = map.stations(map.avatar.in_station).position;
             tmp_step    = tmp_nextpos-tmp_thispos;
             if      all(tmp_step == [+1,0])
-                options_symbols(i_options) = 'R';
+                options_symbols(i_options) = 'E';
             elseif  all(tmp_step == [-1,0])
-                options_symbols(i_options) = 'L';
+                options_symbols(i_options) = 'W';
             elseif  all(tmp_step == [0,+1])
-                options_symbols(i_options) = 'D';
+                options_symbols(i_options) = 'S';
             elseif  all(tmp_step == [0,-1])
-                options_symbols(i_options) = 'U';
+                options_symbols(i_options) = 'N';
             else
                 error('ptb_screen_trial: error. step is not a cardinal');
             end
@@ -112,7 +108,6 @@ if ~end_of_trial
     options_sizes(1:nb_options)  = parameters.screen_optionflags.exchange_size;
     % modifications
         % reorder if cross options
-    if parameters.flag_optionscross
         new_optionsenabled  = zeros(1,nb_options);
         new_optionssublines = zeros(1,nb_options);
         new_optionsstations = zeros(1,nb_options);
@@ -121,13 +116,13 @@ if ~end_of_trial
         for i_options = 1:nb_options
             if options_enabled(i_options)
                 switch options_symbols(i_options)
-                    case 'R'
+                    case 'W'
                         to_option = 1;
-                    case 'U'
+                    case 'N'
                         to_option = 2;
-                    case 'L'
+                    case 'S'
                         to_option = 3;
-                    case 'D'
+                    case 'E'
                         to_option = 4;
                 end
                 new_optionsenabled(to_option)  = options_enabled(i_options);
@@ -142,18 +137,6 @@ if ~end_of_trial
         options_stations = new_optionsstations;
         options_dists    = new_optionsdists;
         options_symbols  = new_optionssymbols;
-    end
-        % randomise
-    if parameters.flag_randomize
-        i_options = randperm(nb_options);
-        options_enabled  = options_enabled(i_options);
-        options_sublines = options_sublines(i_options);
-        options_stations = options_stations(i_options);
-        options_dists    = options_dists(i_options);
-        options_symbols  = options_symbols(i_options);
-        options_thicks   = options_thicks(i_options);
-        options_sizes    = options_sizes(i_options);
-    end
         % thicks
     if parameters.flag_arrowthicks && i_trial>1 && (~exist('do_quiz','var') || ~do_quiz)
             % forward
@@ -214,26 +197,16 @@ if ~end_of_trial
 end
 
 %% Draw options
-if parameters.flag_optionscross
-    % option frame
-    ptb_screen_station(ptb,parameters.screen_optioncrossstation,[]);
-    % tmp values
-    tmp_nb  = 4;
-    tmp_sx  = parameters.screen_optionscross.sx;
-    tmp_dx  = parameters.screen_optionscross.dx;
-    tmp_nxs = ptb.screen_center(1)                                                          + .5 * cos(-pi*[0:.5:1.5]) *(tmp_sx+tmp_dx); % x positions
-    tmp_nys  = ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_optionscross.ry   + .5 * sin(-pi*[0:.5:1.5]) *(tmp_sx+tmp_dx); % y positions
-else
-    % option frame
-    ptb_screen_station(ptb,parameters.screen_optionlinestation,[]);
-    % tmp values
-    tmp_nb  = nb_options;
-    tmp_sx  = parameters.screen_optionsline.sx;
-    tmp_dx  = parameters.screen_optionsline.dx;
-    tmp_nxs = ptb.screen_center(1) + .5 * ((1-tmp_nb):2:(tmp_nb-1))*(tmp_sx+tmp_dx); % x positions
-    tmp_nys  = ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_optionsline.ry * ones(1,tmp_nb);
-end
-    % draw selected option
+% option frame
+ptb_screen_station(ptb,parameters.screen_crossstation,[]);
+% tmp values
+tmp_nb  = 4;
+tmp_sx  = parameters.screen_cross.sx;
+tmp_dx  = parameters.screen_cross.dx;
+tmp_nxs = ptb.screen_center(1)                                                  + .5 * cos(-pi*[1,0.5,1.5,0]) *(tmp_sx+tmp_dx); % x positions
+tmp_nys = ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_cross.ry   + .5 * sin(-pi*[1,0.5,1.5,0]) *(tmp_sx+tmp_dx); % y positions
+
+% draw selected option
 if end_of_trial
     ptb_screen_symbol(  ptb.screen_w,...
                         '*',...
@@ -243,9 +216,9 @@ if end_of_trial
                         tmp_nys(resp.option));
 end
     % draw options
-Screen(ptb.screen_w, 'TextFont',            parameters.screen_optionsline.fontname);
-Screen(ptb.screen_w, 'TextSize',            parameters.screen_optionsline.fontsize);
-Screen(ptb.screen_w, 'TextBackgroundColor', parameters.screen_optionsline.fontbgcolor);
+Screen(ptb.screen_w, 'TextFont',            parameters.screen_cross.fontname);
+Screen(ptb.screen_w, 'TextSize',            parameters.screen_cross.fontsize);
+Screen(ptb.screen_w, 'TextBackgroundColor', parameters.screen_cross.fontbgcolor);
 for i_options = 1:tmp_nb
     if options_enabled(i_options)
         % set option
@@ -256,38 +229,20 @@ for i_options = 1:tmp_nb
         else
             tmp_color = map.sublines(options_sublines(i_options)).color;
         end
-        if parameters.flag_optionscross
-            tmp_textcolor = parameters.screen_optionscross.fontcolor;
-            tmp_keyname   = parameters.screen_optionscross.keynames{i_options};
-        else
-            tmp_textcolor = parameters.screen_optionsline.fontcolor;
-            tmp_keyname   = parameters.screen_optionsline.keynames{i_options};
-        end
+        tmp_textcolor = parameters.screen_cross.fontcolor;
     else
         if options_sublines(i_options) && parameters.flag_showdisabled
             % disabled option
             tmp_symbol = options_symbols(i_options);
             tmp_thick  = options_thicks(i_options);
             tmp_color = [223,223,223];
-            if parameters.flag_optionscross
-                tmp_textcolor = parameters.screen_optionscross.fontcolor;
-                tmp_keyname   = parameters.screen_optionscross.keynames{i_options};
-            else
-                tmp_textcolor = parameters.screen_optionsline.fontcolor;
-                tmp_keyname   = parameters.screen_optionsline.keynames{i_options};
-            end
+            tmp_textcolor = parameters.screen_cross.fontcolor;
         else
             % no option
             tmp_symbol = 'O';
             tmp_thick  = options_thicks(i_options);
             tmp_color = [223,223,223];
-            if parameters.flag_optionscross
-                tmp_textcolor = parameters.screen_optionscross.fontcolor;
-                tmp_keyname   = parameters.screen_optionscross.keynames{i_options};
-            else
-                tmp_textcolor = parameters.screen_optionsline.fontcolor;
-                tmp_keyname   = parameters.screen_optionsline.keynames{i_options};
-            end
+            tmp_textcolor = parameters.screen_cross.fontcolor;
         end
     end
     % draw symbol

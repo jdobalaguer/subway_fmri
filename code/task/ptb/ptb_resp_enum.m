@@ -1,6 +1,6 @@
 
-
-resp.bool           = nan;
+%% build response struct
+resp.bool           = 0;
 resp.gs             = nan;
 resp.rt             = nan;
 resp.resp_istation  = nan;
@@ -12,33 +12,20 @@ resp.in_name        = nan;
 resp.distin         = nan;
 resp.cor            = nan;
 
-while isnan(resp.bool)
+%% press key
+while ~resp.bool
+    tmp_gs = GetSecs();
+    
     % press
-    ptb.mouse_buttons = 0;
-    kdown = 0;
-    while ~any(ptb.mouse_buttons) && ~kdown
-        [ptb.mouse_x,ptb.mouse_y,ptb.mouse_buttons] = GetMouse;
-        [kdown,ksecs,kcode] = KbCheck();
-    end
+    ptb_response;
 
-    % release
-    while any(ptb.mouse_buttons) || kdown
-        [ptb.mouse_x,ptb.mouse_y,ptb.mouse_buttons] = GetMouse;
-        [kdown,ksecs,kcode] = KbCheck();
-    end
-
-    % check escape key
-    if kdown && sum(kcode)==1
-        kcode = find(kcode);
-        switch kcode
-            % escape
-            case KbName(parameters.screen_list.exitkbname);
-                end_of_trial = 1;
-                end_of_block = 1;
-                end_of_task  = 1;
-                fprintf('Exit forced by user.\n');
-                return;
-        end
+    % escape
+    if tmp_response.escape
+        end_of_trial = 1;
+        end_of_block = 1;
+        end_of_task  = 1;
+        fprintf('Exit forced by user.\n');
+        return;
     end
 
     % exit if stations not asked
@@ -49,14 +36,14 @@ while isnan(resp.bool)
     % find box
     nb_names = size(br_names,1);
     for i_station = i_trial:nb_names
-        if      ptb.mouse_x > br_names(i_station,1) && ...
-                ptb.mouse_x < br_names(i_station,3) && ...
-                ptb.mouse_y > br_names(i_station,2) && ...
-                ptb.mouse_y < br_names(i_station,4)
+        if      tmp_response.mx > br_names(i_station,1) && ...
+                tmp_response.mx < br_names(i_station,3) && ...
+                tmp_response.my > br_names(i_station,2) && ...
+                tmp_response.my < br_names(i_station,4)
 
             resp.bool           = 1;
-            resp.gs             = ksecs;
-            resp.rt             = ksecs - ptb.screen_time_this;
+            resp.gs             = tmp_gs;
+            resp.rt             = tmp_gs - ptb.screen_time_this;
             resp.resp_istation  = i_station;
             resp.resp_station   = tmp_nextstations(i_station-i_trial+1);
             resp.resp_name      = tmp_nextnames{i_station-i_trial+1};
@@ -68,3 +55,6 @@ while isnan(resp.bool)
         end
     end
 end
+
+% release
+ptb_release;
