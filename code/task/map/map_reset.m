@@ -30,4 +30,4 @@ else
 end
 
 %% clean
-clear tmp_startstations tmp_goalstations tmp_sublines;
+clear tmp_startstation tmp_goalstation tmp_sublines;

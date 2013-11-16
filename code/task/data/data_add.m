@@ -3,8 +3,7 @@ if ~parameters.debug_subject; return; end
 % exp
 data.exp_sub(end+1)     = participant.id;
 data.exp_map(end+1)     = map.id;
-data.exp_session(end+1) = parameters.session;
-data.exp_mode(end+1)    = parameters.mode;
+data.exp_session{end+1} = parameters.session;
 data.exp_block(end+1)   = i_block;
 data.exp_trial(end+1)   = i_trial;
 data.exp_jtrial(end+1)  = j_trial;
@@ -19,9 +18,7 @@ data.flag_blackandwhite(end+1) = parameters.flag_blackandwhite;
 data.flag_disabledchanges(end+1) = parameters.flag_disabledchanges;
 data.flag_forward(end+1)       = parameters.flag_forward;
 data.flag_mail(end+1)          = parameters.flag_mail;
-data.flag_optionscross(end+1)  = parameters.flag_optionscross;
 data.flag_quiz(end+1)          = parameters.flag_quiz;
-data.flag_randomize(end+1)     = parameters.flag_randomize;
 data.flag_showreward(end+1)    = parameters.flag_showreward;
 data.flag_showsublines(end+1)  = parameters.flag_showsublines;
 data.flag_stopprob(end+1)      = parameters.flag_stopprob;

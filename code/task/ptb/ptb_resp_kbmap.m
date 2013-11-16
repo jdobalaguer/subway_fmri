@@ -1,8 +1,5 @@
 
-%% Get key
-tmp_escapecode      = KbName(parameters.screen_optionsline.exitkbname);
-
-% press key
+%% press key
 tmp_while = 1;
 while tmp_while
     tmp_gs = GetSecs();
@@ -13,33 +10,33 @@ while tmp_while
         break;
     end
     
-    [kdown,ksecs,kcode] = KbCheck();
-    if kdown && sum(kcode)==1
-        kcode = find(kcode);
-        switch kcode
-            % escape
-            case tmp_escapecode
-                end_of_trial = 1;
-                end_of_block = 1;
-                end_of_task  = 1;
-                fprintf('Exit forced by user.\n');
-                break
-            otherwise
-                tmp_while = 0;
-                tmp_maptime = tmp_gs - ptb.screen_time_this;
-                break
+    % get response
+    ptb_response;
+    
+    if (tmp_response.nbkeys==1)
+        %% escape
+        if tmp_response.escape
+            end_of_trial = 1;
+            end_of_block = 1;
+            end_of_task  = 1;
+            fprintf('Exit forced by user.\n');
+            break
         end
+        
+        %% otherwise
+        tmp_while = 0;
+        tmp_maptime = tmp_gs - ptb.screen_time_this;
     end
 end
 
 % release
-while kdown; kdown = KbCheck(); end
+ptb_release;
 
 % timestamps
 ptb.screen_time_this = GetSecs();
 ptb.screen_time_next = GetSecs();
 
-%% Clean
+%% clean
 clear tmp_gs tmp_escapecode tmp_while;
-clear kdown ksecs kcode;
+clear tmp_response;
 clear tmp_stations tmp_options;

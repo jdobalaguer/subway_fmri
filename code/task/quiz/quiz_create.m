@@ -27,15 +27,9 @@ quiz.resp_gs      = [];
 quiz.resp_rt      = [];
 quiz.resp_option  = [];
 quiz.resp_nboptions = [];
-if parameters.flag_optionscross
-    quiz.resp_optionssublines = nan(parameters.screen_optionscross.nb,0);
-    quiz.resp_optionsstations = nan(parameters.screen_optionscross.nb,0);
-    quiz.resp_optionsdists    = nan(parameters.screen_optionscross.nb,0);
-else
-    quiz.resp_optionssublines = nan(parameters.screen_optionsline.nb,0);
-    quiz.resp_optionsstations = nan(parameters.screen_optionsline.nb,0);
-    quiz.resp_optionsdists    = nan(parameters.screen_optionsline.nb,0);
-end
+quiz.resp_optionssublines = nan(parameters.screen_cross.nb,0);
+quiz.resp_optionsstations = nan(parameters.screen_cross.nb,0);
+quiz.resp_optionsdists    = nan(parameters.screen_cross.nb,0);
 quiz.resp_subline = [];
 quiz.resp_station = [];
 quiz.resp_steptime = [];

@@ -1,38 +1,5 @@
 
-%% Possible buttons
-
-if parameters.flag_optionscross
-    nb_options = 4;
-else
-    nb_options = parameters.screen_optionsline.nb;
-end
-if parameters.flag_optionscross
-    tmp_keycodes = nan(1,nb_options);
-    for i_options = 1:nb_options
-        if options_enabled(i_options)
-            tmp_keycodes(i_options) = KbName(parameters.screen_optionscross.keynames{i_options});
-        end
-    end
-    % escape code
-    tmp_escapecode      = KbName(parameters.screen_optionscross.exitkbname);
-    % enable changes station
-    tmp_enablecode      = KbName(parameters.screen_optionscross.enablekbname);
-else
-    tmp_keycodes = nan(1,nb_options);
-    for i_options = 1:nb_options
-        if options_sublines(i_options)
-            tmp_keycodes(i_options) = KbName(parameters.screen_optionsline.keynames{i_options});
-        end
-    end
-    % add escape
-    tmp_escapecode      = KbName(parameters.screen_optionsline.exitkbname);
-    % enable changes station
-    tmp_enablecode      = KbName(parameters.screen_optionsline.enablekbname);
-end
-
-%% Get key
-
-% no response
+%% build response struct
 resp = struct();
 resp.bool = 0;
 resp.code = nan;
@@ -50,7 +17,7 @@ if exist('tmp_maptime','var')
     resp.maptime = tmp_maptime;
 end
 
-% press key
+%% press key
 while ~resp.bool
     tmp_gs = GetSecs();
     
@@ -61,63 +28,90 @@ while ~resp.bool
         break;
     end
     
-    [kdown,ksecs,kcode] = KbCheck();
-    % check escape key
-    if kdown && sum(kcode)==1
-        kcode = find(kcode);
-        switch kcode
-            % escape
-            case tmp_escapecode
+    % get response
+    ptb_response;
+    
+    if (tmp_response.nbkeys==1)
+        %% escape
+        if tmp_response.escape
+            end_of_trial = 1;
+            end_of_block = 1;
+            end_of_task  = 1;
+            fprintf('Exit forced by user.\n');
+            break
+        end
+        
+        %% enable other lines
+        if tmp_response.enable && parameters.flag_disabledchanges
+            tmp_instation = map.avatar.in_station;
+            tmp_difflines = map.links(map.stations(tmp_instation).id,:);
+            tmp_difflines(~tmp_difflines) = [];
+            tmp_difflines = unique(ceil(.5*tmp_difflines));
+            tmp_nbdifflines = length(tmp_difflines);
+            if tmp_nbdifflines>1
+                parameters.flag_disabledchanges = 3 - parameters.flag_disabledchanges;
+                break;
+            end
+        end
+        
+        %% directions
+        if tmp_response.nbcard
+            % west
+            if tmp_response.west
+                resp.code = 1;
+                resp.option = 1;
+                resp.name = 'west';
+            end
+            % north
+            if tmp_response.north
+                resp.code = 2;
+                resp.option = 2;
+                resp.name = 'north';
+            end
+            % south
+            if tmp_response.south
+                resp.code = 3;
+                resp.option = 3;
+                resp.name = 'south';
+            end
+            % east
+            if tmp_response.east
+                resp.code = 4;
+                resp.option = 4;
+                resp.name = 'east';
+            end
+            if options_stations(resp.option) && options_sublines(resp.option) && options_enabled(resp.option)
+                % set resp
+                resp.bool = 1;
+                resp.gs = tmp_gs;
+                resp.rt = tmp_gs - ptb.screen_time_this;
+                resp.subline = options_sublines(resp.option);
+                resp.station = options_stations(resp.option);
+                resp.steptime = map.sublines(resp.subline).time;
+                resp.dist = map.dists.steptimes_stations(map.avatar.to_station,resp.station);
+                resp.cor  = (resp.dist < map.dists.steptimes_stations(map.avatar.to_station,map.avatar.in_station));
+                % reset disabledchanges
+                if parameters.flag_disabledchanges
+                    parameters.flag_disabledchanges = 1;
+                end
+                % end of trial
                 end_of_trial = 1;
-                end_of_block = 1;
-                end_of_task  = 1;
-                fprintf('Exit forced by user.\n');
                 break
-            % enable other lines
-            case tmp_enablecode
-                tmp_instation    = map.avatar.in_station;
-                tmp_difflines = map.links(map.stations(tmp_instation).id,:);
-                tmp_difflines(~tmp_difflines) = [];
-                tmp_difflines = unique(ceil(.5*tmp_difflines));
-                tmp_nbdifflines = length(tmp_difflines);
-                if parameters.flag_disabledchanges && tmp_nbdifflines>1
-                    parameters.flag_disabledchanges = 3 - parameters.flag_disabledchanges;
-                    break;
-                end
-            % sublines
-            otherwise
-                if any(kcode==tmp_keycodes)
-                    resp.bool = 1;
-                    resp.code = kcode;
-                    resp.name = KbName(kcode);
-                    resp.gs = tmp_gs;
-                    resp.rt = tmp_gs - ptb.screen_time_this;
-                    resp.option = find(kcode==tmp_keycodes);
-                    resp.subline = options_sublines(resp.option);
-                    resp.station = options_stations(resp.option);
-                    resp.steptime = map.sublines(resp.subline).time;
-                    resp.dist = map.dists.steptimes_stations(map.avatar.to_station,resp.station);
-                    resp.cor  = (resp.dist < map.dists.steptimes_stations(map.avatar.to_station,map.avatar.in_station));
-                    % reset disabledchanges
-                    if parameters.flag_disabledchanges
-                        parameters.flag_disabledchanges = 1;
-                    end
-                    % end of trial
-                    end_of_trial = 1;
-                    break
-                end
+            end
         end
     end
 end
 
 % release
 if ~parameters.flag_timelimit
-    while kdown; kdown = KbCheck(); end
+    ptb_release;
 end
 
 %% Clean
 
 clear i_options;
-clear tmp_gs tmp_keycodes tmp_escapecode tmp_enablecode;
-clear kdown ksecs kcode;
+clear tmp_gs;
+clear kdown;
+clear tmp_response;
 clear tmp_stations tmp_options;
+clear tmp_instation tmp_difflines tmp_nbdifflines;

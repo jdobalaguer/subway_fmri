@@ -1,5 +1,4 @@
 if ~exist('map','var'); return; end
-if ~parameters.flag_showmap; return; end
 
 % get positions
 stations_positions = nan(0,2);
