@@ -14,6 +14,7 @@ parameters.flag_disabledchanges = 0;
 parameters.flag_showdisabled    = 0;
 parameters.flag_stopprob        = 0;
 parameters.flag_showreward      = 0;
+parameters.flag_timelimit       = 0;
 parameters.flag_jittering       = 0;
 parameters.flag_scanner         = 0;
 
@@ -68,6 +69,12 @@ for i_mode = 1:length(parameters.mode)
             parameters.flag_showreward = 1;
         case 'noreward'
             parameters.flag_showreward = 0;
+            
+        % time
+        case 'time'
+            parameters.flag_timelimit = 1;
+        case 'notime'
+            parameters.flag_timelimit = 0;
             
         % jitter
         case 'jitter'

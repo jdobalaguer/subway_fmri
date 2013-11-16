@@ -1,7 +1,7 @@
 if ~parameters.debug_subject; return; end
 if end_of_task; return; end
 
-save(participant.filename_data,'data','map','allo','parameters','participant','ptb');
+save(participant.filename_data,'data','map','parameters','participant','ptb');
 if parameters.flag_quiz
     if ~exist('quiz','var'); quiz_create; end
     save(participant.filename_data,'quiz','-append');

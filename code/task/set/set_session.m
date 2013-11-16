@@ -26,7 +26,7 @@ switch parameters.session
     % debug
     case 'debug'
         tmp_message = 'Debug session';
-        tmp_mode = {'map','colour','enum'};
+        tmp_mode = {'map','colour','time'};
         parameters.run_by_min = 1;
         parameters.run_min = 5;
         
@@ -40,11 +40,13 @@ switch parameters.session
         disabled (show disabled)
         quiz
             --todo
-        enum
         bailout
         reward
+        time
         jitter
         scanner
+            -- not working
+        enum
         %}
         error(['set_session: error. session "',parameters.session,'" doesn''t exist']);
 end

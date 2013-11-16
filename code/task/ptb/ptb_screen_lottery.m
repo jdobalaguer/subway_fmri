@@ -18,7 +18,7 @@ if isempty(rewards_win) || isempty(rewards_total)
     fprintf('ptb_screen_lottery: warning. no rewards\n');
 else
     % ratio
-    ratio_coins = 5./sum(rewards_total);
+    ratio_coins = parameters.reward_maxbonus./sum(rewards_total);
     reward      = ratio_coins * sum(rewards_win);
 
     % Screen

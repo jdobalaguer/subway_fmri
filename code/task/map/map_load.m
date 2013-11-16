@@ -14,7 +14,7 @@ if parameters.debug_mapload
     if ~exist(['donefiles',   filesep,    'allmap_',participant.name,'.mat'],'file')
         error('map_load: error. map does not exists');
     else
-        load(['donefiles',   filesep,    'allmap_',participant.name,'.mat']);
+        load(['donefiles',   filesep,    'allmap_',participant.name,'.mat'],'map');
     end
     % resize
     map_resize;
@@ -22,7 +22,7 @@ if parameters.debug_mapload
 end
 
 % ls the 'data' folder
-if IsWin
+if ispc
     tmp_lsfiles = dir('files');
     lsfiles = {};
     for i = 1:length(tmp_lsfiles)
@@ -53,7 +53,7 @@ end
 
 % load map
 file_map = lsfiles{randi(nb_lsfiles)};
-load(['files',filesep,file_map]);
+load(['files',filesep,file_map],'map');
 
 % move that file, so no one else uses it
 if parameters.debug_subject

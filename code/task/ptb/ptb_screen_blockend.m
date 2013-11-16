@@ -46,8 +46,8 @@ switch parameters.session
             parameters.screen_instation.stationstr = [map.stations(map.avatar.in_station).name,' Station'];
             if parameters.flag_showreward
                 % show reward
-                if map.rewards(i_block)==1  parameters.screen_instation.labelstr = ['Good! You''ve won ',num2str(map.rewards(i_block)),' coin'];
-                else                        parameters.screen_instation.labelstr = ['Good! You''ve won ',num2str(map.rewards(i_block)),' coins'];
+                if map.avatar.reward==1 parameters.screen_instation.labelstr = ['Good! You''ve won ',num2str(map.avatar.reward),' coin'];
+                else                    parameters.screen_instation.labelstr = ['Good! You''ve won ',num2str(map.avatar.reward),' coins'];
                 end
             else
                 parameters.screen_instation.labelstr = ' ';
@@ -55,7 +55,7 @@ switch parameters.session
             ptb_screen_station(ptb,parameters.screen_instation,tmp_color);
         % no left time
         elseif parameters.flag_stopprob
-            DrawFormattedText(ptb.screen_w,'�Phone Call�','center',ptb.screen_center(2));
+            DrawFormattedText(ptb.screen_w,'Phone Call','center',ptb.screen_center(2));
         else
             fprintf('ptb_screen_blockend: error. end_of_block = 1\n');
             fprintf('ptb_screen_blockend: error. end_of_task  = 0\n');

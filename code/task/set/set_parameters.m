@@ -15,7 +15,6 @@ parameters.flag_arrowsizes  = 1;        % forward is bigger
 parameters.flag_showsublines = 1;       % show subline indicators under the labels
 parameters.flag_tasksel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
-parameters.flag_timelimit  = 0;         % limited response time
 parameters.flag_timechange = 1;         % waiting time when switching sublines
 parameters.flag_enum = 0;               % have enumerations between blocks
 
@@ -29,6 +28,7 @@ parameters.flag_disabledchanges = nan;  % switching lines requires an extra acti
 parameters.flag_showdisabled = nan;     % show arrows even when options are disabled (in change points)
 parameters.flag_stopprob = nan;         % stochastic probability of stopping after optimal nb of steps
 parameters.flag_showreward = nan;       % use rewards for each journey
+parameters.flag_timelimit  = nan;       % limited response time
 parameters.flag_jittering = nan;        % jittering wait between trials
 parameters.flag_scanner = nan;          % interaction with fmri scanner
 
@@ -47,7 +47,6 @@ parameters.run_trials = nan;
 parameters.stop_power = 0.5;
 
 %% map
-parameters.map_size  = [1080,720];
 parameters.map_thick = 7;
 
 %% enum
@@ -64,9 +63,11 @@ parameters.quiz_rtrials = (.1:.1:1);
 parameters.quiz_nbquestions = 10;
 
 %% reward
+parameters.reward_maxbonus = 5;
 parameters.reward_high = 5;
 parameters.reward_low  = 1;
 parameters.reward_prop = 0.5;
+parameters.reward_block = [];
 
 %% screen times
 parameters.time_response = 3;
@@ -81,7 +82,7 @@ parameters.resp_mouse     = 1;
 parameters.resp_buttonbox = 0;
 
 %% screen structs
-%parameters.screen_rect   = [0,0,1080,810];
+parameters.screen_rect   = [0,0,1280,960];
 parameters.screen_bg_color  = [255,255,255];
 
 parameters.screen_fontcolor = [128,128,128];
