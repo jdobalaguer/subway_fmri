@@ -11,8 +11,8 @@ map_minpos = min(stations_positions);
 map_maxpos = max(stations_positions);
 map_center = .5 * (map_minpos + map_maxpos);
 
-screen_minpos = ptb.screen_center - .5*parameters.map_size;
-screen_maxpos = ptb.screen_center + .5*parameters.map_size;
+screen_minpos = ptb.screen_center - .4*ptb.screen_drect;
+screen_maxpos = ptb.screen_center + .4*ptb.screen_drect;
 screen_center = ptb.screen_center;
 
 % get transformation

@@ -44,10 +44,10 @@ Screen('DrawLine',  ptb.screen_w, ...
                     parameters.screen_bar_thick);
     % reward
 if parameters.flag_showreward && exist('end_of_block','var')
-    if map.rewards(i_block)==1
-        str_reward = [' reward is ',num2str(map.rewards(i_block)),' coin '];
+    if map.avatar.reward == parameters.reward_low
+        str_reward = [' reward is ',num2str(map.avatar.reward),' coin '];
     else
-        str_reward = [' REWARD IS ',num2str(map.rewards(i_block)),' COINS '];
+        str_reward = [' REWARD IS ',num2str(map.avatar.reward),' COINS '];
     end
     nbr_reward = Screen('TextBounds',ptb.screen_w,str_reward);
     DrawFormattedText(ptb.screen_w,str_reward,...
