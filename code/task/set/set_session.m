@@ -5,14 +5,14 @@ switch parameters.session
     % training 1
     case 'training_1'
         tmp_message = 'First training';
-        tmp_mode = {'colour','map','quiz','exchange'};
+        tmp_mode = {'map','colour','quiz','exchange'};
         parameters.run_by_min = 1;
         parameters.run_min = 45;
         
     % training 2
     case 'training_2'
         tmp_message = 'Second training';
-        tmp_mode = {'exchange','disabled','bailout','reward'};
+        tmp_mode = {'map','time','disabled','bailout','reward'};
         parameters.run_by_min = 1;
         parameters.run_min = 15;
         
@@ -26,7 +26,7 @@ switch parameters.session
     % debug
     case 'debug'
         tmp_message = 'Debug session';
-        tmp_mode = {'map','colour','time'};
+        tmp_mode = {'map','colour'};
         parameters.run_by_min = 1;
         parameters.run_min = 5;
         
@@ -39,13 +39,13 @@ switch parameters.session
         exchange (click space)
         disabled (show disabled)
         quiz
-            --todo
-        bailout
         reward
         time
-        jitter
+        jitter (complementary to the 'time' option)
+        buttonbox
         scanner
-            -- not working
+            --todo
+        bailout
         enum
         %}
         error(['set_session: error. session "',parameters.session,'" doesn''t exist']);

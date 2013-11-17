@@ -9,14 +9,12 @@ parameters.debug_mapload = 0;
 parameters.flag_audio   = 0;            % use audio
 parameters.flag_mail    = 0;            % alert with mails (for each mode)
 
-parameters.flag_forward = 0;            % forward is an option
 parameters.flag_arrowthicks  = 1;       % forward is thicker
 parameters.flag_arrowsizes  = 1;        % forward is bigger
 parameters.flag_showsublines = 1;       % show subline indicators under the labels
 parameters.flag_tasksel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_timechange = 1;         % waiting time when switching sublines
-parameters.flag_enum = 0;               % have enumerations between blocks
 
 %% session/modes
 parameters.session = 'debug';           % which session (defines the different modes in set_mode)
@@ -24,6 +22,7 @@ parameters.mode = {};
 parameters.flag_blackandwhite = nan;    % identify sublines with different colours
 parameters.flag_showmap = nan;          % show map at the beginning of each trial
 parameters.flag_quiz = nan;             % have quizes between blocks
+parameters.flag_enum = nan;             % have enumerations between blocks
 parameters.flag_disabledchanges = nan;  % switching lines requires an extra action
 parameters.flag_showdisabled = nan;     % show arrows even when options are disabled (in change points)
 parameters.flag_stopprob = nan;         % stochastic probability of stopping after optimal nb of steps
@@ -70,7 +69,9 @@ parameters.reward_prop = 0.5;
 parameters.reward_block = [];
 
 %% screen times
-parameters.time_response = 3;
+parameters.time_isi      = 1;
+parameters.time_isiscan  = 3;
+parameters.time_isijit   = 1;
 parameters.time_exchange = 1;
 parameters.time_map      = 10;
 
@@ -79,10 +80,11 @@ parameters.resp_kbadmin   = 1;
 parameters.resp_kbcross   = 1;
 parameters.resp_kbline    = 1;
 parameters.resp_mouse     = 1;
-parameters.resp_buttonbox = 0;
+parameters.resp_buttonbox = 1;
+parameters.resp_default   = 'random';   % one of {'random','forward','none'}
 
 %% screen structs
-parameters.screen_rect   = [0,0,1280,960];
+%parameters.screen_rect   = [0,0,1280,960];
 parameters.screen_bg_color  = [255,255,255];
 
 parameters.screen_fontcolor = [128,128,128];

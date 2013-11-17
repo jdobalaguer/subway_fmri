@@ -22,17 +22,25 @@ data.exp_stoptrial = [];
 % flag
 data.flag_audio         = [];
 data.flag_mail          = [];
-data.flag_forward       = [];
+
 data.flag_arrowthicks   = [];
 data.flag_arrowsizes    = [];
 data.flag_showsublines  = [];
-data.flag_timelimit     = [];
+data.flag_tasksel       = {};
+data.flag_quizsel       = {};
 data.flag_timechange    = [];
+
+data.flag_blackandwhite = [];
+data.flag_showmap       = [];
 data.flag_quiz          = [];
+data.flag_enum          = [];
+data.flag_disabledchanges = [];
+data.flag_showdisabled  = [];
 data.flag_stopprob      = [];
 data.flag_showreward    = [];
-data.flag_blackandwhite = [];
-data.flag_disabledchanges = [];
+data.flag_timelimit     = [];
+data.flag_jittering     = [];
+data.flag_scanner       = [];
 
 % response
 data.resp_bool    = [];

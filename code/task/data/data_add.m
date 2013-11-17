@@ -12,18 +12,26 @@ data.exp_stoptrial(end+1) = end_of_block;
 
 % flag
 data.flag_audio(end+1)         = parameters.flag_audio;
-data.flag_arrowsizes(end+1)    = parameters.flag_arrowsizes;
-data.flag_arrowthicks(end+1)   = parameters.flag_arrowthicks;
-data.flag_blackandwhite(end+1) = parameters.flag_blackandwhite;
-data.flag_disabledchanges(end+1) = parameters.flag_disabledchanges;
-data.flag_forward(end+1)       = parameters.flag_forward;
 data.flag_mail(end+1)          = parameters.flag_mail;
-data.flag_quiz(end+1)          = parameters.flag_quiz;
-data.flag_showreward(end+1)    = parameters.flag_showreward;
+
+data.flag_arrowthicks(end+1)   = parameters.flag_arrowthicks;
+data.flag_arrowsizes(end+1)    = parameters.flag_arrowsizes;
 data.flag_showsublines(end+1)  = parameters.flag_showsublines;
-data.flag_stopprob(end+1)      = parameters.flag_stopprob;
+data.flag_tasksel{end+1}       = parameters.flag_tasksel;
+data.flag_quizsel{end+1}       = parameters.flag_quizsel;
 data.flag_timechange(end+1)    = parameters.flag_timechange;
+
+data.flag_blackandwhite(end+1) = parameters.flag_blackandwhite;
+data.flag_showmap(end+1)       = parameters.flag_showmap;
+data.flag_quiz(end+1)          = parameters.flag_quiz;
+data.flag_enum(end+1)          = parameters.flag_enum;
+data.flag_disabledchanges(end+1) = parameters.flag_disabledchanges;
+data.flag_showdisabled(end+1)  = parameters.flag_showdisabled;
+data.flag_stopprob(end+1)      = parameters.flag_stopprob;
+data.flag_showreward(end+1)    = parameters.flag_showreward;
 data.flag_timelimit(end+1)     = parameters.flag_timelimit;
+data.flag_jittering(end+1)     = parameters.flag_jittering;
+data.flag_scanner(end+1)       = parameters.flag_scanner;
 
 % response
 data.resp_bool(end+1)       = resp.bool;

@@ -163,16 +163,6 @@ if ~end_of_trial
         end
         options_sizes(i_options)  = parameters.screen_optionflags.backward_size;
     end
-        % remove forward
-    if parameters.flag_forward
-        i_options = (options_sublines==map.avatar.in_subline);
-        options_sublines(i_options) = 0;
-        options_stations(i_options) = 0;
-        options_dists(i_options)    = nan;
-        options_symbols(i_options)  = 0;
-        options_thicks(i_options)   = nan;
-        options_sizes(i_options)    = parameters.screen_optionflags.exchange_size;
-    end
         % enable changes
     switch parameters.flag_disabledchanges
         case 1
@@ -271,10 +261,24 @@ if exist('do_enum','var') && do_enum && exist('tmp_askstations','var') && tmp_as
 end
 %% Flip
 [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip',ptb.screen_time_next);
+% start distinction for limited time response
 if parameters.flag_timelimit && ~end_of_trial
-    % start distinction for limited time response
     ptb.screen_time_this = tmp_stimulusonset;
-    ptb.screen_time_next = tmp_stimulusonset + parameters.time_response;
+    % scanner
+    if parameters.flag_scanner
+        ptb.screen_time_next = tmp_stimulusonset + parameters.time_isiscan;
+    % no scanner
+    else
+        ptb.screen_time_next = tmp_stimulusonset + parameters.time_isi;
+    end
+    % jit
+    if parameters.flag_jittering
+        ptb.screen_time_next = tmp_stimulusonset + parameters.time_isijit;
+    end
+    % check
+    if ptb.screen_time_next < ptb.screen_time_this
+        ptb.screen_time_next = ptb.screen_time_this;
+    end
 else
     ptb.screen_time_this = tmp_stimulusonset;
     ptb.screen_time_next = tmp_stimulusonset;
