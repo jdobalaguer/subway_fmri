@@ -25,6 +25,35 @@ while ~resp.bool
     if  parameters.flag_timelimit && ...
         tmp_gs > ptb.screen_time_next
         end_of_trial = 1;
+        
+        % default response
+        switch(parameters.resp_default)
+            % random response
+            case 'random'
+                resp.option = tools_randomelement(find(options_sublines));
+                resp.subline = options_sublines(resp.option);
+                resp.station = options_stations(resp.option);
+                resp.steptime = map.sublines(resp.subline).time;
+                resp.dist = map.dists.steptimes_stations(map.avatar.to_station,resp.station);
+                resp.cor  = (resp.dist < map.dists.steptimes_stations(map.avatar.to_station,map.avatar.in_station));
+            % forward response
+            case 'forward'
+                resp.option = find(options_sublines==map.avatar.in_subline);
+                if isempty(resp.option)
+                    resp.option = tools_randomelement(find(options_sublines));
+                end
+                resp.subline = options_sublines(resp.option);
+                resp.station = options_stations(resp.option);
+                resp.steptime = map.sublines(resp.subline).time;
+                resp.dist = map.dists.steptimes_stations(map.avatar.to_station,resp.station);
+                resp.cor  = (resp.dist < map.dists.steptimes_stations(map.avatar.to_station,map.avatar.in_station));
+            % no response
+            case 'none'
+            % otherwise error
+            otherwise
+                error(['ptb_resp_kbtrial: error. response "',parameters.resp_default,'" is not valid']);
+        end
+    
         break;
     end
     

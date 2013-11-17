@@ -17,10 +17,9 @@ if parameters.resp_mouse
 end
         
 %% button box release
-if (parameters.resp_buttonbox)
-    
-    while lptread(1); end
-    while lptread(2); end
-    while lptread(3); end
-    while lptread(4); end
+if (parameters.resp_buttonbox) && exist('lptread','builtin')
+    while lptread(  7); end
+    while lptread( 71); end
+    while lptread(167); end
+    while lptread(231); end
 end

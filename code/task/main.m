@@ -1,5 +1,8 @@
 %{
     notes.
+
+    things to do:   set bailing out
+    things to do:   enum is not working anymore.
 %}
 
 clc;
@@ -16,6 +19,7 @@ map_load;
 data_create;
 
 %% TASK
+set_task;
 try
     % initialise psychtoolbox
     ptb_start;
@@ -24,12 +28,17 @@ try
     % show introduction screen
     ptb_screen_intro;
     
+    %% SET INITIAL MODE
+    set_session;
+    set_mode;
+    % scanner connection
+    set_scanner;
+
     %% BLOCK
-    set_task;
     while ~end_of_task
         % new block
         set_block;
-        % modes
+        % change modes
         set_session;
         set_mode;
         % restart map
