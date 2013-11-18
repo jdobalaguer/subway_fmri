@@ -17,7 +17,7 @@ parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both 
 parameters.flag_timechange = 1;         % waiting time when switching sublines
 
 %% session/modes
-parameters.session = 'debug';           % which session (defines the different modes in set_mode)
+parameters.session = 'training_1';      % session (defines the different modes in set_mode)
 parameters.mode = {};
 parameters.flag_blackandwhite = nan;    % identify sublines with different colours
 parameters.flag_showmap = nan;          % show map at the beginning of each trial
