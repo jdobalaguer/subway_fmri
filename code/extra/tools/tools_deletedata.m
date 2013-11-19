@@ -1,4 +1,4 @@
-function tools_deletedata()
+function tools_deletedata(session)
 
     %% sure?
     sure = str2num(input('You sure? ','s'));
@@ -10,7 +10,7 @@ function tools_deletedata()
 
     %% donefiles
     % ls the 'data' folder
-    lsdata = regexp(ls('data'),'\s','split');
+    lsdata = regexp(ls(['data',filesep,session]),'\s','split');
     i = 1;
     while i<=length(lsdata)
         if isempty(lsdata{i})
@@ -23,7 +23,7 @@ function tools_deletedata()
 
     %% move them
     for i_lsdata = 1:nb_lsdata
-        delete(['data/',lsdata{i_lsdata}]);
+        delete(['data',filesep,session,filesep,lsdata{i_lsdata}]);
     end
 
 end

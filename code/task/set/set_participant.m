@@ -15,8 +15,8 @@ participant.hand = input('Hand:  ','s');
 
 % filenames
 participant.id   = 1;
-participant.filename_data  = ['data',filesep,'data_',participant.name,'_',num2str(participant.id),'.mat'];
-participant.filename_error = ['data',filesep,'error_',participant.name,'_',num2str(participant.id),'.mat'];
+participant.filename_data  = ['data',filesep,parameters.session,filesep,'data_',participant.name,'_',num2str(participant.id),'.mat'];
+participant.filename_error = ['data',filesep,parameters.session,filesep,'error_',participant.name,'_',num2str(participant.id),'.mat'];
 
 if exist(participant.filename_data,'file')
     error('set_participant: error. data file already exists');

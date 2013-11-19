@@ -60,7 +60,7 @@ data.avatar_inexchange(end+1)     = (length(unique(map.links(map.avatar.in_stati
 data.avatar_toexchange(end+1)     = (length(unique(map.links(map.avatar.to_station,:))) > 3); %0,ford,back
 data.avatar_time(end+1)           = map.avatar.time;
 data.avatar_reward(end+1)         = map.avatar.reward;
-data.avatar_stopprob(end+1)       = stop_prob;
+data.avatar_stopprob(end+1)       = map.avatar.stopprob;
 
 % dists
 data.dists_steptimes_stations(end+1) = map.dists.steptimes_stations(map.avatar.to_station,map.avatar.in_station);

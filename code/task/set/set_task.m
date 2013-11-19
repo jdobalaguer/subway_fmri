@@ -6,18 +6,3 @@ else
     i_block = max(data.exp_block);
     j_trial = length(data.exp_block);
 end
-
-% select your home location
-if strcmp(parameters.flag_tasksel,'home') && ~isfield(participant,'homestation')
-    participant.homestation = randi(map.nb_stations);
-    % criteria
-    while   (sum(map.links(participant.homestation,:)>0)~=2) ... % regular station
-            || ...
-            ( ...
-                ~sum(map.links(participant.homestation,:)==1) ... % connection with yellow line
-                && ...
-                ~sum(map.links(participant.homestation,:)==7) ... % connection with blue line
-            )
-        participant.homestation = randi(map.nb_stations);
-    end
-end

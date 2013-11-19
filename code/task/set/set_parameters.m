@@ -3,7 +3,6 @@ parameters = struct();
 %% debug
 parameters.debug_subject = 1;
 parameters.debug_preload = '';
-parameters.debug_mapload = 0;
 
 %% flags
 parameters.flag_audio   = 0;            % use audio
@@ -19,6 +18,7 @@ parameters.flag_timechange = 1;         % waiting time when switching sublines
 %% session/modes
 parameters.session = 'training_2';      % session (defines the different modes in set_mode)
 parameters.mode = {};
+parameters.flag_mapload = nan;          % preload the map matching participant name
 parameters.flag_blackandwhite = nan;    % identify sublines with different colours
 parameters.flag_showmap = nan;          % show map at the beginning of each trial
 parameters.flag_quiz = nan;             % have quizes between blocks
@@ -39,11 +39,8 @@ parameters.run_blocks = nan;
 parameters.run_by_trials = 0;
 parameters.run_trials = nan;
 
-%% stop
-    % needs to be >0
-    % if 0, prob is always 1
-    % if inf, prob is always 0
-parameters.stop_power = 0.5;
+%% bailout
+parameters.bailout_optprop = 0.5; % proportion of bailouts with optimal algorithm
 
 %% map
 parameters.map_thick = 7;
@@ -62,7 +59,7 @@ parameters.quiz_rtrials = (.1:.1:1);
 parameters.quiz_nbquestions = 10;
 
 %% reward
-parameters.reward_maxbonus = 5;
+parameters.reward_maxbonus = 10;
 parameters.reward_high = 5;
 parameters.reward_low  = 1;
 parameters.reward_prop = 0.5;

@@ -1,16 +1,13 @@
 if ~isempty(parameters.debug_preload); return; end
 
-% check for the files directory
-if ~exist('files','dir')
-    error('map_load: error. no ''files'' directory.');
-end
-% check for the files directory
+
+%% preload map
+% check
 if ~exist('donefiles','dir')
     mkdir('donefiles');
 end
-
-% preload map
-if parameters.debug_mapload
+% preload
+if parameters.flag_mapload
     if ~exist(['donefiles',   filesep,    'allmap_',participant.name,'.mat'],'file')
         error('map_load: error. map does not exists');
     else
@@ -21,8 +18,14 @@ if parameters.debug_mapload
     return;
 end
 
+
+%% list of maps
+% check
+if ~exist('files','dir')
+    error('map_load: error. no ''files'' directory.');
+end
 % ls the 'data' folder
-if ispc
+if ispc()
     tmp_lsfiles = dir('files');
     lsfiles = {};
     for i = 1:length(tmp_lsfiles)
@@ -44,14 +47,13 @@ else
     end
     clear i;
 end
-
-% check files
+% check
 if ~nb_lsfiles
     error('map_load: no files. please create maps');
 end
 
 
-% load map
+%% load map
 file_map = lsfiles{randi(nb_lsfiles)};
 load(['files',filesep,file_map],'map');
 
@@ -64,7 +66,24 @@ if parameters.debug_subject
                 ['donefiles',   filesep,    'allmap_',participant.name,'.mat']);
 end
 
-% clean
+
+%% home location
+if strcmp(parameters.flag_tasksel,'home') && ~isfield(participant,'homestation')
+    participant.homestation = randi(map.nb_stations);
+    % criteria
+    while   (sum(map.links(participant.homestation,:)>0)~=2) ... % regular station
+            || ...
+            ( ...
+                ~sum(map.links(participant.homestation,:)==1) ... % connection with yellow line
+                && ...
+                ~sum(map.links(participant.homestation,:)==7) ... % connection with blue line
+            )
+        participant.homestation = randi(map.nb_stations);
+    end
+end
+
+
+%% clean
 clear lsfiles nb_lsfiles tmp_lsfiles;
 clear i_map;
 clear file_map;

@@ -5,6 +5,9 @@ if ~isempty(parameters.debug_preload); return; end
 if ~exist('data','dir')
     mkdir 'data';
 end
+if ~exist(['data',filesep,parameters.session],'dir')
+    mkdir(['data',filesep,parameters.session]);
+end
 
 % struct
 data = struct();

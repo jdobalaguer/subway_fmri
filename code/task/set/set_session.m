@@ -12,14 +12,14 @@ switch parameters.session
     % training 2
     case 'training_2'
         tmp_message = 'Second training';
-        tmp_mode = {'disabled','bailouts','reward'};
+        tmp_mode = {'samemap','disabled','bailout','reward'};
         parameters.run_by_min = 1;
         parameters.run_min = 45;
         
     % scanner
     case 'scanner'
         tmp_message = 'Scanner session';
-        tmp_mode = {'disabled','bailout','reward','jitter','scanner'};
+        tmp_mode = {'samemap','disabled','bailout','reward','jitter','scanner'};
         parameters.run_by_min = 1;
         parameters.run_min = 60;
         

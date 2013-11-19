@@ -18,6 +18,13 @@ map.avatar.in_subline = map.avatar.start_subline;
 % time
 map.avatar.time = 0;
 
+% bailing out
+if parameters.flag_stopprob
+    map.avatar.stopprob = 1 - power(1 - parameters.bailout_optprop , 1/map.dists.steptimes_stations(map.avatar.start_station,map.avatar.to_station));
+else
+    map.avatar.stopprob = 0;
+end
+
 % reward
 if parameters.flag_showreward
     if rand > parameters.reward_prop

@@ -26,7 +26,7 @@ tmp_color    = nan(tmp_nb,3);
 for i_sublines = 1:tmp_nb
     tmp_color(i_sublines,:) = map.sublines(tmp_sublines(i_sublines)).color;
 end
-if parameters.flag_blackandwhite
+if ~parameters.flag_showsublines
     tmp_color = [];
 end
 parameters.screen_instation.labelstr = 'this is';
