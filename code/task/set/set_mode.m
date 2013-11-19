@@ -1,11 +1,6 @@
 
 %% default mode
-%   no colour
-%   no map
-%   no exchange
-%   no bail out
-%   no reward
-%   no scanner
+parameters.flag_mapload         = 0;
 parameters.flag_blackandwhite   = 1;
 parameters.flag_showmap         = 0;
 parameters.flag_quiz            = 0;
@@ -22,6 +17,12 @@ parameters.flag_scanner         = 0;
 %% set modes
 for i_mode = 1:length(parameters.mode)
     switch parameters.mode{i_mode}
+        % same map
+        case 'samemap'
+            parameters.flag_mapload = 1;
+        case 'nosamemap'
+            parameters.flag_mapload = 0;
+            
         % colour
         case 'colour'
             parameters.flag_blackandwhite = 0;
@@ -90,7 +91,7 @@ for i_mode = 1:length(parameters.mode)
             
         % error
         otherwise
-            error(['set_mode: error. mode "',parameters.mode,'" doesn''t exist']);
+            error(['set_mode: error. mode "',parameters.mode{i_mode},'" doesn''t exist']);
     end
 end
 

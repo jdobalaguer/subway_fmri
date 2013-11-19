@@ -1,8 +1,8 @@
-function set_results()
+function set_results(session)
     %% participant files
         % ls the 'data' folder
-    if IsWin
-        tmp_lsdata= dir('data');
+    if ispc()
+        tmp_lsdata= dir(['data',filesep,session]);
         lsdata = {};
         for i = 1:length(tmp_lsdata)
             if ~(tmp_lsdata(i).name(1)=='.')
@@ -11,7 +11,7 @@ function set_results()
         end
         nb_lsdata = length(lsdata);
     else
-        lsdata = regexp(ls('data'),'\s','split');
+        lsdata = regexp(ls(['data',filesep,session]),'\s','split');
         i = 1;
         while i<=length(lsdata)
             if isempty(lsdata{i})
@@ -26,6 +26,9 @@ function set_results()
         % mkdir the 'results' folder
     if ~exist('result','dir');
         mkdir('result');
+    end
+    if ~exist(['result',filesep,session],'dir');
+        mkdir(['result',filesep,session]);
     end
     
     % for each data file
@@ -69,6 +72,6 @@ function set_results()
         end
         
         %% save
-        save(['result/results_',participant.name,'_',num2str(participant.id),'.mat'],'results','map','parameters','participant','ptb');
+        save(['result',filesep,session,'results_',participant.name,'_',num2str(participant.id),'.mat'],'results','map','parameters','participant','ptb');
     end
 end

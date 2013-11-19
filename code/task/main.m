@@ -12,8 +12,6 @@ set_parameters;
 set_preload;
 set_participant;
 
-%% LOAD
-map_load;
 
 %% CREATE
 data_create;
@@ -23,8 +21,6 @@ set_task;
 try
     % initialise psychtoolbox
     ptb_start;
-    % resize map
-    map_resize;
     % show introduction screen
     ptb_screen_intro;
     
@@ -34,6 +30,12 @@ try
     % scanner connection
     set_scanner;
 
+    %% MAP
+    % load
+    map_load;
+    % resize
+    map_resize;
+    
     %% BLOCK
     while ~end_of_task
         % new block

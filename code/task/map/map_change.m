@@ -1,7 +1,6 @@
 if end_of_task
     clear to_station;
     clear resp;
-    clear optnb_trials stop_prob;
     return;
 end
 
@@ -17,4 +16,3 @@ map.avatar.time = map.avatar.time + map.sublines(resp.subline).time;
 % clean
 clear to_station;
 clear resp;
-clear optnb_trials stop_prob;
