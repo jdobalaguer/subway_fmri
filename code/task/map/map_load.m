@@ -65,7 +65,7 @@ if parameters.debug_subject
 end
 
 % clean
-clear lsfiles nb_lsfiles;
+clear lsfiles nb_lsfiles tmp_lsfiles;
 clear i_map;
 clear file_map;
 

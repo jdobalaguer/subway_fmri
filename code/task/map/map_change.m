@@ -1,4 +1,9 @@
-if end_of_task; return; end
+if end_of_task
+    clear to_station;
+    clear resp;
+    clear optnb_trials stop_prob;
+    return;
+end
 
 % change station
 map.avatar.in_station = resp.station;

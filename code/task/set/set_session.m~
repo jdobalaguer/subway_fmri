@@ -12,7 +12,7 @@ switch parameters.session
     % training 2
     case 'training_2'
         tmp_message = 'Second training';
-        tmp_mode = {'disabled','bailouts','reward'};
+        tmp_mode = {'time','disabled','bailout','reward'};
         parameters.run_by_min = 1;
         parameters.run_min = 45;
         

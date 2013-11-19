@@ -86,6 +86,9 @@ try
         
         % end of task
         set_endoftask;
+        
+        % clean
+        clear i_trial end_of_trial end_of_block options_enabled options_sublines options_stations options_dists options_symbols options_thicks options_sizes nb_options tmp_maptime;
     end
     
     % show end screen
