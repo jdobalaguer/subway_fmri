@@ -2,7 +2,7 @@ if ~parameters.debug_subject; return; end
 if end_of_task; return; end
 
 %% show reward
-if parameters.flag_showreward
+if parameters.flag_showreward && parameters.flag_stopprob
     % show reward
     if (map.avatar.in_station ~= map.avatar.to_station)
         DrawFormattedText(ptb.screen_w,'Phone Call','center','center');
@@ -14,12 +14,8 @@ if parameters.flag_showreward
     end
 %% show number of steps
 else
-    % goal not reached
-    if (map.avatar.in_station ~= map.avatar.to_station)
-        DrawFormattedText(ptb.screen_w,'Phone Call','center','center');
-        parameters.screen_instation.labelstr = ['Could we meet there instead?'];
     % if minimum time
-    elseif map.avatar.time == map.dists.steptimes_stations(map.avatar.to_station,map.avatar.start_station)
+    if map.avatar.time == map.dists.steptimes_stations(map.avatar.to_station,map.avatar.start_station)
         parameters.screen_instation.labelstr = ['Perfect!  You got there in ',num2str(map.avatar.time),' steps (the quickest).'];
     % if longuer
     else

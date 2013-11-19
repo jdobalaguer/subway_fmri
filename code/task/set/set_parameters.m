@@ -7,7 +7,7 @@ parameters.debug_mapload = 0;
 
 %% flags
 parameters.flag_audio   = 0;            % use audio
-parameters.flag_mail    = 0;            % alert with mails (for each mode)
+parameters.flag_mail    = 1;            % alert with mails (for each mode)
 
 parameters.flag_arrowthicks  = 1;       % forward is thicker
 parameters.flag_arrowsizes  = 1;        % forward is bigger
@@ -17,7 +17,7 @@ parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both 
 parameters.flag_timechange = 1;         % waiting time when switching sublines
 
 %% session/modes
-parameters.session = 'training_1';      % session (defines the different modes in set_mode)
+parameters.session = 'training_2';      % session (defines the different modes in set_mode)
 parameters.mode = {};
 parameters.flag_blackandwhite = nan;    % identify sublines with different colours
 parameters.flag_showmap = nan;          % show map at the beginning of each trial
@@ -69,9 +69,9 @@ parameters.reward_prop = 0.5;
 parameters.reward_block = [];
 
 %% screen times
-parameters.time_isi      = 1;
-parameters.time_isiscan  = 3;
-parameters.time_isijit   = 1;
+parameters.time_isi      = 4.5;
+parameters.time_isiscan  = 4.5;
+parameters.time_isijit   = 1.5;
 parameters.time_exchange = 1;
 parameters.time_map      = 10;
 
