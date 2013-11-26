@@ -1,6 +1,6 @@
-function plot_quiz_map()
+function plot_quiz_map(session)
     % load results
-    allresults = load_results();
+    allresults = load_results(session);
     
     % numbers
     u_participants = unique(allresults.trial_quiz.exp_sub);

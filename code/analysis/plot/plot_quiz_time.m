@@ -1,6 +1,6 @@
-function plot_quiz_time
+function plot_quiz_time(session)
     % load results
-    allresults = load_results();
+    allresults = load_results(session);
     
     % numbers
     u_participants = unique(allresults.block_quiz.exp_sub);

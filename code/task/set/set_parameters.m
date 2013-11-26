@@ -10,7 +10,7 @@ parameters.flag_mail    = 1;            % alert with mails (for each mode)
 
 parameters.flag_arrowthicks  = 1;       % forward is thicker
 parameters.flag_arrowsizes  = 1;        % forward is bigger
-parameters.flag_showsublines = 1;       % show subline indicators under the labels
+parameters.flag_showsublines = 0;       % show subline indicators under the labels
 parameters.flag_tasksel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand'
 parameters.flag_timechange = 1;         % waiting time when switching sublines
