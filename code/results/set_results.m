@@ -35,15 +35,15 @@ function set_results(session)
     for i_lsdata = 1:nb_lsdata
         %% initialise
         % load
-        load(['data/',lsdata{i_lsdata}]);
+        load(['data',filesep,session,filesep,lsdata{i_lsdata}]);
         % struct
         results = struct();
         fprintf(['set_results: setting results for ',participant.name,'\n']);
         
         %% trial results
         % data
-        data.avatar_inexchange = [];
         %{
+        data.avatar_inexchange = [];
         for i_trial = 1:length(data.avatar_instation)
             data.avatar_inexchange(end+1)     = (length(unique(map.links(data.avatar_instation(i_trial),:))) > 3);
         end
@@ -71,7 +71,11 @@ function set_results(session)
             results.block_quiz = results_blockquiz(quiz);
         end
         
+        %% participant results
+        results.participant = participant;
+        
+        
         %% save
-        save(['result',filesep,session,'results_',participant.name,'_',num2str(participant.id),'.mat'],'results','map','parameters','participant','ptb');
+        save(['result',filesep,session,filesep,'results_',participant.name,'_',num2str(participant.id),'.mat'],'results','map','parameters','participant','ptb');
     end
 end
