@@ -1,7 +1,6 @@
 %{
     notes.
 
-    things to do:   set bailing out
     things to do:   enum is not working anymore.
 %}
 
