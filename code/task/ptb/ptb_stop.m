@@ -1,18 +1,18 @@
 
 %% Time
 if ~isfield(ptb,'time_stop')
-    ptb.time_stop = GetSecs;
+    ptb.time_stop = GetSecs();
 else
-    ptb.time_stop(end+1) = GetSecs;
+    ptb.time_stop(end+1) = GetSecs();
 end
 
 %% Screen
 
 % mouse
-ShowCursor;
+ShowCursor();
 
 % remove anything pressed during the experiment?
-FlushEvents;
+FlushEvents();
 
 % window
 Screen('CloseAll');
