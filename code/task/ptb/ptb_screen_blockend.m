@@ -15,12 +15,14 @@ if parameters.flag_showreward && parameters.flag_stopprob
     
 % screen(number of steps)
 else
+    tmp_station = parameters.screen_instation;
+    tmp_station.stationry = 0.5;
     % if minimum time
     if map.avatar.time == map.dists.steptimes_stations(map.avatar.to_station,map.avatar.start_station)
-        parameters.screen_instation.labelstr = ['Perfect!  You got there in ',num2str(map.avatar.time),' steps (the quickest).'];
+        tmp_station.labelstr = ['Perfect!  You got there in ',num2str(map.avatar.time),' steps (the quickest).'];
     % if longuer
     else
-        parameters.screen_instation.labelstr = ['Well done!  You got there in ',num2str(map.avatar.time),' steps.  The quickest route was in ',num2str(map.dists.steptimes_stations(map.avatar.to_station,map.avatar.start_station)),' steps.'];
+        tmp_station.labelstr = ['Well done!  You got there in ',num2str(map.avatar.time),' steps.  The quickest route was in ',num2str(map.dists.steptimes_stations(map.avatar.to_station,map.avatar.start_station)),' steps.'];
     end
     
     % show screen_instation
@@ -31,8 +33,9 @@ else
     for i_sublines = 1:tmp_nb
         tmp_color(i_sublines,:) = map.sublines(tmp_sublines(i_sublines)).color;
     end
-    parameters.screen_instation.stationstr = [map.stations(map.avatar.in_station).name,' Station'];
-    ptb_screen_station(ptb,parameters.screen_instation,tmp_color);
+    tmp_station.stationstr = [map.stations(map.avatar.in_station).name,' Station'];
+    ptb_screen_station(ptb,tmp_station,tmp_color);
+    clear tmp_station;
 end
 % flip
 [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip',ptb.screen_time_next);

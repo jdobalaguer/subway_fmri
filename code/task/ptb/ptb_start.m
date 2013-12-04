@@ -68,6 +68,9 @@ if parameters.flag_audio
     ptb.audio_sampling = tmp_s.SampleRate;
 end
 
+%% Textures
+[ptb.texture_name,ptb.texture_id] = ptb_maketextures(ptb.screen_w,parameters.screen_picture.alpha);
+
 %% Clean
 clear ptb_ConfigPath ptb_RootPath;
 clear tmp_w tmp_r tmp_s;

@@ -16,7 +16,9 @@ if parameters.flag_showreward && exist('end_of_block','var')
                        (data.resp_station(logical(data.exp_stoptrial)) == data.avatar_goalstation(logical(data.exp_stoptrial)));
     tmp_rewardstotal = data.avatar_reward(logical(data.exp_stoptrial));
     tmp_rewardstring = sprintf(parameters.screen_reward.labelstr,nansum(tmp_rewardswin),nansum(tmp_rewardstotal));
-    DrawFormattedText(ptb.screen_w,tmp_rewardstring,'center',parameters.screen_reward.labelry*ptb.screen_drect(2)+ptb.screen_rect(2));
+    DrawFormattedText(ptb.screen_w,tmp_rewardstring,...
+        parameters.screen_reward.labelrx*ptb.screen_drect(1)+ptb.screen_rect(1),...
+        parameters.screen_reward.labelry*ptb.screen_drect(2)+ptb.screen_rect(2));
     clear tmp_rewardswin tmp_rewardstotal tmp_rewardstring;
 end    
     % goal station
@@ -49,37 +51,30 @@ if ~(exist('do_enum','var') && do_enum && exist('tmp_askstations','var') && tmp_
     parameters.screen_instation.stationstr = [map.stations(map.avatar.in_station).name,' Station'];
 end
 ptb_screen_station(ptb,parameters.screen_instation,tmp_color);
-    % picture
-if parameters.flag_showpics
-    tmp_picimage   = uint8(imread([map.stations(map.avatar.in_station).name,'.jpg']));
-    tmp_pictexture = Screen('MakeTexture',ptb.screen_w,tmp_picimage);
-    tmp_picrect    = CenterRectOnPoint([0,0,parameters.screen_picture.boxdx,parameters.screen_picture.boxdy],...
-                                        parameters.screen_picture.boxrx*ptb.screen_drect(1)+ptb.screen_rect(1),...
-                                        parameters.screen_picture.boxry*ptb.screen_drect(2)+ptb.screen_rect(2));
-    Screen('DrawTexture',ptb.screen_w,tmp_pictexture,[],tmp_picrect);
-    clear tmp_picimage tmp_pictexture tmp_picrect;
-end
     % bar
-Screen('DrawLine',  ptb.screen_w, ...
-                    parameters.screen_bar_color,...
-                    ptb.screen_center(1) - .5*parameters.screen_bar_drx*ptb.screen_drect(1),... fromH
-                    ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry, ... fromV
-                    ptb.screen_center(1) + .5*parameters.screen_bar_drx*ptb.screen_drect(1),... toH
-                    ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry, ... toV
-                    parameters.screen_bar_thick);
+for i_bar = 1:length(parameters.screen_bar_ry)
+    Screen('DrawLine',  ptb.screen_w, ...
+                        parameters.screen_bar_color,...
+                        ptb.screen_center(1) - .5*parameters.screen_bar_drx*ptb.screen_drect(1),  ... fromH
+                        ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry(i_bar), ... fromV
+                        ptb.screen_center(1) + .5*parameters.screen_bar_drx*ptb.screen_drect(1),  ... toH
+                        ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry(i_bar), ... toV
+                        parameters.screen_bar_thick);
+end
     % reward
 if parameters.flag_showreward && exist('end_of_block','var')
-    if map.avatar.reward == parameters.reward_low
-        tmp_rewimage = uint8(imread('blacksilver_low.jpg'));
-    else
-        tmp_rewimage = uint8(imread('blacksilver_high.jpg'));
+    for i_bar = 1:length(parameters.screen_bar_ry)
+        if map.avatar.reward == parameters.reward_low
+            tmp_rewtexture = ptb_gettexture(ptb,'blacksilver_low');
+        else
+            tmp_rewtexture = ptb_gettexture(ptb,'blacksilver_high');
+        end
+        tmp_rewrect    = CenterRectOnPoint([0,0,267,52],...
+                            ptb.screen_center(1),...
+                            ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry(i_bar));
+        Screen('DrawTexture',ptb.screen_w,tmp_rewtexture,[],tmp_rewrect);
+        clear tmp_rewimage tmp_rewmap tmp_rewalpha tmp_rewtexture tmp_rewrect;
     end
-    tmp_rewtexture = Screen('MakeTexture',ptb.screen_w,tmp_rewimage);
-    tmp_rewrect    = CenterRectOnPoint([0,0,size(tmp_rewimage,2),size(tmp_rewimage,1)],...
-                        ptb.screen_center(1),...
-                        ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry);
-    Screen('DrawTexture',ptb.screen_w,tmp_rewtexture,[],tmp_rewrect);
-    clear tmp_rewimage tmp_rewmap tmp_rewalpha tmp_rewtexture tmp_rewrect;
 end
 
 
@@ -232,7 +227,7 @@ if end_of_trial
                         1.5*tmp_sx,...
                         tmp_nys(resp.option));
 end
-    % draw options
+% draw options
 Screen(ptb.screen_w, 'TextFont',            parameters.screen_cross.fontname);
 Screen(ptb.screen_w, 'TextSize',            parameters.screen_cross.fontsize);
 Screen(ptb.screen_w, 'TextBackgroundColor', parameters.screen_cross.fontbgcolor);
@@ -270,6 +265,15 @@ for i_options = 1:tmp_nb
                         options_sizes(i_options)*tmp_sx,...
                         tmp_nys(i_options),...
                         tmp_thick);
+end
+% draw picture
+if parameters.flag_showpics
+    tmp_pictexture = ptb_gettexture(ptb,map.stations(map.avatar.in_station).name);
+    tmp_picrect    = CenterRectOnPoint([0,0,2*parameters.screen_picture.boxdx,2*parameters.screen_picture.boxdy],...
+                                        parameters.screen_picture.boxrx*ptb.screen_drect(1)+ptb.screen_rect(1),...
+                                        parameters.screen_picture.boxry*ptb.screen_drect(2)+ptb.screen_rect(2));
+    Screen('DrawTexture',ptb.screen_w,tmp_pictexture,[],tmp_picrect);
+    clear tmp_picimage tmp_pictexture tmp_picrect;
 end
 
 
@@ -320,6 +324,7 @@ else
 end
 
 %% Clean
+clear i_bar;
 clear i_sublines;
 clear i_nxs i_options to_option;
 clear str_reward nbr_reward;
