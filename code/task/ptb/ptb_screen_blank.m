@@ -5,7 +5,7 @@ Screen(ptb.screen_w, 'FillRect',  ptb.screen_bg_color);
 %% Flip
 [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip',ptb.screen_time_next);
 ptb.screen_time_this = tmp_stimulusonset;
-ptb.screen_time_next = tmp_stimulusonset + parameters.time_blank;
+ptb.screen_time_next = tmp_stimulusonset + parameters.time_blank + parameters.time_blankjit*(2*rand()-1);
 
 time.screens{end+1}  = 'blank';
 time.getsecs(end+1)  = tmp_stimulusonset;
