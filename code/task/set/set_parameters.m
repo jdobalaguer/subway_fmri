@@ -13,28 +13,29 @@ parameters.flag_tasksel = 'rand';       % increasing difficulty over time (both 
 parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand', 'oneorone'
 parameters.flag_timechange = 1;         % waiting time when switching sublines
 parameters.flag_showresp   = 0;         % show response (with timelimit)
+parameters.flag_timize = 0;             % pass screen through time (not clicks)
 
 %% session/modes
 parameters.session = 'training_2';      % session (defines the different modes in set_mode)
 parameters.mode = {};
 parameters.flag_arrowthicks = nan;      % forward is thicker
-parameters.flag_arrowsizes = nan;       % forward is bigger
-parameters.flag_mapload = nan;          % preload the map matching participant name
+parameters.flag_arrowsizes  = nan;      % forward is bigger
+parameters.flag_mapload     = nan;      % preload the map matching participant name
 parameters.flag_blackandwhite = nan;    % identify sublines with different colours
 parameters.flag_avatarlines = nan;      % show subline indicators under the goal label 
-parameters.flag_showmap = nan;          % show map at the beginning of each trial
-parameters.flag_showpics = nan;         % show a picture associated with the current station
-parameters.flag_quiz = nan;             % have quizes between blocks
-parameters.flag_enum = nan;             % have enumerations between blocks
+parameters.flag_showmap     = nan;      % show map at the beginning of each trial
+parameters.flag_showpics    = nan;      % show a picture associated with the current station
+parameters.flag_quiz        = nan;      % have quizes between blocks
+parameters.flag_enum        = nan;      % have enumerations between blocks
 parameters.flag_disabledchanges = nan;  % switching lines requires an extra action
 parameters.flag_showdisabled = nan;     % show arrows even when options are disabled (in change points)
-parameters.flag_stopprob = nan;         % stochastic probability of stopping after optimal nb of steps
-parameters.flag_showreward = nan;       % use rewards for each journey
-parameters.flag_timelimit  = nan;       % limited response time
-parameters.flag_break      = nan;       % breaks screens across the experiment
-parameters.flag_blank      = nan;       % blank screen between trials
-parameters.flag_jittering  = nan;       % jittering wait between trials
-parameters.flag_scanner    = nan;       % interaction with fmri scanner
+parameters.flag_stopprob    = nan;      % stochastic probability of stopping after optimal nb of steps
+parameters.flag_showreward  = nan;      % use rewards for each journey
+parameters.flag_timelimit   = nan;      % limited response time
+parameters.flag_break       = nan;      % breaks screens across the experiment
+parameters.flag_blank       = nan;      % blank screen between trials
+parameters.flag_jittering   = nan;      % jittering wait between trials
+parameters.flag_scanner     = nan;      % interaction with fmri scanner
 
 %% run
 parameters.run_by_min = 0;
@@ -76,14 +77,26 @@ parameters.reward_prop = 0.5;
 parameters.reward_block = [];
 
 %% screen times
-parameters.time_isi      = 4;
-parameters.time_isiscan  = 5;
-parameters.time_isijit   = 0;
-parameters.time_exchange = 1;
+parameters.time_breakpre = 10;
+parameters.time_breakpos = 10;
+parameters.time_block    = 3;
+parameters.time_blockpre = 3.5;
+parameters.time_blockprejit = 1.5;
+parameters.time_blockpos = 3.5;
+parameters.time_blockposjit = 1.5;
 parameters.time_map      = 10;
+parameters.time_trial    = 2;
+parameters.time_trialjit = 0;
+parameters.time_exchange = 1;
 parameters.time_blank    = 2;
 parameters.time_blankjit = 1;
-parameters.time_scanwait = 10;
+parameters.time_rew      = 2;
+parameters.time_rewjit   = 2;
+parameters.time_rew      = 2;
+parameters.time_quizstart= 2;
+parameters.time_quizpre  = 2;
+parameters.time_quizend  = 2;
+parameters.time_quizpos  = 2;
 
 %% response buttons
 parameters.resp_kbadmin   = 1;

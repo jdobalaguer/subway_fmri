@@ -297,11 +297,11 @@ else
 end
 
 if exist('do_quiz','var')  && do_quiz
-    time.screens{end+1}  = 'quiz trial';
+    time.screens{end+1}  = 'quiz do';
 elseif exist('do_enum','var') && do_enum
-    time.screens{end+1}  = 'enum trial';
+    time.screens{end+1}  = 'enum do';
 elseif end_of_trial
-    time.screens{end+1}  = 'trial end';
+    time.screens{end+1}  = 'trial done';
 else
     time.screens{end+1}  = 'trial';
 end
@@ -312,22 +312,7 @@ time.breakgs(end+1) = time.breakgs(end);
 if parameters.flag_timelimit
     if ~end_of_trial
         ptb.screen_time_this = tmp_stimulusonset;
-        ptb.screen_time_next = tmp_stimulusonset;
-        % scanner
-        if parameters.flag_scanner
-            ptb.screen_time_next = ptb.screen_time_next + parameters.time_isiscan;
-        % no scanner
-        else
-            ptb.screen_time_next = ptb.screen_time_next + parameters.time_isi;
-        end
-        % jit
-        if parameters.flag_jittering
-            ptb.screen_time_next = ptb.screen_time_next + parameters.time_isijit*(2*rand()-1);
-        end
-        % check
-        if ptb.screen_time_next < ptb.screen_time_this
-            ptb.screen_time_next = ptb.screen_time_this;
-        end
+        ptb.screen_time_next = tmp_stimulusonset + parameters.time_trial + parameters.time_trialjit*(2*rand()-1);
     end
 else
     ptb.screen_time_this = tmp_stimulusonset;

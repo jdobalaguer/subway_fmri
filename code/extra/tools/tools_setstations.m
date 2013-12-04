@@ -52,7 +52,7 @@ function [tmp_startstation,tmp_goalstation] = tools_setstations(dists,map,parame
                 tmp_elbows    = map.dists.steptimes_elbows(tmp_startstation,tmp_goalstation);
                 
                 % criterium
-                if tmp_steps<10 && tmp_steps>2
+                if tmp_steps<12 && tmp_steps>4
                     if tmp_exchanges==1;                ok=1; end
                     if tmp_elbows==1 && ~tmp_exchanges; ok=1; end
                 end

@@ -30,8 +30,8 @@ ptb.screen_rect = tmp_r;
 ptb.screen_drect = [(ptb.screen_rect(3)-ptb.screen_rect(1)) , (ptb.screen_rect(4)-ptb.screen_rect(2))];
 ptb.screen_center = [ptb.screen_rect(1) , ptb.screen_rect(2)] + .5*ptb.screen_drect;
 ptb.screen_bg_color = parameters.screen_bg_color;
-ptb.screen_time_this = 0;
-ptb.screen_time_next = 0;
+ptb.screen_time_this = GetSecs();
+ptb.screen_time_next = GetSecs();
 
 % textures
 Screen('Preference', 'TextAlphaBlending', 1);

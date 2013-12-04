@@ -22,7 +22,7 @@ try
     % initialise psychtoolbox
     ptb_start;
     % show introduction screen
-    ptb_screen_intro;
+    %ptb_screen_intro;
     
     %% SET INITIAL MODE
     set_session;
