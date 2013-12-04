@@ -10,7 +10,6 @@ while 1
     if parameters.flag_scanner
         if tmp_value==199;
             tmp_scantrigger = GetSecs();
-            WaitSecs(parameters.time_scanwait);
             break;
         end
         [kdown ksecs kcode] = KbCheck();

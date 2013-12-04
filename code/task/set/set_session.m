@@ -5,7 +5,7 @@ switch parameters.session
     % training 1
     case 'training_1'
         tmp_message = 'First training';
-        tmp_mode = {'arrows','colour','avalines','map','pics','quiz','exchange','disabled','taskrand'};
+        tmp_mode = {'arrows','colour','map','pics','quiz','exchange','taskrand'};
         parameters.run_by_min = 1;
         parameters.run_min = 45;
         

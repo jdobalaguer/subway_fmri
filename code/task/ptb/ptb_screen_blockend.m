@@ -1,7 +1,8 @@
 if ~parameters.debug_subject; return; end
 if end_of_task; return; end
 
-%% show reward
+%% reward screen
+% screen (reward)
 if parameters.flag_showreward && parameters.flag_stopprob
     % show reward
     if (map.avatar.in_station ~= map.avatar.to_station)
@@ -12,8 +13,7 @@ if parameters.flag_showreward && parameters.flag_stopprob
         DrawFormattedText(ptb.screen_w,['Good! You''ve won ',num2str(map.avatar.reward),' coins'],'center','center');
     end
     
-    
-%% show number of steps
+% screen(number of steps)
 else
     % if minimum time
     if map.avatar.time == map.dists.steptimes_stations(map.avatar.to_station,map.avatar.start_station)
@@ -34,17 +34,36 @@ else
     parameters.screen_instation.stationstr = [map.stations(map.avatar.in_station).name,' Station'];
     ptb_screen_station(ptb,parameters.screen_instation,tmp_color);
 end
-    
-    
-%% flip
+% flip
 [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip',ptb.screen_time_next);
-
-time.screens{end+1}  = 'block end';
+ptb.screen_time_this = tmp_stimulusonset;
+if parameters.flag_timize
+    ptb.screen_time_next = tmp_stimulusonset + parameters.time_rew + parameters.time_rewjit*(2*rand()-1);
+else
+    ptb.screen_time_next = tmp_stimulusonset;
+    ptb_resp_click;
+end
+% time
+time.screens{end+1}  = 'rew';
 time.getsecs(end+1) = tmp_stimulusonset;
 time.breakgs(end+1) = time.breakgs(end);
 
-%% click
-ptb_resp_click;
+%% blank screen
+% screen
+Screen(ptb.screen_w, 'FillRect',  ptb.screen_bg_color);
+% flip
+[tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip',ptb.screen_time_next);
+ptb.screen_time_this = tmp_stimulusonset;
+if parameters.flag_timize
+    ptb.screen_time_next = tmp_stimulusonset + parameters.time_blockpos + parameters.time_blockposjit*(2*rand()-1);
+else
+    ptb.screen_time_next = tmp_stimulusonset;
+    ptb_resp_click;
+end
+% time
+time.screens{end+1}  = 'block pos';
+time.getsecs(end+1)  = tmp_stimulusonset;
+time.breakgs(end+1)  = time.breakgs(end);
 
 %% clean
 clear tmp_sublines tmp_nb tmp_color;
