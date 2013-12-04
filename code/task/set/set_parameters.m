@@ -13,7 +13,6 @@ parameters.flag_tasksel = 'rand';       % increasing difficulty over time (both 
 parameters.flag_quizsel = 'rand';       % increasing difficulty over time (both for quiz and task). options: 'incr', 'home', 'rand', 'oneorone'
 parameters.flag_timechange = 1;         % waiting time when switching sublines
 parameters.flag_showresp   = 0;         % show response (with timelimit)
-parameters.flag_timize = 0;             % pass screen through time (not clicks)
 
 %% session/modes
 parameters.session = 'training_2';      % session (defines the different modes in set_mode)
@@ -31,6 +30,7 @@ parameters.flag_disabledchanges = nan;  % switching lines requires an extra acti
 parameters.flag_showdisabled = nan;     % show arrows even when options are disabled (in change points)
 parameters.flag_stopprob    = nan;      % stochastic probability of stopping after optimal nb of steps
 parameters.flag_showreward  = nan;      % use rewards for each journey
+parameters.flag_timize      = nan;      % pass screen through time (not clicks)
 parameters.flag_timelimit   = nan;      % limited response time
 parameters.flag_break       = nan;      % breaks screens across the experiment
 parameters.flag_blank       = nan;      % blank screen between trials
@@ -119,6 +119,7 @@ parameters.screen_fontname  = 'Arial';
 
     % reward
 parameters.screen_reward = struct();
+parameters.screen_reward.labelrx  = 0.1;
 parameters.screen_reward.labelry  = 0.1;
 parameters.screen_reward.labelstr = 'total bonus is %d/%d so far';
 
@@ -136,14 +137,14 @@ parameters.screen_goalstation.boxround = 1;
 parameters.screen_goalstation.boxdx = 30;
 parameters.screen_goalstation.boxdy = 10;
 parameters.screen_goalstation.stationstr = ' ';
-parameters.screen_goalstation.stationry = 0.2;
+parameters.screen_goalstation.stationry = 0.15;
 parameters.screen_goalstation.stationfontcolor = [255,255,255];%[0,0,0];
 parameters.screen_goalstation.stationfontsize  = 20;
 parameters.screen_goalstation.stationfontname  = 'Arial';
 
     % bar
 parameters.screen_bar_drx   = 0.666;
-parameters.screen_bar_ry    = 0.333;
+parameters.screen_bar_ry    = [0.25,0.75];
 parameters.screen_bar_thick = 1;
 parameters.screen_bar_color = [128,128,128];
 
@@ -161,17 +162,10 @@ parameters.screen_instation.boxround = 1;
 parameters.screen_instation.boxdx = 30;
 parameters.screen_instation.boxdy = 10;
 parameters.screen_instation.stationstr = ' ';
-parameters.screen_instation.stationry = 0.5;
+parameters.screen_instation.stationry = 0.85;
 parameters.screen_instation.stationfontcolor = [255,255,255];%[0,0,0];
 parameters.screen_instation.stationfontsize  = 20;
 parameters.screen_instation.stationfontname  = 'Arial';
-
-    % picture
-parameters.screen_picture = struct();
-parameters.screen_picture.boxdx = 100;
-parameters.screen_picture.boxdy = 100;
-parameters.screen_picture.boxrx = 0.5;
-parameters.screen_picture.boxry = 0.6;
 
     % flag options
 parameters.screen_optionflags = struct();
@@ -183,7 +177,7 @@ parameters.screen_optionflags.forward_size = 1.0;
 parameters.screen_optionflags.exchange_size = 0.8;
 parameters.screen_optionflags.backward_size = 0.6;
 
-    % cross options
+    % cross box
 parameters.screen_crossstation = struct();
 parameters.screen_crossstation.labeldy = 20;
 parameters.screen_crossstation.labelfontcolor = [128,128,128];
@@ -192,22 +186,31 @@ parameters.screen_crossstation.labelfontname  = 'Arial';
 parameters.screen_crossstation.labelstr = 'exchange for';
 parameters.screen_crossstation.boxcolorin = parameters.screen_bg_color;
 parameters.screen_crossstation.boxcolorout = [255,255,255];%[0,0,0];
-parameters.screen_crossstation.boxthick = 2;
+parameters.screen_crossstation.boxthick = 10;
 parameters.screen_crossstation.boxround = 0.3;
-parameters.screen_crossstation.boxdx = 135;
-parameters.screen_crossstation.boxdy = 120;
+parameters.screen_crossstation.boxdx = 200;
+parameters.screen_crossstation.boxdy = 200;
 parameters.screen_crossstation.stationstr = ' ';
-parameters.screen_crossstation.stationry = 0.8;
+parameters.screen_crossstation.stationry = 0.5;
 parameters.screen_crossstation.stationfontcolor = [255,255,255];%[0,0,0];
 parameters.screen_crossstation.stationfontsize  = 32;
 parameters.screen_crossstation.stationfontname  = 'Arial';
-parameters.screen_crossstation.disabledcolor    = [32,32,32];%[223,223,223];
+parameters.screen_crossstation.disabledcolor    = [223,223,223];%[32,32,32];
 parameters.screen_crossstation.blackcolor       = [223,223,223];%[0,0,0];
 
+    % picture
+parameters.screen_picture = struct();
+parameters.screen_picture.alpha = 0.3;
+parameters.screen_picture.boxdx = 0.8*parameters.screen_crossstation.boxdx;
+parameters.screen_picture.boxdy = 0.8*parameters.screen_crossstation.boxdy;
+parameters.screen_picture.boxrx = 0.5;
+parameters.screen_picture.boxry = parameters.screen_crossstation.stationry;
+
+    % cross options
 parameters.screen_cross.labeldy = 10;
 parameters.screen_cross.nb = 4;
-parameters.screen_cross.sx = 60;
-parameters.screen_cross.dx = 80;
+parameters.screen_cross.sx = 80;
+parameters.screen_cross.dx = 120;
 parameters.screen_cross.ry = parameters.screen_crossstation.stationry;
 parameters.screen_cross.fontcolor = [255,255,255];%[0,0,0];
 parameters.screen_cross.fontbgcolor = [255,255,255,0];%[0,0,0,0];

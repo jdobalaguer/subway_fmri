@@ -14,6 +14,7 @@ parameters.flag_showdisabled    = 0;
 parameters.flag_stopprob        = 0;
 parameters.flag_showreward      = 0;
 parameters.flag_timelimit       = 0;
+parameters.flag_timize          = 0;
 parameters.flag_break           = 0;
 parameters.flag_blank           = 0;
 parameters.flag_jittering       = 0;
@@ -102,6 +103,12 @@ for i_mode = 1:length(parameters.mode)
             parameters.flag_timelimit = 1;
         case 'notime'
             parameters.flag_timelimit = 0;
+            
+        % timize
+        case 'timize'
+            parameters.flag_timize = 1;
+        case 'notimize'
+            parameters.flag_timize = 0;
             
         % break
         case 'break'
