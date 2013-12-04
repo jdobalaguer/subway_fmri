@@ -5,6 +5,10 @@ init_gs = GetSecs;
 this_gs = init_gs;
 end_gs = init_gs + parameters.time_exchange;
 
+time.screens{end+1}  = 'wait start';
+time.getsecs(end+1)  = init_gs;
+time.breakgs(end+1)  = time.breakgs(end);
+
 ptb.screen_time_this = init_gs;
 ptb.screen_time_next = end_gs;
 
@@ -49,6 +53,10 @@ while this_gs < end_gs
     [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip');
     this_gs = tmp_stimulusonset;
 end
+
+time.screens{end+1}  = 'wait end';
+time.getsecs(end+1)  = this_gs;
+time.breakgs(end+1)  = time.breakgs(end);
 
 clear init_gs this_gs end_gs;
 clear d c r theta x y dx dy;

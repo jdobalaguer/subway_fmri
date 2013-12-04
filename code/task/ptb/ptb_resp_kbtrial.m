@@ -5,6 +5,7 @@ resp.bool = 0;
 resp.code = nan;
 resp.name = '';
 resp.gs = nan;
+resp.ts = nan;
 resp.rt = nan;
 resp.option = nan;
 resp.subline = nan;
@@ -49,6 +50,12 @@ while ~resp.bool
                 resp.cor  = (resp.dist < map.dists.steptimes_stations(map.avatar.to_station,map.avatar.in_station));
             % no response
             case 'none'
+                resp.option = nan;
+                resp.subline = map.avatar.in_subline;
+                resp.station = map.avatar.in_station;
+                resp.steptime = map.sublines(resp.subline).time;
+                resp.dist = map.dists.steptimes_stations(map.avatar.to_station,resp.station);
+                resp.cor  = 0;
             % otherwise error
             otherwise
                 error(['ptb_resp_kbtrial: error. response "',parameters.resp_default,'" is not valid']);
@@ -113,6 +120,7 @@ while ~resp.bool
                 % set resp
                 resp.bool = 1;
                 resp.gs = tmp_gs;
+                resp.ts = tmp_gs - time.breakgs(end);
                 resp.rt = tmp_gs - ptb.screen_time_this;
                 resp.subline = options_sublines(resp.option);
                 resp.station = options_stations(resp.option);
@@ -131,9 +139,17 @@ while ~resp.bool
     end
 end
 
+time.screens{end+1}  = 'trial press';
+time.getsecs(end+1) = tmp_gs;
+time.breakgs(end+1) = time.breakgs(end);
+
 % release
 if ~parameters.flag_timelimit
     ptb_release;
+    
+    time.screens{end+1}  = 'trial release';
+    time.getsecs(end+1) = GetSecs();
+    time.breakgs(end+1) = time.breakgs(end);
 end
 
 %% Clean

@@ -3,16 +3,18 @@ if ~isempty(parameters.debug_preload); return; end
 
 %% preload map
 % check
-if ~exist('donefiles','dir')
-    mkdir('donefiles');
+if ~exist(['data',filesep,'maps',filesep,'done'],'dir')
+    mkdir(['data',filesep,'maps',filesep,'done']);
 end
 % preload
 if parameters.flag_mapload
-    if ~exist(['donefiles',   filesep,    'allmap_',participant.name,'.mat'],'file')
-        error('map_load: error. map does not exists');
+    tmp_mapfile = ['data',filesep,'maps',filesep,'done',filesep,'allmap_',participant.name,'.mat'];
+    if ~exist(tmp_mapfile,'file')
+        error(['map_load: error. map ''',tmp_mapfile,'''does not exist']);
     else
-        load(['donefiles',   filesep,    'allmap_',participant.name,'.mat'],'map');
+        load(tmp_mapfile,'map');
     end
+    clear tmp_mapfile;
     % resize
     map_resize;
     return;
@@ -21,8 +23,8 @@ end
 
 %% list of maps
 % check
-if ~exist('files','dir')
-    error('map_load: error. no ''files'' directory.');
+if ~exist(['data',filesep,'maps',filesep,'todo'],'dir')
+    error('map_load: error. no ''maps/todo'' directory.');
 end
 % ls the 'data' folder
 if ispc()
@@ -35,7 +37,7 @@ if ispc()
     end
     nb_lsfiles = length(lsfiles);
 else
-    lsfiles = regexp(ls('files'),'\s','split');
+    lsfiles = regexp(ls(['data',filesep,'maps',filesep,'todo']),'\s','split');
     i = 1;
     while i<=length(lsfiles)
         if isempty(lsfiles{i})
@@ -55,15 +57,15 @@ end
 
 %% load map
 file_map = lsfiles{randi(nb_lsfiles)};
-load(['files',filesep,file_map],'map');
+load(['data',filesep,'maps',filesep,'todo',filesep,file_map],'map');
 
 % move that file, so no one else uses it
 if parameters.debug_subject
-    if exist(['donefiles',   filesep,    'allmap_',participant.name,'.mat'],'file')
+    if exist(['data',filesep,'maps',filesep,'done',filesep,'allmap_',participant.name,'.mat'],'file')
         error('map_load: error. map already exists');
     end
-    movefile(   ['files',       filesep,    file_map],...
-                ['donefiles',   filesep,    'allmap_',participant.name,'.mat']);
+    movefile(   ['data',filesep,'maps',filesep,'todo',filesep,file_map], ...
+                ['data',filesep,'maps',filesep,'done',filesep,'allmap_',participant.name,'.mat']);
 end
 
 

@@ -1,4 +1,4 @@
-function [tmp_startstation,tmp_goalstation] = tools_setstations(dists,parameters,participant,ptb,i_block,j_trial,do_quiz)
+function [tmp_startstation,tmp_goalstation] = tools_setstations(dists,map,parameters,participant,ptb,i_block,j_trial,do_quiz)
     
     if do_quiz
         sel = parameters.flag_quizsel;
@@ -23,6 +23,39 @@ function [tmp_startstation,tmp_goalstation] = tools_setstations(dists,parameters
             tmp_goalstation  = tmp_startstation;
             while (tmp_goalstation == tmp_startstation)
                 tmp_goalstation  = randi(size(dists,2));
+            end
+        case 'oneorone'
+            %% one elbow (or more) or (not exclusive) one (exact) exchange
+            ok = 0;
+            while ~ok
+                % set random regular stations
+                tmp_startstation = 0;
+                tmp_goalstation  = 0;
+                while tmp_startstation==tmp_goalstation
+                    tmp_startstation = randi(size(dists,1));
+                    while ( map.stations(tmp_startstation).exchange || ...
+                            map.stations(tmp_startstation).ending   || ...
+                            map.stations(tmp_startstation).elbow    );
+                                tmp_startstation = randi(size(dists,1));
+                    end
+                    tmp_goalstation = randi(size(dists,2));
+                    while ( map.stations(tmp_goalstation).exchange || ...
+                            map.stations(tmp_goalstation).ending   || ...
+                            map.stations(tmp_goalstation).elbow    );
+                                tmp_goalstation = randi(size(dists,2));
+                    end
+                end
+                
+                % calculate values
+                tmp_steps     = map.dists.steptimes_stations(tmp_startstation,tmp_goalstation);
+                tmp_exchanges = map.dists.steptimes_sublines(tmp_startstation,tmp_goalstation);
+                tmp_elbows    = map.dists.steptimes_elbows(tmp_startstation,tmp_goalstation);
+                
+                % criterium
+                if tmp_steps<10 && tmp_steps>2
+                    if tmp_exchanges==1;                ok=1; end
+                    if tmp_elbows==1 && ~tmp_exchanges; ok=1; end
+                end
             end
         case 'incr'
             %% increasing difficulty

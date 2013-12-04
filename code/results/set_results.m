@@ -2,7 +2,7 @@ function set_results(session)
     %% participant files
         % ls the 'data' folder
     if ispc()
-        tmp_lsdata= dir(['data',filesep,session]);
+        tmp_lsdata= dir(['data',filesep,'data',filesep,session]);
         lsdata = {};
         for i = 1:length(tmp_lsdata)
             if ~(tmp_lsdata(i).name(1)=='.')
@@ -11,7 +11,7 @@ function set_results(session)
         end
         nb_lsdata = length(lsdata);
     else
-        lsdata = regexp(ls(['data',filesep,session]),'\s','split');
+        lsdata = regexp(ls(['data',filesep,'data',filesep,session]),'\s','split');
         i = 1;
         while i<=length(lsdata)
             if isempty(lsdata{i})
@@ -24,18 +24,18 @@ function set_results(session)
         clear i;
     end
         % mkdir the 'results' folder
-    if ~exist('result','dir');
-        mkdir('result');
+    if ~exist(['data',filesep,'result'],'dir');
+        mkdir(['data',filesep,'result']);
     end
-    if ~exist(['result',filesep,session],'dir');
-        mkdir(['result',filesep,session]);
+    if ~exist(['data',filesep,'result',filesep,session],'dir');
+        mkdir(['data',filesep,'result',filesep,session]);
     end
     
     % for each data file
     for i_lsdata = 1:nb_lsdata
         %% initialise
         % load
-        load(['data',filesep,session,filesep,lsdata{i_lsdata}]);
+        load(['data',filesep,'data',filesep,session,filesep,lsdata{i_lsdata}]);
         % struct
         results = struct();
         fprintf(['set_results: setting results for ',participant.name,'\n']);
@@ -76,6 +76,6 @@ function set_results(session)
         
         
         %% save
-        save(['result',filesep,session,filesep,'results_',participant.name,'_',num2str(participant.id),'.mat'],'results','map','parameters','participant','ptb');
+        save(['data',filesep,'result',filesep,session,filesep,'results_',participant.name,'_',num2str(participant.id),'.mat'],'results','map','parameters','participant','ptb');
     end
 end

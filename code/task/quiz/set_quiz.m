@@ -20,7 +20,7 @@ if parameters.run_by_blocks
 end
 % trial counter
 if parameters.run_by_trials
-    if i_quiz > length(parameters.quiz_trials) || parameters.quiz_trials(parameters.quiz_trials) > j_trial
+    if i_quiz > length(parameters.quiz_trials) || parameters.quiz_trials(i_quiz) > j_trial
         do_quiz = 0;
     end
 end
@@ -47,7 +47,7 @@ if do_quiz
             end
             % set stations
             tmp_dists = map.dists.exchanges_sublines(tmp_instations,tmp_tostations);
-            [i_tmpinstations,i_tmptostations] = tools_setstations(tmp_dists,parameters,participant,ptb,i_block,j_trial,1);
+            [i_tmpinstations,i_tmptostations] = tools_setstations(tmp_dists,map,parameters,participant,ptb,i_block,j_trial,1);
             in_station = tmp_instations(i_tmpinstations);
             to_station = tmp_tostations(i_tmptostations);
             % in_subline

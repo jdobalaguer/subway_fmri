@@ -28,6 +28,11 @@ end
 
 % Flip
 [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip');
+
+time.screens{end+1}  = 'block start';
+time.getsecs(end+1) = tmp_stimulusonset;
+time.breakgs(end+1) = time.breakgs(end);
+
 ptb.screen_time_this = tmp_stimulusonset;
 ptb.screen_time_next = tmp_stimulusonset;
 

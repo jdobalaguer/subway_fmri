@@ -7,7 +7,7 @@ if (    parameters.resp_kbadmin || ...
     while KbCheck(); end
 end
 
-%% mouse
+%% mouse release
 if parameters.resp_mouse
     tmp_mb = 1;
     while any(tmp_mb)
