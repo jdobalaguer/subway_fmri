@@ -4,6 +4,7 @@ if ~parameters.debug_subject; return; end
 data.exp_sub(end+1)     = participant.id;
 data.exp_map(end+1)     = map.id;
 data.exp_session{end+1} = parameters.session;
+data.exp_break(end+1)   = i_break;
 data.exp_block(end+1)   = i_block;
 data.exp_trial(end+1)   = i_trial;
 data.exp_jtrial(end+1)  = j_trial;
@@ -16,13 +17,16 @@ data.flag_mail(end+1)          = parameters.flag_mail;
 
 data.flag_arrowthicks(end+1)   = parameters.flag_arrowthicks;
 data.flag_arrowsizes(end+1)    = parameters.flag_arrowsizes;
-data.flag_showsublines(end+1)  = parameters.flag_showsublines;
+data.flag_goallines(end+1)     = parameters.flag_goallines;
 data.flag_tasksel{end+1}       = parameters.flag_tasksel;
 data.flag_quizsel{end+1}       = parameters.flag_quizsel;
 data.flag_timechange(end+1)    = parameters.flag_timechange;
 
+data.flag_mapload(end+1)       = parameters.flag_mapload;
 data.flag_blackandwhite(end+1) = parameters.flag_blackandwhite;
+data.flag_avatarlines(end+1)   = parameters.flag_avatarlines;
 data.flag_showmap(end+1)       = parameters.flag_showmap;
+data.flag_showpics(end+1)      = parameters.flag_showpics;
 data.flag_quiz(end+1)          = parameters.flag_quiz;
 data.flag_enum(end+1)          = parameters.flag_enum;
 data.flag_disabledchanges(end+1) = parameters.flag_disabledchanges;
@@ -30,6 +34,8 @@ data.flag_showdisabled(end+1)  = parameters.flag_showdisabled;
 data.flag_stopprob(end+1)      = parameters.flag_stopprob;
 data.flag_showreward(end+1)    = parameters.flag_showreward;
 data.flag_timelimit(end+1)     = parameters.flag_timelimit;
+data.flag_break(end+1)         = parameters.flag_break;
+data.flag_blank(end+1)         = parameters.flag_blank;
 data.flag_jittering(end+1)     = parameters.flag_jittering;
 data.flag_scanner(end+1)       = parameters.flag_scanner;
 
@@ -37,6 +43,7 @@ data.flag_scanner(end+1)       = parameters.flag_scanner;
 data.resp_bool(end+1)       = resp.bool;
 data.resp_keycode(end+1)    = resp.code;
 data.resp_gs(end+1)         = resp.gs;
+data.resp_ts(end+1)         = resp.ts;
 data.resp_rt(end+1)         = resp.rt;
 data.resp_option(end+1)     = resp.option;
 data.resp_nboptions(end+1)  = sum(options_sublines>0);

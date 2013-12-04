@@ -11,5 +11,14 @@ Screen(ptb.screen_w, 'TextBackgroundColor', parameters.screen_fontbgcolor);
 DrawFormattedText(ptb.screen_w,'Memory game!','center','center');
 
 % Flip
-Screen(ptb.screen_w,'Flip');
+[tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip');
+
+time.screens{end+1}  = 'enum start';
+time.getsecs(end+1) = tmp_stimulusonset;
+time.breakgs(end+1) = time.breakgs(end);
+
+% Click
 ptb_resp_click;
+
+% Clean
+clear tmp_vbltimestamp tmp_stimulusonset;

@@ -5,49 +5,33 @@ switch parameters.session
     % training 1
     case 'training_1'
         tmp_message = 'First training';
-        tmp_mode = {'map','colour','quiz','exchange'};
+        tmp_mode = {'arrows','colour','avalines','map','pics','quiz','exchange','disabled','taskrand'};
         parameters.run_by_min = 1;
         parameters.run_min = 45;
         
     % training 2
     case 'training_2'
         tmp_message = 'Second training';
-        tmp_mode = {'samemap','disabled','bailout','reward'};
+        tmp_mode = {'samemap','bailout','reward','time','break','blank','jitter','taskoneorone'};
         parameters.run_by_min = 1;
-        parameters.run_min = 45;
+        parameters.run_min = 60;
         
     % scanner
     case 'scanner'
         tmp_message = 'Scanner session';
-        tmp_mode = {'samemap','disabled','bailout','reward','jitter','scanner'};
+        tmp_mode = {'samemap','bailout','reward','time','break','blank','jitter','scanner','taskoneorone'};
         parameters.run_by_min = 1;
         parameters.run_min = 60;
         
     % debug
     case 'debug'
         tmp_message = 'Debug session';
-        tmp_mode = {'map','colour'};
-        parameters.run_by_min = 1;
-        parameters.run_min = 5;
+        tmp_mode = {'arrows','colour','avalines','map','pics','quiz','exchange','disabled','taskrand'};
+        parameters.run_by_blocks = 1;
+        parameters.run_blocks = 5;
         
     % error
     otherwise
-        %{
-            --check
-        colour
-        map
-        exchange (click space)
-        disabled (show disabled)
-        quiz
-        reward
-        time
-        jitter (complementary to the 'time' option)
-        buttonbox
-        scanner
-            --todo
-        bailout
-        enum
-        %}
         error(['set_session: error. session "',parameters.session,'" doesn''t exist']);
 end
 
@@ -76,7 +60,12 @@ end
 %% set modes
 parameters.mode = tmp_mode;
 
-%% set quiz and enum triggers
+%% set break and quiz and enum triggers
+% break
+parameters.break_min   = parameters.break_rmin   * parameters.run_min;
+parameters.break_blocks= parameters.break_rblocks* parameters.run_blocks;
+parameters.break_trials= parameters.break_rtrials* parameters.run_trials;
+
 % quiz
 parameters.quiz_min    = parameters.quiz_rmin    * parameters.run_min;
 parameters.quiz_blocks = parameters.quiz_rblocks * parameters.run_blocks;

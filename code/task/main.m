@@ -1,7 +1,7 @@
 %{
     notes.
 
-    things to do:   enum is not working anymore.
+    things to do:   fix enum. it is not working anymore.
 %}
 
 clc;
@@ -14,6 +14,7 @@ set_participant;
 
 %% CREATE
 data_create;
+time_create;
 
 %% TASK
 set_task;
@@ -26,8 +27,6 @@ try
     %% SET INITIAL MODE
     set_session;
     set_mode;
-    % scanner connection
-    set_scanner;
 
     %% MAP
     % load
@@ -37,6 +36,8 @@ try
     
     %% BLOCK
     while ~end_of_task
+        % set break
+        set_break;
         % new block
         set_block;
         % change modes
@@ -71,6 +72,8 @@ try
             data_save;
             % set changes
             map_change;
+            % blank screen
+            ptb_screen_blank;
         end
         
         % clean
@@ -100,7 +103,7 @@ try
     ptb_stop;
     
     % clean
-    clear i_block j_trial i_quiz end_of_task ans;
+    clear i_block j_trial i_quiz i_break end_of_task ans;
     
 catch err
     % close psychtoolbox

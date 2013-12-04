@@ -13,14 +13,16 @@ function dists = map_dists(map)
         %fprintf('map_dists: block number %d\n',i_block);
         
         % timesteps (minimise time)
-        [pt,pl,t,dt,dl] = map_dijkstra_station(map,i_station);
+        [pt,pl,t,dt,dl,de] = map_dijkstra_station(map,i_station);
         dists.steptimes_stations(i_station,:) = dt;
         dists.steptimes_sublines(i_station,:) = dl;
+        dists.steptimes_elbows(i_station,:)   = de;
         
         % exchanges (minimise changing sublines)
-        [pt,pl,t,dt,dl] = map_dijkstra_subline(map,i_station);
+        [pt,pl,t,dt,dl,de] = map_dijkstra_subline(map,i_station);
         dists.exchanges_stations(i_station,:) = dt;
         dists.exchanges_sublines(i_station,:) = dl;
+        dists.exchanges_elbows(i_station,:)   = de;
         
         % euclidean
         t_pos = map.stations(i_station).position;

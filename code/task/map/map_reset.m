@@ -2,7 +2,7 @@
 
 %% set values, reset map
 % start, goal station
-[tmp_startstation,tmp_goalstation] = tools_setstations(map.dists.exchanges_sublines,parameters,participant,ptb,i_block,j_trial,0);
+[tmp_startstation,tmp_goalstation] = tools_setstations(map.dists.exchanges_sublines,map,parameters,participant,ptb,i_block,j_trial,0);
 map.avatar.start_station = tmp_startstation;
 map.avatar.to_station    = tmp_goalstation;
 

@@ -5,8 +5,17 @@ if ~isempty(parameters.debug_preload); return; end
 if ~exist('data','dir')
     mkdir 'data';
 end
-if ~exist(['data',filesep,parameters.session],'dir')
-    mkdir(['data',filesep,parameters.session]);
+if ~exist(['data',filesep,'data'],'dir')
+    mkdir(['data',filesep,'data']);
+end
+if ~exist(['data',filesep,'data',filesep,parameters.session],'dir')
+    mkdir(['data',filesep,'data',filesep,parameters.session]);
+end
+if ~exist(['data',filesep,'error'],'dir')
+    mkdir(['data',filesep,'error']);
+end
+if ~exist(['data',filesep,'error',filesep,parameters.session],'dir')
+    mkdir(['data',filesep,'error',filesep,parameters.session]);
 end
 
 % struct
@@ -16,6 +25,7 @@ data = struct();
 data.exp_sub = [];
 data.exp_map = [];
 data.exp_session = {};
+data.exp_break = [];
 data.exp_block = [];
 data.exp_trial = [];
 data.exp_jtrial = [];
@@ -28,13 +38,16 @@ data.flag_mail          = [];
 
 data.flag_arrowthicks   = [];
 data.flag_arrowsizes    = [];
-data.flag_showsublines  = [];
+data.flag_goallines     = [];
 data.flag_tasksel       = {};
 data.flag_quizsel       = {};
 data.flag_timechange    = [];
 
+data.flag_mapload       = [];
 data.flag_blackandwhite = [];
+data.flag_avatarlines   = [];
 data.flag_showmap       = [];
+data.flag_showpics      = [];
 data.flag_quiz          = [];
 data.flag_enum          = [];
 data.flag_disabledchanges = [];
@@ -42,6 +55,8 @@ data.flag_showdisabled  = [];
 data.flag_stopprob      = [];
 data.flag_showreward    = [];
 data.flag_timelimit     = [];
+data.flag_break         = [];
+data.flag_blank         = [];
 data.flag_jittering     = [];
 data.flag_scanner       = [];
 
@@ -49,6 +64,7 @@ data.flag_scanner       = [];
 data.resp_bool    = [];
 data.resp_keycode = [];
 data.resp_gs      = [];
+data.resp_ts      = [];
 data.resp_rt      = [];
 data.resp_option  = [];
 data.resp_nboptions = [];

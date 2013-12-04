@@ -1,7 +1,7 @@
 function allresults = load_results(session)
     %% participant files
     % ls the 'data' folder
-    lsdata = regexp(ls(['result',filesep,session]),'\s','split');
+    lsdata = regexp(ls(['data',filesep,'result',filesep,session]),'\s','split');
     i = 1;
     while i<=length(lsdata)
         if isempty(lsdata{i})
@@ -18,7 +18,7 @@ function allresults = load_results(session)
     % for each participant
     for i_lsdata = 1:nb_lsdata
         % load
-        load(['result',filesep,session,filesep,lsdata{i_lsdata}]);
+        load(['data',filesep,'result',filesep,session,filesep,lsdata{i_lsdata}]);
         
         % change subject number
         results.trial_data.exp_sub(:) = i_lsdata;

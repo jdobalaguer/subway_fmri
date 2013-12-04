@@ -1,0 +1,11 @@
+to resize, center and crop images:
+
+  cd input/
+  for f in *
+  > do
+  > convert -resize '200x200^' -gravity center -crop 200x200+0+0 $f ../output/$f
+  > done
+
+to check sizes:
+  
+  identify output/* | grep -v 220x220+0+0

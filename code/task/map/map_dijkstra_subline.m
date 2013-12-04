@@ -18,7 +18,7 @@ it_station = target node index
 %}
 
 % dijkstra algorithm for a main map ---------------------------------------
-function [path_station,path_subline,time_cost,distances_station,distances_subline] = map_dijkstra_subline(map,is_station)
+function [path_station,path_subline,time_cost,distances_station,distances_subline,distances_elbow] = map_dijkstra_subline(map,is_station)
     
     it_station = 1;
     
@@ -29,9 +29,12 @@ function [path_station,path_subline,time_cost,distances_station,distances_sublin
     distances_station(is_station) = 0;
     distances_subline(1:n) = inf;
     distances_subline(is_station) = 0;
+    distances_elbow(1:n) = inf;
+    distances_elbow(is_station) = 0;
     parent_station(1:n) = 0;
     parent_subline(1:n) = 0;
-    
+    parent_elbow(1:n)   = nan;
+        
     % n-1 nodes visited at most
     for i = 1:(n-1),
         % find the nearest node to the source not visited yet
@@ -55,25 +58,30 @@ function [path_station,path_subline,time_cost,distances_station,distances_sublin
                 in_subline = map.links(u,v);
                 cost_station = map.sublines(in_subline).time;
                 cost_subline = (parent_subline(u)~=in_subline);
+                cost_elbow   = map.stations(v).elbow;
             else
                 % if no possible main sublines, infinite cost
                 cost_station = Inf;
                 cost_subline = Inf;
+                cost_elbow   = Inf;
             end
 
             % update values
             if cost_station + distances_subline(u) < distances_subline(v)
                 distances_station(v) = distances_station(u) + cost_station;
                 distances_subline(v) = distances_subline(u) + cost_subline;
+                distances_elbow(v)   = distances_elbow(u)   + cost_elbow;
                 parent_station(v) = u;
                 parent_subline(v) = in_subline;
+                parent_elbow(v)   = map.stations(u).elbow;
             end
         end
     end
     
     % deduce the path (if exists) and its average time cost
-    path_subline = [];
     path_station = it_station;
+    path_subline = [];
+    path_elbow = [];
     time_cost = distances_subline(it_station);
     if parent_station(it_station) ~= 0
         ii_station = it_station;
@@ -81,6 +89,7 @@ function [path_station,path_subline,time_cost,distances_station,distances_sublin
         while ii_station ~= is_station
             path_station = [parent_station(ii_station) path_station];
             path_subline = [parent_subline(ii_station) path_subline];
+            path_elbow   = [parent_elbow(ii_station) path_elbow];
             ii_station = parent_station(ii_station);
             %todo: increase time
         end
@@ -89,4 +98,6 @@ function [path_station,path_subline,time_cost,distances_station,distances_sublin
     % inverse paths
     path_station = fliplr(path_station);
     path_subline = fliplr(path_subline);
+    path_elbow   = fliplr(path_elbow);
+    
 end

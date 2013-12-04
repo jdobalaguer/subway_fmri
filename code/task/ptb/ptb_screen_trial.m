@@ -1,11 +1,26 @@
 if end_of_trial && ~resp.bool; return; end
 if end_of_trial && ~parameters.flag_timelimit; return; end
+if end_of_trial && ~parameters.flag_showresp;  return; end
 
 Screen(ptb.screen_w, 'FillRect',  ptb.screen_bg_color);
+Screen(ptb.screen_w, 'TextFont',  parameters.screen_fontname);
+Screen(ptb.screen_w, 'TextSize',  parameters.screen_fontsize);
+Screen(ptb.screen_w, 'TextColor', parameters.screen_fontcolor);
+Screen(ptb.screen_w, 'TextBackgroundColor', parameters.screen_fontbgcolor);
+
 
 %% Draw stations
+    % total reward
+if parameters.flag_showreward && exist('end_of_block','var')
+    tmp_rewardswin   = data.avatar_reward(logical(data.exp_stoptrial)) .* ...
+                       (data.resp_station(logical(data.exp_stoptrial)) == data.avatar_goalstation(logical(data.exp_stoptrial)));
+    tmp_rewardstotal = data.avatar_reward(logical(data.exp_stoptrial));
+    tmp_rewardstring = sprintf(parameters.screen_reward.labelstr,nansum(tmp_rewardswin),nansum(tmp_rewardstotal));
+    DrawFormattedText(ptb.screen_w,tmp_rewardstring,'center',parameters.screen_reward.labelry*ptb.screen_drect(2)+ptb.screen_rect(2));
+    clear tmp_rewardswin tmp_rewardstotal tmp_rewardstring;
+end    
     % goal station
-if parameters.flag_showsublines
+if parameters.flag_goallines
     tmp_sublines = 2*unique(ceil(.5*map.links(:,map.avatar.to_station)));
     tmp_sublines(~tmp_sublines) = [];
     tmp_nb       = length(tmp_sublines);
@@ -26,7 +41,7 @@ tmp_color    = nan(tmp_nb,3);
 for i_sublines = 1:tmp_nb
     tmp_color(i_sublines,:) = map.sublines(tmp_sublines(i_sublines)).color;
 end
-if ~parameters.flag_showsublines
+if ~parameters.flag_avatarlines
     tmp_color = [];
 end
 parameters.screen_instation.labelstr = 'this is';
@@ -34,6 +49,16 @@ if ~(exist('do_enum','var') && do_enum && exist('tmp_askstations','var') && tmp_
     parameters.screen_instation.stationstr = [map.stations(map.avatar.in_station).name,' Station'];
 end
 ptb_screen_station(ptb,parameters.screen_instation,tmp_color);
+    % picture
+if parameters.flag_showpics
+    tmp_picimage   = uint8(imread([map.stations(map.avatar.in_station).name,'.jpg']));
+    tmp_pictexture = Screen('MakeTexture',ptb.screen_w,tmp_picimage);
+    tmp_picrect    = CenterRectOnPoint([0,0,parameters.screen_picture.boxdx,parameters.screen_picture.boxdy],...
+                                        parameters.screen_picture.boxrx*ptb.screen_drect(1)+ptb.screen_rect(1),...
+                                        parameters.screen_picture.boxry*ptb.screen_drect(2)+ptb.screen_rect(2));
+    Screen('DrawTexture',ptb.screen_w,tmp_pictexture,[],tmp_picrect);
+    clear tmp_picimage tmp_pictexture tmp_picrect;
+end
     % bar
 Screen('DrawLine',  ptb.screen_w, ...
                     parameters.screen_bar_color,...
@@ -45,15 +70,16 @@ Screen('DrawLine',  ptb.screen_w, ...
     % reward
 if parameters.flag_showreward && exist('end_of_block','var')
     if map.avatar.reward == parameters.reward_low
-        str_reward = [' reward is ',num2str(map.avatar.reward),' coin '];
+        tmp_rewimage = uint8(imread('blacksilver_low.jpg'));
     else
-        str_reward = [' REWARD IS ',num2str(map.avatar.reward),' COINS '];
+        tmp_rewimage = uint8(imread('blacksilver_high.jpg'));
     end
-    nbr_reward = Screen('TextBounds',ptb.screen_w,str_reward);
-    DrawFormattedText(ptb.screen_w,str_reward,...
-        ptb.screen_center(1)                                              - .5*nbr_reward(3),...
-        ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry - .5*nbr_reward(4)...
-        );
+    tmp_rewtexture = Screen('MakeTexture',ptb.screen_w,tmp_rewimage);
+    tmp_rewrect    = CenterRectOnPoint([0,0,size(tmp_rewimage,2),size(tmp_rewimage,1)],...
+                        ptb.screen_center(1),...
+                        ptb.screen_rect(2) + ptb.screen_drect(2)*parameters.screen_bar_ry);
+    Screen('DrawTexture',ptb.screen_w,tmp_rewtexture,[],tmp_rewrect);
+    clear tmp_rewimage tmp_rewmap tmp_rewalpha tmp_rewtexture tmp_rewrect;
 end
 
 
@@ -186,6 +212,7 @@ if ~end_of_trial
     end
 end
 
+
 %% Draw options
 % option frame
 ptb_screen_station(ptb,parameters.screen_crossstation,[]);
@@ -215,7 +242,7 @@ for i_options = 1:tmp_nb
         tmp_symbol = options_symbols(i_options);
         tmp_thick  = options_thicks(i_options);
         if parameters.flag_blackandwhite
-            tmp_color = [0,0,0];
+            tmp_color = parameters.screen_crossstation.blackcolor;
         else
             tmp_color = map.sublines(options_sublines(i_options)).color;
         end
@@ -225,13 +252,13 @@ for i_options = 1:tmp_nb
             % disabled option
             tmp_symbol = options_symbols(i_options);
             tmp_thick  = options_thicks(i_options);
-            tmp_color = [223,223,223];
+            tmp_color  = parameters.screen_crossstation.disabledcolor;
             tmp_textcolor = parameters.screen_cross.fontcolor;
         else
             % no option
             tmp_symbol = 'O';
             tmp_thick  = options_thicks(i_options);
-            tmp_color = [223,223,223];
+            tmp_color  = parameters.screen_crossstation.disabledcolor;
             tmp_textcolor = parameters.screen_cross.fontcolor;
         end
     end
@@ -244,6 +271,7 @@ for i_options = 1:tmp_nb
                         tmp_nys(i_options),...
                         tmp_thick);
 end
+
 
 %% Enum List
 if exist('do_enum','var') && do_enum && exist('tmp_askstations','var') && tmp_askstations(i_trial)
@@ -259,25 +287,47 @@ if exist('do_enum','var') && do_enum && exist('tmp_askstations','var') && tmp_as
     end
     br_names = ptb_screen_enumlist(ptb,parameters.screen_list,[tmp_lastnames,tmp_nextnames],i_trial,resp_istation,in_istation);
 end
+
+
 %% Flip
-[tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip',ptb.screen_time_next);
+if end_of_trial
+    [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip');
+else
+    [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip',ptb.screen_time_next);
+end
+
+if exist('do_quiz','var')  && do_quiz
+    time.screens{end+1}  = 'quiz trial';
+elseif exist('do_enum','var') && do_enum
+    time.screens{end+1}  = 'enum trial';
+elseif end_of_trial
+    time.screens{end+1}  = 'trial end';
+else
+    time.screens{end+1}  = 'trial';
+end
+time.getsecs(end+1) = tmp_stimulusonset;
+time.breakgs(end+1) = time.breakgs(end);
+
 % start distinction for limited time response
-if parameters.flag_timelimit && ~end_of_trial
-    ptb.screen_time_this = tmp_stimulusonset;
-    % scanner
-    if parameters.flag_scanner
-        ptb.screen_time_next = tmp_stimulusonset + parameters.time_isiscan;
-    % no scanner
-    else
-        ptb.screen_time_next = tmp_stimulusonset + parameters.time_isi;
-    end
-    % jit
-    if parameters.flag_jittering
-        ptb.screen_time_next = tmp_stimulusonset + parameters.time_isijit;
-    end
-    % check
-    if ptb.screen_time_next < ptb.screen_time_this
-        ptb.screen_time_next = ptb.screen_time_this;
+if parameters.flag_timelimit
+    if ~end_of_trial
+        ptb.screen_time_this = tmp_stimulusonset;
+        ptb.screen_time_next = tmp_stimulusonset;
+        % scanner
+        if parameters.flag_scanner
+            ptb.screen_time_next = ptb.screen_time_next + parameters.time_isiscan;
+        % no scanner
+        else
+            ptb.screen_time_next = ptb.screen_time_next + parameters.time_isi;
+        end
+        % jit
+        if parameters.flag_jittering
+            ptb.screen_time_next = ptb.screen_time_next + parameters.time_isijit*(2*rand()-1);
+        end
+        % check
+        if ptb.screen_time_next < ptb.screen_time_this
+            ptb.screen_time_next = ptb.screen_time_this;
+        end
     end
 else
     ptb.screen_time_this = tmp_stimulusonset;

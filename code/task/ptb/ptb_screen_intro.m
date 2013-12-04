@@ -18,8 +18,15 @@ ny = ny+50; DrawFormattedText(ptb.screen_w,'At each step, you can move forward o
 ny = 600;   DrawFormattedText(ptb.screen_w,'Good luck!'                                                                 ,'center',ny);
 
 % Flip
-Screen(ptb.screen_w,'Flip');
+[tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip');
+
+time.screens{end+1}  = 'intro';
+time.getsecs(end+1) = tmp_stimulusonset;
+time.breakgs(end+1) = time.breakgs(end);
+
+% Click
 ptb_resp_click;
 
 % clean
 clear ny;
+clear tmp_vbltimestamp tmp_stimulusonset;

@@ -29,9 +29,6 @@ while tmp_while
     end
 end
 
-% release
-ptb_release;
-
 % timestamps
 ptb.screen_time_this = GetSecs();
 ptb.screen_time_next = GetSecs();

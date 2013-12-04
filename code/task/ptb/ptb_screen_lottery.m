@@ -30,9 +30,17 @@ else
     DrawFormattedText(ptb.screen_w,str_reward,'center','center');
 
     % Flip
-    Screen(ptb.screen_w,'Flip');
+    [tmp_vbltimestamp,tmp_stimulusonset] = Screen(ptb.screen_w,'Flip');
+
+    time.screens{end+1}  = 'lottery';
+    time.getsecs(end+1) = tmp_stimulusonset;
+    time.breakgs(end+1) = time.breakgs(end);
+    
+    % Response
     ptb_resp_click;
 end
 
 % clean
+clear ratio_coins;
 clear rewards_win rewards_total str_reward;
+clear tmp_vbltimestamp tmp_stimulusonset;
