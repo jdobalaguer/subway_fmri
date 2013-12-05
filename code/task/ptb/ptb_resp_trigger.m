@@ -2,6 +2,7 @@
 %% save trigger
 tmp_scantrigger = nan;
 while 1
+    tmp_value = nan;
     if exist('lptread','builtin')
         tmp_value = lptread(889);
     end
