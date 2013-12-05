@@ -15,7 +15,7 @@ parameters.flag_timechange = 1;         % waiting time when switching sublines
 parameters.flag_showresp   = 0;         % show response (with timelimit)
 
 %% session/modes
-parameters.session = 'training_2';      % session (defines the different modes in set_mode)
+parameters.session = 'scanner';         % session (defines the different modes in set_mode)
 parameters.mode = {};
 parameters.flag_arrowthicks = nan;      % forward is thicker
 parameters.flag_arrowsizes  = nan;      % forward is bigger
@@ -78,7 +78,7 @@ parameters.reward_block = [];
 
 %% screen times
 parameters.time_breakpre = 10;
-parameters.time_breakpos = 10;
+parameters.time_breakpos = 5;
 parameters.time_block    = 3;
 parameters.time_blockpre = 3.5;
 parameters.time_blockprejit = 1.5;
