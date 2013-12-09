@@ -15,7 +15,7 @@ parameters.flag_timechange = 1;         % waiting time when switching sublines
 parameters.flag_showresp   = 0;         % show response (with timelimit)
 
 %% session/modes
-parameters.session = 'scanner';         % session (defines the different modes in set_mode)
+parameters.session = 'training_1';      % session (defines the different modes in set_mode)
 parameters.mode = {};
 parameters.flag_arrowthicks = nan;      % forward is thicker
 parameters.flag_arrowsizes  = nan;      % forward is bigger
@@ -103,18 +103,19 @@ parameters.resp_kbadmin   = 1;
 parameters.resp_kbcross   = 1;
 parameters.resp_kbline    = 1;
 parameters.resp_mouse     = 1;
-parameters.resp_buttonbox = 1;
+parameters.resp_buttonbox = 0;
 parameters.resp_default   = 'none';   % one of {'random','forward','none'}
 
 %% screen structs
 %parameters.screen_rect   = [0,0,1280,960];
+%parameters.screen_rect   = [0,0,1920,1080];
 parameters.screen_bg_color  = [0,0,0];%[255,255,255];
 
 parameters.screen_fontcolor = [128,128,128];
 parameters.screen_whitecolor = [0,0,0];%[255,255,255];
 parameters.screen_blackcolor = [255,255,255];%[0,0,0];
 parameters.screen_fontbgcolor = [255,255,255,0];%[0,0,0,0];
-parameters.screen_fontsize  = 20;
+parameters.screen_fontsize  = 32;
 parameters.screen_fontname  = 'Arial';
 
     % reward
@@ -127,7 +128,7 @@ parameters.screen_reward.labelstr = 'total bonus is %d/%d so far';
 parameters.screen_goalstation = struct();
 parameters.screen_goalstation.labeldy = 20;
 parameters.screen_goalstation.labelfontcolor = [128,128,128];
-parameters.screen_goalstation.labelfontsize  = 20;
+parameters.screen_goalstation.labelfontsize  = 32;
 parameters.screen_goalstation.labelfontname  = 'Arial';
 parameters.screen_goalstation.labelstr = 'meeting at';
 parameters.screen_goalstation.boxcolorin = parameters.screen_bg_color;
@@ -139,7 +140,7 @@ parameters.screen_goalstation.boxdy = 10;
 parameters.screen_goalstation.stationstr = ' ';
 parameters.screen_goalstation.stationry = 0.15;
 parameters.screen_goalstation.stationfontcolor = [255,255,255];%[0,0,0];
-parameters.screen_goalstation.stationfontsize  = 20;
+parameters.screen_goalstation.stationfontsize  = 32;
 parameters.screen_goalstation.stationfontname  = 'Arial';
 
     % bar
@@ -152,7 +153,7 @@ parameters.screen_bar_color = [128,128,128];
 parameters.screen_instation = struct();
 parameters.screen_instation.labeldy = 20;
 parameters.screen_instation.labelfontcolor = [128,128,128];
-parameters.screen_instation.labelfontsize  = 20;
+parameters.screen_instation.labelfontsize  = 32;
 parameters.screen_instation.labelfontname  = 'Arial';
 parameters.screen_instation.labelstr = 'this is';
 parameters.screen_instation.boxcolorin = parameters.screen_bg_color;
@@ -164,7 +165,7 @@ parameters.screen_instation.boxdy = 10;
 parameters.screen_instation.stationstr = ' ';
 parameters.screen_instation.stationry = 0.85;
 parameters.screen_instation.stationfontcolor = [255,255,255];%[0,0,0];
-parameters.screen_instation.stationfontsize  = 20;
+parameters.screen_instation.stationfontsize  = 32;
 parameters.screen_instation.stationfontname  = 'Arial';
 
     % flag options
@@ -181,15 +182,15 @@ parameters.screen_optionflags.backward_size = 0.6;
 parameters.screen_crossstation = struct();
 parameters.screen_crossstation.labeldy = 20;
 parameters.screen_crossstation.labelfontcolor = [128,128,128];
-parameters.screen_crossstation.labelfontsize  = 20;
+parameters.screen_crossstation.labelfontsize  = 32;
 parameters.screen_crossstation.labelfontname  = 'Arial';
 parameters.screen_crossstation.labelstr = 'exchange for';
 parameters.screen_crossstation.boxcolorin = parameters.screen_bg_color;
 parameters.screen_crossstation.boxcolorout = [255,255,255];%[0,0,0];
 parameters.screen_crossstation.boxthick = 10;
 parameters.screen_crossstation.boxround = 0.3;
-parameters.screen_crossstation.boxdx = 200;
-parameters.screen_crossstation.boxdy = 200;
+parameters.screen_crossstation.boxdx = 170;
+parameters.screen_crossstation.boxdy = 150;
 parameters.screen_crossstation.stationstr = ' ';
 parameters.screen_crossstation.stationry = 0.5;
 parameters.screen_crossstation.stationfontcolor = [255,255,255];%[0,0,0];
@@ -214,7 +215,7 @@ parameters.screen_cross.dx = 120;
 parameters.screen_cross.ry = parameters.screen_crossstation.stationry;
 parameters.screen_cross.fontcolor = [255,255,255];%[0,0,0];
 parameters.screen_cross.fontbgcolor = [255,255,255,0];%[0,0,0,0];
-parameters.screen_cross.fontsize  = 20;
+parameters.screen_cross.fontsize  = 32;
 parameters.screen_cross.fontname  = 'Arial';
 
     % waiting screen
@@ -227,7 +228,7 @@ parameters.screen_wait.thick_hand   = 10;
 
     % enum list screen
 parameters.screen_list = struct();
-parameters.screen_list.fontsize  = 20;
+parameters.screen_list.fontsize  = 32;
 parameters.screen_list.fontname  = 'Arial';
 parameters.screen_list.fontbgcolor = [255,255,255];%[0,0,0,0];
 parameters.screen_list.fontcolor_last = [192,192,192];

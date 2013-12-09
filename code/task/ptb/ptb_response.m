@@ -10,7 +10,7 @@ tmp_response.east   = 0;
 tmp_response.mx     = nan;
 tmp_response.my     = nan;
 
-[kdown,ksecs,kcode] = KbCheck();
+[kdown,ksecs,kcode] = KbCheck(ptb.kb_i);
 
 %% keyboard admin
 if parameters.resp_kbadmin
@@ -44,12 +44,12 @@ if parameters.resp_mouse
     end
 end
 
-%% button box
-if parameters.resp_buttonbox && exist('lptread','builtin')
-    tmp_response.west   = (tmp_response.west   || lptread(  7));
-    tmp_response.north  = (tmp_response.north  || lptread( 71));
-    tmp_response.south  = (tmp_response.south  || lptread(167));
-    tmp_response.east   = (tmp_response.east   || lptread(231));
+%% gamepad
+if parameters.resp_buttonbox
+    tmp_response.west   = (tmp_response.west   || Gamepad('GetButton', ptb.gamepad_i, 1));
+    tmp_response.north  = (tmp_response.north  || Gamepad('GetButton', ptb.gamepad_i, 2));
+    tmp_response.south  = (tmp_response.south  || Gamepad('GetButton', ptb.gamepad_i, 3));
+    tmp_response.east   = (tmp_response.east   || Gamepad('GetButton', ptb.gamepad_i, 4));
 end
 
 %% any response?

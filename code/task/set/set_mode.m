@@ -19,6 +19,7 @@ parameters.flag_break           = 0;
 parameters.flag_blank           = 0;
 parameters.flag_jittering       = 0;
 parameters.flag_scanner         = 0;
+parameters.resp_buttonbox       = 0;
 
 
 %% set modes
@@ -134,6 +135,12 @@ for i_mode = 1:length(parameters.mode)
         case 'noscanner'
             parameters.flag_scanner = 0;
         
+        % button box
+        case 'buttonbox'
+            parameters.resp_buttonbox = 1;
+        case 'nobuttonbox'
+            parameters.resp_buttonbox = 0;
+            
         % one or one
         case 'taskrand'
             parameters.flag_tasksel = 'rand';

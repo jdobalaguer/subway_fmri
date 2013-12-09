@@ -61,14 +61,10 @@ if do_break
     % screen
     Screen(ptb.screen_w, 'FillRect',  ptb.screen_bg_color);
     if parameters.flag_scanner
-        if exist('lptread','builtin')
-            DrawFormattedText(ptb.screen_w,['Run ',num2str(i_break),'/',num2str(tmp_nbreaks)],'center',ptb.screen_center(2));
-            DrawFormattedText(ptb.screen_w,'Please wait for scanner signal','center',ptb.screen_center(2)+50);
-        else
-            DrawFormattedText(ptb.screen_w,'LPTREAD doesnt exist. Please cancel.','center','center');
-        end
+        DrawFormattedText(ptb.screen_w,['Run ',num2str(i_break),'/',num2str(tmp_nbreaks)],'center',ptb.screen_center(2));
+        DrawFormattedText(ptb.screen_w,'Please wait for scanner signal','center',ptb.screen_center(2)+50);
     else
-        DrawFormattedText(ptb.screen_w,['Break ',num2str(i_break),'/',num2str(tmp_nbreaks)],'center',ptb.screen_center(2));
+        DrawFormattedText(ptb.screen_w,['Run ',num2str(i_break),'/',num2str(tmp_nbreaks)],'center',ptb.screen_center(2));
         DrawFormattedText(ptb.screen_w,'Dummy mode. Press any key.','center',ptb.screen_center(2)+50);
     end
     % flip

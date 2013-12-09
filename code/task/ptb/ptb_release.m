@@ -4,7 +4,7 @@ if (    parameters.resp_kbadmin || ...
         parameters.resp_kbcross || ...
         parameters.resp_kbline          )
     
-    while KbCheck(); end
+    while KbCheck(ptb.kb_i); end
 end
 
 %% mouse release
@@ -17,9 +17,9 @@ if parameters.resp_mouse
 end
         
 %% button box release
-if (parameters.resp_buttonbox) && exist('lptread','builtin')
-    while lptread(  7); end
-    while lptread( 71); end
-    while lptread(167); end
-    while lptread(231); end
+if (parameters.resp_buttonbox)
+    while Gamepad('GetButton', ptb.gamepad_i, 1); end
+    while Gamepad('GetButton', ptb.gamepad_i, 2); end
+    while Gamepad('GetButton', ptb.gamepad_i, 3); end
+    while Gamepad('GetButton', ptb.gamepad_i, 4); end
 end

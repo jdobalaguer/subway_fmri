@@ -19,7 +19,7 @@ switch parameters.session
     % scanner
     case 'scanner'
         tmp_message = 'Scanner session';
-        tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','scanner','taskoneorone'};
+        tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','scanner','buttonbox','taskoneorone'};
         parameters.run_by_min = 1;
         parameters.run_min = 60;
         
