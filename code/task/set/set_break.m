@@ -1,38 +1,25 @@
 if ~parameters.flag_break; i_break = nan; return; end
 if end_of_task; return; end
 
-if ~exist('i_break','var')
-    i_break = 1;
-end
-
 %% Do break?
 do_break = 1;
-% minutes counter
-if parameters.run_by_min
-    tmp_nbreaks = length(parameters.break_min);
-    gs = GetSecs - ptb.time_start;
-    gm = gs/60;
-    if i_break > length(parameters.break_min) || parameters.break_min(i_break) > gm
-        do_break = 0;
-    end
-end    
-% block counter
-if parameters.run_by_blocks
-    tmp_nbreaks = length(parameters.break_blocks);
-    if i_break > length(parameters.break_blocks) || parameters.break_blocks(i_break) > i_block
-        do_break = 0;
-    end
-end
-% trial counter
-if parameters.run_by_trials
-    tmp_nbreaks = length(parameters.break_trials);
-    if i_break > length(parameters.break_trials) || parameters.break_trials(i_break) > j_trial
-        do_break = 0;
-    end
+tmp_nbreaks = length(parameters.run_breaks);
+if ~exist('i_break','var')
+    i_break = 0;
+else
+    if ~isnan(ptb.time_break)
+        gs = GetSecs - ptb.time_break;
+        gm = gs/60;
+        if i_break > length(parameters.run_breaks) || parameters.run_breaks(i_break) > gm
+            do_break = 0;
+        end
+    end    
 end
 
 %% Break
 if do_break
+    i_break = i_break+1;
+    
     Screen(ptb.screen_w, 'TextFont',  parameters.screen_fontname);
     Screen(ptb.screen_w, 'TextSize',  parameters.screen_fontsize);
     Screen(ptb.screen_w, 'TextColor', parameters.screen_fontcolor);
@@ -52,9 +39,23 @@ if do_break
         end
         time.screens{end+1}  = 'break pos';
         time.getsecs(end+1) = tmp_stimulusonset;
-        time.breakgs(end+1) = tmp_scantrigger;
-        % trigger
-        if end_of_task; return; end
+        time.breakgs(end+1) = time.breakgs(end);
+    end
+    
+    %% was this last break?
+    if i_break > length(parameters.run_breaks)
+        end_of_block = 1;
+        end_of_task = 1;
+    end
+    
+    %% end of task (by click or by last break)
+    if end_of_task
+        clear do_break;
+        clear gm gs;
+        clear tmp_nbreaks;
+        clear tmp_scantrigger;
+        clear tmp_vbltimestamp tmp_stimulusonset;
+        return
     end
     
     %% wait screen
@@ -90,15 +91,14 @@ if do_break
     time.screens{end+1}  = 'break pre';
     time.getsecs(end+1) = tmp_stimulusonset;
     time.breakgs(end+1) = tmp_scantrigger;
+    ptb.time_break = tmp_scantrigger;
     % trigger
     if end_of_task; return; end
-
-    i_break = i_break+1;
 end
 
 %% Clean
 clear do_break;
-clear tmp_gs;
+clear gm gs;
 clear tmp_nbreaks;
 clear tmp_scantrigger;
 clear tmp_vbltimestamp tmp_stimulusonset;

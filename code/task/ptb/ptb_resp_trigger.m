@@ -6,7 +6,7 @@ tmp_scantrigger = nan;
 if parameters.flag_scanner
     while 1
         % trigger
-        if Gamepad('GetButton', ptb.gamepad_i, 5);
+        if parameters.resp_buttonbox && ~ispc() && ptb.gamepad_i && Gamepad('GetButton', ptb.gamepad_i, 5)
             tmp_scantrigger = GetSecs();
             break;
         end
@@ -31,4 +31,3 @@ end
 
 %% clean
 clear kdown ksecs kcode;
-clear tmp_value;

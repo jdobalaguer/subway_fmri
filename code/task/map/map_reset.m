@@ -1,4 +1,4 @@
-
+if end_of_task; return; end
 
 %% set values, reset map
 % start, goal station

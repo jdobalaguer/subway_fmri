@@ -1,7 +1,8 @@
 .DS_Store
 *~
-data
-data/*
+backups/data/*
+data/data/*
+data/error/*
 tmp*
 trash
 trash/*

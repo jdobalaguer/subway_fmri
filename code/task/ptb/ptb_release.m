@@ -17,7 +17,7 @@ if parameters.resp_mouse
 end
         
 %% button box release
-if (parameters.resp_buttonbox)
+if parameters.resp_buttonbox && ~ispc() && ptb.gamepad_i
     while Gamepad('GetButton', ptb.gamepad_i, 1); end
     while Gamepad('GetButton', ptb.gamepad_i, 2); end
     while Gamepad('GetButton', ptb.gamepad_i, 3); end
