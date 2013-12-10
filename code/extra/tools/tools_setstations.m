@@ -53,8 +53,8 @@ function [tmp_startstation,tmp_goalstation] = tools_setstations(dists,map,parame
                 
                 % criterium
                 if tmp_steps<12 && tmp_steps>4
-                    if tmp_exchanges==1;                ok=1; end
-                    if tmp_elbows==1 && ~tmp_exchanges; ok=1; end
+                    if tmp_exchanges==2;                  ok=1; end
+                    if tmp_elbows==1 && ~tmp_exchanges<2; ok=1; end
                 end
             end
         case 'incr'
