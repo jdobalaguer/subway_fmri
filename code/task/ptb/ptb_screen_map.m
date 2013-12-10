@@ -1,3 +1,4 @@
+if end_of_task; return; end
 if ~parameters.flag_showmap; return; end
 
 Screen(ptb.screen_w, 'TextFont',  parameters.screen_fontname);

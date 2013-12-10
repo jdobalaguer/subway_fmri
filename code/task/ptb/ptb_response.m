@@ -45,7 +45,7 @@ if parameters.resp_mouse
 end
 
 %% gamepad
-if parameters.resp_buttonbox
+if parameters.resp_buttonbox && ~ispc() && ptb.gamepad_i
     tmp_response.west   = (tmp_response.west   || Gamepad('GetButton', ptb.gamepad_i, 1));
     tmp_response.north  = (tmp_response.north  || Gamepad('GetButton', ptb.gamepad_i, 2));
     tmp_response.south  = (tmp_response.south  || Gamepad('GetButton', ptb.gamepad_i, 3));

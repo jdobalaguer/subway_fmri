@@ -1,3 +1,4 @@
+if end_of_task; return; end
 
 %% default mode
 parameters.flag_arrowthicks     = 0;

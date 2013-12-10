@@ -13,8 +13,9 @@ end
 if ~isfield(ptb,'time_start')
     ptb.time_start = GetSecs;
 else
-    ptb.time_start(end+1) = GetSecs;
+    ptb.time_start(end+1) = GetSecs();
 end
+ptb.time_break = nan;
 
 %% Screen
 % list screens

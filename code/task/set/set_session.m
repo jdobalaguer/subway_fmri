@@ -1,3 +1,4 @@
+if end_of_task; return; end
 
 %% set session
 switch parameters.session
@@ -13,22 +14,22 @@ switch parameters.session
     case 'training_2'
         tmp_message = 'Second training';
         tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','taskoneorone'};
-        parameters.run_by_min = 1;
-        parameters.run_min = 60;
+        parameters.run_by_breaks = 1;
+        parameters.run_breaks = [15];
         
     % scanner
     case 'scanner'
         tmp_message = 'Scanner session';
         tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','scanner','buttonbox','taskoneorone'};
-        parameters.run_by_min = 1;
-        parameters.run_min = 60;
+        parameters.run_by_breaks = 1;
+        parameters.run_breaks = [15,15,15,15];
         
     % debug
     case 'debug'
         tmp_message = 'Debug session';
-        tmp_mode = {'arrows','colour','avalines','map','pics','quiz','exchange','disabled','taskrand'};
-        parameters.run_by_blocks = 1;
-        parameters.run_blocks = 5;
+        tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','taskoneorone'};
+        parameters.run_by_breaks = 1;
+        parameters.run_breaks = [5,5];
         
     % error
     otherwise
@@ -61,11 +62,6 @@ end
 parameters.mode = tmp_mode;
 
 %% set break and quiz and enum triggers
-% break
-parameters.break_min   = parameters.break_rmin   * parameters.run_min;
-parameters.break_blocks= parameters.break_rblocks* parameters.run_blocks;
-parameters.break_trials= parameters.break_rtrials* parameters.run_trials;
-
 % quiz
 parameters.quiz_min    = parameters.quiz_rmin    * parameters.run_min;
 parameters.quiz_blocks = parameters.quiz_rblocks * parameters.run_blocks;

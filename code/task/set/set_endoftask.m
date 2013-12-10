@@ -1,3 +1,5 @@
+if end_of_task; return; end
+
 % minutes counter
 if parameters.run_by_min
     gs = GetSecs - ptb.time_start;
