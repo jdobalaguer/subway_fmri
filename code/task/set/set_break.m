@@ -73,6 +73,7 @@ if do_break
     time.screens{end+1}  = 'break wait';
     time.getsecs(end+1) = tmp_stimulusonset;
     time.breakgs(end+1) = time.breakgs(end);
+    input('break','s');
     % trigger
     ptb_resp_trigger;
     if end_of_task; return; end
