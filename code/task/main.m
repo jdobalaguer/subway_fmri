@@ -31,6 +31,9 @@ try
     % resize
     map_resize;
     
+    %% SAVE
+    data_save;
+    
     %% BLOCK
     while ~end_of_task
         % set break
