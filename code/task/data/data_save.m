@@ -1,5 +1,5 @@
 if ~parameters.debug_subject; return; end
-if end_of_task; return; end
+%if end_of_task; return; end
 
 save(participant.filename_data,'data','map','parameters','participant','ptb','time');
 if parameters.flag_quiz

@@ -22,7 +22,7 @@ switch parameters.session
         tmp_message = 'Scanner session';
         tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','scanner','buttonbox','taskoneorone'};
         parameters.run_by_breaks = 1;
-        parameters.run_breaks = [15,15,15];
+        parameters.run_breaks = [15,15,15,15];
         
     % debug
     case 'debug'

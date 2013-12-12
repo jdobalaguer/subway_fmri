@@ -3,6 +3,7 @@
 backups/data/*
 data/data/*
 data/error/*
+data/result/*
 tmp*
 trash
 trash/*
