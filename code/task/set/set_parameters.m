@@ -52,6 +52,7 @@ parameters.bailout_optprop = 0.5; % proportion of bailouts with optimal algorith
 
 %% map
 parameters.map_thick = 7;
+parameters.map_fontsize = 20;
 
 %% enum
 parameters.enum_rmin    = (.05:.05:.5);
@@ -67,7 +68,7 @@ parameters.quiz_rtrials = (.1:.1:1);
 parameters.quiz_nbquestions = 10;
 
 %% reward
-parameters.reward_maxbonus = 10;
+parameters.reward_maxbonus = 20;
 parameters.reward_high = 5;
 parameters.reward_low  = 1;
 parameters.reward_prop = 0.5;

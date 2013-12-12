@@ -1,6 +1,5 @@
 %{
     notes.
-
     things to do:   fix enum. it is not working anymore.
 %}
 
@@ -65,9 +64,8 @@ try
             ptb_screen_trial;
             % end of block
             set_endofblock;
-            % save data
+            % add data
             data_add;
-            data_save;
             % set changes
             map_change;
             % blank screen
@@ -91,12 +89,18 @@ try
         
         % clean
         clear i_trial end_of_trial end_of_block options_enabled options_sublines options_stations options_dists options_symbols options_thicks options_sizes nb_options tmp_maptime;
+        
+        %% SAVE
+        data_save;
     end
     
     % show end screen
     ptb_screen_lottery;
     ptb_screen_end;
     
+    % save
+    data_save;
+        
     % close psychtoolbox
     ptb_stop;
     

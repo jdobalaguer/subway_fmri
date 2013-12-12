@@ -2,7 +2,7 @@ if end_of_task; return; end
 if ~parameters.flag_showmap; return; end
 
 Screen(ptb.screen_w, 'TextFont',  parameters.screen_fontname);
-Screen(ptb.screen_w, 'TextSize',  parameters.screen_fontsize);
+Screen(ptb.screen_w, 'TextSize',  parameters.map_fontsize);
 Screen(ptb.screen_w, 'TextColor', parameters.screen_blackcolor);
 Screen(ptb.screen_w, 'TextBackgroundColor', parameters.screen_fontbgcolor);
 
