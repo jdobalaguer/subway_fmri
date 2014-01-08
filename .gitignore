@@ -3,7 +3,11 @@
 backups/data/*
 data/data/*
 data/error/*
+data/maps/*
+data/nii/*
 data/result/*
+data/regressors/*
+justincase/*
 tmp*
 trash
 trash/*

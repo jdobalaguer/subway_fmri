@@ -1,32 +1,33 @@
 
 
-function runs = scan_generateregressors(scans)
+function [timeruns,dataruns] = scan_generateregressors(datafiles)
     
-    runs = {};
-    if ~iscell(scans); scans = {scans}; end
+    timeruns = {};
+    dataruns = {};
+    if ~iscell(datafiles); datafiles = {datafiles}; end
     
-    for i_scan = 1:length(scans)
-        scan = scans{i_scan};
+    for i_datafile = 1:length(datafiles)
+        datafile = datafiles{i_datafile};
 
         %% go through screens
         % remove espace characters
         % find break indices
         ii_break = [];
-        for i_screen = 1:length(scan.time.screens)
-            scan.time.screens{i_screen}(scan.time.screens{i_screen}==' ') = [];
-            if strcmp(scan.time.screens{i_screen},'breakwait')
+        for i_screen = 1:length(datafile.time.screens)
+            datafile.time.screens{i_screen}(datafile.time.screens{i_screen}==' ') = [];
+            if strcmp(datafile.time.screens{i_screen},'breakwait')
                 ii_break(end+1) = i_screen;
             end
         end
-        ii_break(end+1) = length(scan.time.screens)+1;
+        ii_break(end+1) = length(datafile.time.screens)+1;
 
         %% prepare runs
         % set offset time
-        scan.time.offset = scan.time.getsecs - scan.time.breakgs;
+        datafile.time.offset = datafile.time.getsecs - datafile.time.breakgs;
 
         % set run template
         run_template = struct();
-        u_screen = unique(scan.time.screens);
+        u_screen = unique(datafile.time.screens);
         for i_screen = 1:length(u_screen)
             run_template.(['screen_',u_screen{i_screen}]) = [];
         end
@@ -34,15 +35,18 @@ function runs = scan_generateregressors(scans)
         % map faces
         faces = char(map_getfaces());
         faces = reshape(faces',[1,numel(faces)]);
-        for i_station = 1:scan.map.nb_stations
-            if strfind(faces,scan.map.stations(i_station).name)
-                scan.map.stations(i_station).face = 1;
+        for i_station = 1:datafile.map.nb_stations
+            if strfind(faces,datafile.map.stations(i_station).name)
+                datafile.map.stations(i_station).face = 1;
             else
-                scan.map.stations(i_station).face = 0;
+                datafile.map.stations(i_station).face = 0;
             end
         end
 
         for i_break = 1:(length(ii_break)-1)
+            %% add data
+            dataruns{end+1} = datafile;
+            
             %% add screens
             % load template
             run = run_template;
@@ -50,44 +54,70 @@ function runs = scan_generateregressors(scans)
             ii_trial = ii_break(i_break):(ii_break(i_break+1)-1);
             % set trial
             for i_trial = 1:length(ii_trial)
-                run.(['screen_',scan.time.screens{ii_trial(i_trial)}])(end+1) = scan.time.offset(ii_trial(i_trial));
+                run.(['screen_',datafile.time.screens{ii_trial(i_trial)}])(end+1) = datafile.time.offset(ii_trial(i_trial));
             end
             
-            %% add data
-            breakgs = scan.time.breakgs(ii_break(i_break+1)-1);
-            trial_gs = scan.data.resp_gs - scan.data.resp_rt;
+            %% add trial data
+            breakgs = datafile.time.breakgs(ii_break(i_break+1)-1);
+            trial_gs = datafile.data.resp_gs - datafile.data.resp_rt;
             trial_os = trial_gs - breakgs;
-            ii_run = (scan.data.exp_break==i_break);
+            ii_run = (datafile.data.exp_break==i_break);
+            
             % exchange
-            ii_exchange = logical([scan.map.stations(scan.data.avatar_instation).exchange]);
+            ii_exchange = logical([datafile.map.stations(datafile.data.avatar_instation).exchange]);
             time_exchange = trial_os(ii_run & ii_exchange);
             run.('avatar_exchange') = time_exchange;
+            
             % elbow
-            ii_elbow = logical([scan.map.stations(scan.data.avatar_instation).elbow]);
+            ii_elbow = logical([datafile.map.stations(datafile.data.avatar_instation).elbow]);
             time_elbow = trial_os(ii_run & ii_elbow);
-            run.('avatar_elbow') = time_elbow;
+            %run.('avatar_elbow') = time_elbow;
+            
+            % regular
+            time_regular = trial_os(ii_run & ~ii_exchange);
+            run.('avatar_regular') = time_regular;
+            
             % face
-            ii_face  = logical([scan.map.stations(scan.data.avatar_instation).face]);
+            ii_face  = logical([datafile.map.stations(datafile.data.avatar_instation).face]);
             time_face = trial_os(ii_run & ii_face);
-            run.('avatar_face') = time_face;
+            %run.('avatar_face') = time_face;
+            
             % switch
-            ii_diffline = logical([diff(scan.data.avatar_insubline),0]);
-            ii_stop = scan.data.exp_stoptrial;
+            ii_diffline = logical([diff(datafile.data.avatar_insubline),0]);
+            ii_stop = logical(datafile.data.exp_stoptrial);
             time_switch = trial_os(ii_run & ii_diffline & ~ii_stop & ii_exchange);
-            run.('avatar_switch') = time_switch;
+            %run.('avatar_switch') = time_switch;
+            
             % backwards
-            ii_start = scan.data.exp_starttrial;
+            ii_start = datafile.data.exp_starttrial;
             time_backwards = trial_os(ii_run & ii_diffline & ~ii_stop & ~ii_exchange & ~ii_start);
-            run.('avatar_backwards') = time_backwards;
+            %run.('avatar_backwards') = time_backwards;
+            
+            % achieved
+            ii_togoal = (datafile.data.avatar_goalstation(ii_run & ii_stop)==datafile.data.resp_station(ii_run & ii_stop));
+            time_achieved = run.screen_rew(ii_togoal(1:length(run.screen_rew)));
+            run.('avatar_achieved') = time_achieved;
+            
+            % bailout
+            time_bailout = run.screen_rew(~ii_togoal(1:length(run.screen_rew)));
+            run.('avatar_bailout') = time_bailout;
             
             %% remove fields
+            run = rmfield(run,'screen_blank');
+            run = rmfield(run,'screen_blockpos');
+            run = rmfield(run,'screen_blockpre');
+            run = rmfield(run,'screen_breakpos');
+            run = rmfield(run,'screen_breakpre');
             run = rmfield(run,'screen_breakwait');
             run = rmfield(run,'screen_clickpress');
             run = rmfield(run,'screen_clickrelease');
             run = rmfield(run,'screen_nan');
+            run = rmfield(run,'screen_rew');
+            run = rmfield(run,'screen_trial');
+            run = rmfield(run,'screen_trialpress');
             
             %% save run
-            runs{end+1} = run;
+            timeruns{end+1} = run;
         end
     end
 end
