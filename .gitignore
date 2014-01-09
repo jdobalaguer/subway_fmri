@@ -6,7 +6,7 @@ data/error/*
 data/maps/*
 data/nii/*
 data/result/*
-data/regressors/*
+data/process/*
 justincase/*
 tmp*
 trash

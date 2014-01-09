@@ -59,7 +59,7 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             
             %% add trial data
             breakgs = datafile.time.breakgs(ii_break(i_break+1)-1);
-            trial_gs = datafile.data.resp_gs - datafile.data.resp_rt;
+            trial_gs = datafile.data.time_trial;
             trial_os = trial_gs - breakgs;
             ii_run = (datafile.data.exp_break==i_break);
             
@@ -115,6 +115,9 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             run = rmfield(run,'screen_rew');
             run = rmfield(run,'screen_trial');
             run = rmfield(run,'screen_trialpress');
+            run = rmfield(run,'screen_endblank');
+            run = rmfield(run,'screen_endtext');
+            run = rmfield(run,'screen_lottery');
             
             %% save run
             timeruns{end+1} = run;
