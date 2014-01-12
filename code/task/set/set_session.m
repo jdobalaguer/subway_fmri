@@ -34,9 +34,9 @@ switch parameters.session
     % debug
     case 'debug'
         tmp_message = 'Debug session';
-        tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','taskoneorone','buttonbox'};
+        tmp_mode = {'samemap','bailout','reward','time','timize','break','blank','jitter','buttonbox','taskoneorone'};
         parameters.run_by_breaks = 1;
-        parameters.run_breaks = [1,1];
+        parameters.run_breaks = [15];
         
     % error
     otherwise
