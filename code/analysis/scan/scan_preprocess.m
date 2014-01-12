@@ -16,32 +16,43 @@ function scan_preprocess()
     dir_runs                    = strcat(strvcat(strsplit(ls([strtrim(dir_subs(1,:)),filesep,'epi3']),{'\n','\t'})),filesep);
     file_T1                     = [dir_spm,'templates/T1.nii,1'];
     
-    % VARIABLES
-    nb_runs     = size(dir_runs, 1);
-    u_run       = 1:nb_runs;
-    nb_subjects = size(dir_subs, 1); 
-    u_subject   = set_subjects('swau');
-    
     % PARAMETERS
     pars_nslices = 36;
     pars_tr      = 2;
     pars_refsl   = ceil(.5*pars_nslices);
-    pars_ordsl   = 1:pars_nslices;
-    pars_tgap    = 0;
+    pars_ordsl   = [1:2:pars_nslices,2:2:pars_nslices];
+    pars_voxs    = 4;
+    
+    % VARIABLES
+    nb_runs     = size(dir_runs, 1);
+    u_run       = 1:nb_runs;
+    nb_subjects = size(dir_subs, 1); 
+    u_subject   = set_subjects(sprintf('sw%du',pars_voxs));
     
     %% JOBS
     tic();
     spm_jobman('initcfg');
     realignment('');                        % realign (estimate)
     realign_unwarp('');                     % realign (unwarp)
-    slice_timing('u');                      % slice timing -- why after realignment?
     coregistration_str_meanepi('u')         % coregistration (anatomical T1 to mean EPI)
     normalisation_str_mni('c');             % normalisation  (estimate: anatomical T1 to MNI template)
-    normalisation_epi_mni('au','c');        % normalisation  (write:    EPI to MNI template)
-    smoothing('wau');                       % smoothing
-    cleanfiles('u','au','wau');
+    normalisation_epi_mni('u','c');         % normalisation  (write:    EPI to MNI template)
+    smoothing(sprintf('w%du',pars_voxs));   % smoothing
+    cleanfiles('u',sprintf('w%du',pars_voxs));
     toc();
         
+%     tic();
+%     spm_jobman('initcfg');
+%     realignment('');                        % realign (estimate)
+%     realign_unwarp('');                     % realign (unwarp)
+%     slice_timing('u');                      % slice timing -- why after realignment?
+%     coregistration_str_meanepi('u')         % coregistration (anatomical T1 to mean EPI)
+%     normalisation_str_mni('c');             % normalisation  (estimate: anatomical T1 to MNI template)
+%     normalisation_epi_mni('au','c');        % normalisation  (write:    EPI to MNI template)
+%     smoothing(sprintf('w%dau',pars_voxs));  % smoothing
+%     cleanfiles('u','au',sprintf('w%dau',pars_voxs));
+%     toc();
+    
     %% EXPAND: nii4 to nii3
     function expand()
         for i_sub = 1:size(dir_subs, 1); 
@@ -231,9 +242,9 @@ function scan_preprocess()
         for i_sub = u_subject
             dir_sub = strtrim(dir_subs(i_sub,:));
             dir_str   = strtrim(dir_strs(i_sub,:));
-            file_str  = dir(strcat(dir_str,prefix,'images*'));
+            file_str  = dir(strcat(dir_str,prefix,'images*.nii'));
             fprintf('Normalise Anatomy for: %s\n',dir_sub);
-            if isempty(dir([dir_str,'wcimages*']))
+            if isempty(dir([dir_str,sprintf('w%d%simages*',pars_voxs,prefix)]))
                 job = struct();
                 job.spm.spatial.normalise.estwrite.subj.source = {[dir_str,file_str.name]};% Image to estimate warping parameters: HIGHRES
                 job.spm.spatial.normalise.estwrite.subj.wtsrc = {};        % Source Weighting Image: None
@@ -248,10 +259,10 @@ function scan_preprocess()
                 job.spm.spatial.normalise.estwrite.eoptions.reg = 1;       % Nonlinear Regularisation, Default: 1
                 job.spm.spatial.normalise.estwrite.roptions.preserve = 0;  % Default: 0 = Preserve Concentrations
                 job.spm.spatial.normalise.estwrite.roptions.bb = [-78 -112 -70;78 76 85]; % Bounding Box
-                job.spm.spatial.normalise.estwrite.roptions.vox = [2 2 2]; % Voxel Sizes [2 2 2] is default
+                job.spm.spatial.normalise.estwrite.roptions.vox = [pars_voxs pars_voxs pars_voxs]; % Voxel Sizes [2 2 2] is default
                 job.spm.spatial.normalise.estwrite.roptions.interp = 1;    % Interpolation (Default: 1)
                 job.spm.spatial.normalise.estwrite.roptions.wrap = [0 0 0];% Wrapping, 0: No
-                job.spm.spatial.normalise.estwrite.roptions.prefix = 'w';  % Prefix
+                job.spm.spatial.normalise.estwrite.roptions.prefix = sprintf('w%d',pars_voxs); % Prefix
                 jobs{end+1} = job;
             end
         end
@@ -271,15 +282,15 @@ function scan_preprocess()
             job = struct();
             job.spm.spatial.normalise.write.roptions.preserve = 0;
             job.spm.spatial.normalise.write.roptions.bb = [-78 -112 -50; 78 76 85];
-            job.spm.spatial.normalise.write.roptions.vox = [2 2 2];
+            job.spm.spatial.normalise.write.roptions.vox = [pars_voxs pars_voxs pars_voxs];
             job.spm.spatial.normalise.write.roptions.interp = 1;
             job.spm.spatial.normalise.write.roptions.wrap = [0 0 0];
-            job.spm.spatial.normalise.write.roptions.prefix = 'w';
+            job.spm.spatial.normalise.write.roptions.prefix = sprintf('w%d',pars_voxs);
             filenames_for_normalise = {};
             for i_run = u_run
                 dir_run = strcat(dir_epi3,strtrim(dir_runs(i_run,:)));
                 dir_img = strcat(dir_run,'images',filesep);
-                if isempty(dir([dir_img,'w',prefix_epi,'images*.nii']))
+                if isempty(dir([dir_img,sprintf('w%d',pars_voxs),prefix_epi,'images*.nii']))
                     dir_run = strcat(dir_epi3,strtrim(dir_runs(i_run,:)));
                     dir_img = strcat(dir_run,'images',filesep);
                     spm_select('clearvfiles');
@@ -331,7 +342,7 @@ function scan_preprocess()
     %% CLEAN FILES
     function cleanfiles(varargin)
         for i_varargin = 1:length(varargin)
-            for i = u_subject
+            for i = 1:nb_subjects
                 dir_sub = strtrim(dir_subs(i,:));
                 dir_epi3 = strtrim(dir_epis3(i,:));
                 fprintf('Cleaning files for: %s\n',dir_sub);

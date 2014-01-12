@@ -71,7 +71,7 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             % elbow
             ii_elbow = logical([datafile.map.stations(datafile.data.avatar_instation).elbow]);
             time_elbow = trial_os(ii_run & ii_elbow);
-            %run.('avatar_elbow') = time_elbow;
+            run.('avatar_elbow') = time_elbow;
             
             % regular
             time_regular = trial_os(ii_run & ~ii_exchange);
@@ -80,18 +80,26 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             % face
             ii_face  = logical([datafile.map.stations(datafile.data.avatar_instation).face]);
             time_face = trial_os(ii_run & ii_face);
-            %run.('avatar_face') = time_face;
+            run.('avatar_face') = time_face;
+                        
+            % place
+            time_place = trial_os(ii_run & ~ii_face);
+            run.('avatar_place') = time_place;
             
             % switch
             ii_diffline = logical([diff(datafile.data.avatar_insubline),0]);
             ii_stop = logical(datafile.data.exp_stoptrial);
-            time_switch = trial_os(ii_run & ii_diffline & ~ii_stop & ii_exchange);
-            %run.('avatar_switch') = time_switch;
+            time_switch = trial_os(ii_run & ii_exchange & ii_diffline & ~ii_stop);
+            run.('avatar_switch') = time_switch;
+            
+            % noswitch
+            time_noswitch = trial_os(ii_run & ((ii_exchange & ~ii_diffline & ~ii_stop) | ~ii_exchange));
+            run.('avatar_noswitch') = time_noswitch;
             
             % backwards
             ii_start = datafile.data.exp_starttrial;
             time_backwards = trial_os(ii_run & ii_diffline & ~ii_stop & ~ii_exchange & ~ii_start);
-            %run.('avatar_backwards') = time_backwards;
+            run.('avatar_backwards') = time_backwards;
             
             % achieved
             ii_togoal = (datafile.data.avatar_goalstation(ii_run & ii_stop)==datafile.data.resp_station(ii_run & ii_stop));
@@ -112,8 +120,6 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             run = rmfield(run,'screen_clickpress');
             run = rmfield(run,'screen_clickrelease');
             run = rmfield(run,'screen_nan');
-            run = rmfield(run,'screen_rew');
-            run = rmfield(run,'screen_trial');
             run = rmfield(run,'screen_trialpress');
             run = rmfield(run,'screen_endblank');
             run = rmfield(run,'screen_endtext');
