@@ -2,6 +2,7 @@ function scan_process()
     
     %% WARNING
     fprintf('\nmake sure you have same participants in data and nii folders!\n\n')
+    do_all = 0;
 
     %% GENERAL SETTINGS    
     % DIRECTORIES AND FILES
@@ -24,20 +25,27 @@ function scan_process()
     % VARIABLES
     nb_subjects = size(dir_niisubs, 1);
     nb_runs     = size(dir_niiruns, 1);
-    u_subject   = 1:nb_subjects;
+    u_subject   = [1,2]; %1:nb_subjects;
     u_run       = 1:nb_runs;
     u_regressor = {};
-    u_contrast  = [];
-    eval(fileread([dir_process,'contrasts.m']));
+    u_modulator = {};
+    u_contrast  = {};
+    eval(fileread([dir_process,'process.m']));
     
     % PARAMETERS
     pars_tr      = 2;
     pars_voxs    = 4;
     
+    % FLAGS
+    do_all  = false;
+    do_regs = do_all || ~exist(dir_datregs ,'file');
+    do_frst = do_all || ~exist(dir_datglm1s,'file');
+    do_scnd = do_all || true;
+    
     %% DELETE
-    if exist(dir_datregs ,'file'); rmdir(dir_datregs ,'s'); end
-    if exist(dir_datglm1s,'file'); rmdir(dir_datglm1s,'s'); end
-    if exist(dir_datglm2s,'file'); rmdir(dir_datglm2s,'s'); end
+    if do_regs && exist(dir_datregs ,'file'); rmdir(dir_datregs ,'s'); end
+    if do_frst && exist(dir_datglm1s,'file'); rmdir(dir_datglm1s,'s'); end
+    if do_scnd && exist(dir_datglm2s,'file'); rmdir(dir_datglm2s,'s'); end
     
     %% JOBS
     tic();
@@ -52,6 +60,7 @@ function scan_process()
     
     %% BUILD REGRESSORS
     function build_regressors()
+        if ~do_regs; return; end
         % make directory
         if ~exist(dir_datregs,'dir'); mkdirp(dir_datregs); end
         % load regressors
@@ -77,12 +86,15 @@ function scan_process()
                 reg.onsets = {};
                 reg.durations = {};
                 reg.participant = {};
-                for i_reg = 1:length(u_regressor)
-                    if ~isempty(timeruns{j_run}.(u_regressor{i_reg}))
-                        reg.names{end+1}      = u_regressor{i_reg};
-                        reg.onsets{end+1}     = timeruns{j_run}.(u_regressor{i_reg});
-                        reg.durations{end+1}  = 0;
+                for i_regs = 1:length(u_regressor)
+                    onsets = [];
+                    for i_reg = 1:length(u_regressor{i_regs})
+                        onset = timeruns{j_run}.(u_regressor{i_regs}.value{i_reg});
+                        onsets = [onsets,onset];
                     end
+                    reg.names{end+1}      = u_regressor{i_regs}.name;
+                    reg.onsets{end+1}     = sort(onsets);
+                    reg.durations{end+1}  = 0;
                 end
                 save(file_datreg,'reg');
                 % save realignment
@@ -97,14 +109,15 @@ function scan_process()
     
     %% GLM FIRST LEVEL
     function glm_first_level()
+        if ~do_frst; return; end
         if ~exist(dir_datglm1s,'dir'); mkdirp(dir_datglm1s); end
         
         jobs = {};
         j_run = 0;
         for i_sub = u_subject
-            fprintf('GLM first level for: subject %d\n',i_sub);
+            fprintf('GLM first level for: subject %02i\n',i_sub);
             dir_niiepi3 = strtrim(dir_niiepis3(i_sub,:));
-            dir_datglm1 = sprintf('%ssub_%d/',dir_datglm1s,i_sub);
+            dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
             if ~exist(dir_datglm1,'dir'); mkdirp(dir_datglm1); end
             job = struct();
             job.spm.stats.fmri_spec.dir = {dir_datglm1};
@@ -164,10 +177,11 @@ function scan_process()
     
     %% GLM FIRST LEVEL: Estimate
     function glm_first_estimate()
+        if ~do_frst; return; end
         jobs = {};
         for i_sub = u_subject
-            dir_datglm1 = sprintf('%ssub_%d/',dir_datglm1s,i_sub);
-            fprintf('GLM first level estimate for: subject %d\n',i_sub);
+            dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
+            fprintf('GLM first level estimate for: subject %02i\n',i_sub);
             job = struct();
             job.spm.stats.fmri_est.spmmat = {[dir_datglm1,'SPM.mat']};
             job.spm.stats.fmri_est.method.Classical = 1;
@@ -178,15 +192,16 @@ function scan_process()
     
     %% GLM FIRST LEVEL: Contrasts
     function glm_first_contrasts()
+        if ~do_frst; return; end
         jobs = {};
         for i_sub = u_subject
-            fprintf('GLM first level contrasts for: subject %d\n',i_sub);
-            dir_datglm1 = sprintf('%ssub_%d/',dir_datglm1s,i_sub);
+            fprintf('GLM first level contrasts for: subject %02i\n',i_sub);
+            dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
             job = struct();
             job.spm.stats.con.spmmat = {[dir_datglm1,'SPM.mat']};
             for i_con = 1:length(u_contrast)
-                job.spm.stats.con.consess{i_con}.tcon.name      = u_contrast(i_con).name;
-                job.spm.stats.con.consess{i_con}.tcon.convec    = u_contrast(i_con).convec;
+                job.spm.stats.con.consess{i_con}.tcon.name      = u_contrast{i_con}.name;
+                job.spm.stats.con.consess{i_con}.tcon.convec    = u_contrast{i_con}.convec;
                 job.spm.stats.con.consess{i_con}.tcon.sessrep   = 'replsc';
             end
             job.spm.stats.con.delete = 1;
@@ -197,26 +212,28 @@ function scan_process()
     
     %% GLM SECOND LEVEL: Copy files
     function glm_second_copy()
+        if ~do_scnd; return; end
         for i_sub = u_subject
-            fprintf('GLM second level copy for: subject %d\n',i_sub);
+            fprintf('GLM second level copy for: subject %02i\n',i_sub);
             for i_con = 1:length(u_contrast)
-                dir_datglm1 = sprintf('%ssub_%d/',dir_datglm1s,i_sub);
-                dir_datglm2 = sprintf('%scon_%s/',dir_datglm2s,u_contrast(i_con).name);
+                dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
+                dir_datglm2 = sprintf('%scon_%s/',dir_datglm2s,u_contrast{i_con}.name);
                 if ~exist(dir_datglm2,'dir'); mkdirp(dir_datglm2); end
-                copyfile(sprintf('%sspmT_%04i.hdr',dir_datglm1,i_con),sprintf('%sspmT_sub%d_con%d.hdr',dir_datglm2,i_sub,i_con));
-                copyfile(sprintf('%sspmT_%04i.img',dir_datglm1,i_con),sprintf('%sspmT_sub%d_con%d.img',dir_datglm2,i_sub,i_con));
-                copyfile(sprintf('%scon_%04i.hdr' ,dir_datglm1,i_con),sprintf('%scon_sub%d_con%d.hdr' ,dir_datglm2,i_sub,i_con));
-                copyfile(sprintf('%scon_%04i.img' ,dir_datglm1,i_con),sprintf('%scon_sub%d_con%d.img' ,dir_datglm2,i_sub,i_con));
+                copyfile(sprintf('%sspmT_%04i.hdr',dir_datglm1,i_con),sprintf('%sspmT_sub%02i_con%02i.hdr',dir_datglm2,i_sub,i_con));
+                copyfile(sprintf('%sspmT_%04i.img',dir_datglm1,i_con),sprintf('%sspmT_sub%02i_con%02i.img',dir_datglm2,i_sub,i_con));
+                copyfile(sprintf('%scon_%04i.hdr' ,dir_datglm1,i_con),sprintf('%scon_sub%02i_con%02i.hdr' ,dir_datglm2,i_sub,i_con));
+                copyfile(sprintf('%scon_%04i.img' ,dir_datglm1,i_con),sprintf('%scon_sub%02i_con%02i.img' ,dir_datglm2,i_sub,i_con));
             end
         end
     end
     
     %% GLM SECOND LEVEL
     function glm_second_level()
+        if ~do_scnd; return; end
         jobs = {};
         for i_con = 1:length(u_contrast)
-            fprintf('GLM second level for: contrast "%s"\n',u_contrast(i_con).name);
-            dir_datglm2 = sprintf('%scon_%s/',dir_datglm2s,u_contrast(i_con).name);
+            fprintf('GLM second level for: contrast "%s"\n',u_contrast{i_con}.name);
+            dir_datglm2 = sprintf('%scon_%s/',dir_datglm2s,u_contrast{i_con}.name);
             % design
             job = struct();
             job.spm.stats.factorial_design.dir                      = {dir_datglm2};
@@ -237,7 +254,7 @@ function scan_process()
             % contrast
             job = struct();
             job.spm.stats.con.spmmat                    = {[dir_datglm2,'SPM.mat']};
-            job.spm.stats.con.consess{1}.tcon.name      = u_contrast(i_con).name;
+            job.spm.stats.con.consess{1}.tcon.name      = u_contrast{i_con}.name;
             job.spm.stats.con.consess{1}.tcon.convec    = 1; % contrast vector, here just 1, (simple T)
             job.spm.stats.con.consess{1}.tcon.sessrep   = 'none';
             job.spm.stats.con.delete = 1;
