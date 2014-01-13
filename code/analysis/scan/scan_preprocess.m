@@ -8,7 +8,7 @@ function scan_preprocess()
     % DIRECTORIES AND FILES
     dir_spm                     = [fileparts(which('spm.m')),filesep];
     dir_study                   = [pwd(),filesep,'data',filesep,'nii',filesep];
-    dir_subs                    = strcat(dir_study,strvcat(strsplit(ls(dir_study),{'\n','\t'})),filesep);
+    dir_subs                    = dir([dir_study,'sub_*']); dir_subs = strcat(dir_study,strvcat(dir_subs.name),'/');
     dir_strs                    = strcat(dir_subs,'str',filesep);
     dir_epis3                   = strcat(dir_subs,'epi3',filesep);
     dir_epis4                   = strcat(dir_subs,'epi4',filesep);
@@ -20,7 +20,7 @@ function scan_preprocess()
     pars_nslices = 36;
     pars_tr      = 2;
     pars_refsl   = ceil(.5*pars_nslices);
-    pars_ordsl   = [1:2:pars_nslices,2:2:pars_nslices];
+    pars_ordsl   = [2:2:pars_nslices,1:2:pars_nslices];
     pars_voxs    = 4;
     
     % VARIABLES
