@@ -13,7 +13,7 @@ function scan_preprocess()
     dir_epis3                   = strcat(dir_subs,'epi3',filesep);
     dir_epis4                   = strcat(dir_subs,'epi4',filesep);
     expand(); % expand 4D nii to 3D nii
-    dir_runs                    = strcat(strvcat(strsplit(ls([strtrim(dir_subs(1,:)),filesep,'epi3']),{'\n','\t'})),filesep);
+    dir_runs                    = dir([strtrim(dir_epis3(1,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
     file_T1                     = [dir_spm,'templates/T1.nii,1'];
     
     % PARAMETERS
