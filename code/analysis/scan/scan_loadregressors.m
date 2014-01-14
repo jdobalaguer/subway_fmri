@@ -1,5 +1,5 @@
 
-function [timeruns,dataruns] = scan_loadregressors(session)
+function [timeruns,dataruns] = scan_loadregressors(session,u_lsdata)
     
     %% participant files
     % ls the 'data' folder
@@ -14,15 +14,18 @@ function [timeruns,dataruns] = scan_loadregressors(session)
             i = i+1;
         end
     end
-    nb_lsdata = length(lsdata);
     
     %% load data
-    scans = cell(1,nb_lsdata);
-    for i_lsdata = 1:nb_lsdata
+    if ~exist('u_lsdata','var')
+        nb_lsdata = length(lsdata);
+        u_lsdata = 1:nb_lsdata;
+    end
+    scans = {};
+    for i_lsdata = u_lsdata
         file = [lspath,lsdata{i_lsdata}];
         data = load(file);
         fprintf('scan_loadregressors: loading datafile: %s\n',file);
-        scans{i_lsdata} = data;
+        scans{end+1} = data;
     end
     
     %% generate regressors
