@@ -37,15 +37,15 @@ function scan_process()
     pars_voxs    = 4;
     
     % FLAGS
-    do_all  = false;
+    do_all  = true;
     do_regs = do_all || ~exist(dir_datregs ,'file');
     do_frst = do_all || ~exist(dir_datglm1s,'file');
     do_scnd = do_all || true;
     
     %% DELETE
-    if do_regs && exist(dir_datregs ,'file'); rmdir(dir_datregs ,'s'); end
-    if do_frst && exist(dir_datglm1s,'file'); rmdir(dir_datglm1s,'s'); end
-    if do_scnd && exist(dir_datglm2s,'file'); rmdir(dir_datglm2s,'s'); end
+    if do_regs && exist(dir_datregs ,'dir'); rmdir(dir_datregs ,'s'); end
+    if do_frst && exist(dir_datglm1s,'dir'); rmdir(dir_datglm1s,'s'); end
+    if do_scnd && exist(dir_datglm2s,'dir'); rmdir(dir_datglm2s,'s'); end
     
     %% JOBS
     tic();
@@ -64,7 +64,7 @@ function scan_process()
         % make directory
         if ~exist(dir_datregs,'dir'); mkdirp(dir_datregs); end
         % load regressors
-        [timeruns,dataruns] = scan_loadregressors('scanner');
+        [timeruns,dataruns] = scan_loadregressors('scanner',u_subject);
         j_run = 0;
         for i_sub = u_subject
             dir_niiepi3 = strtrim(dir_niiepis3(i_sub,:));
@@ -80,25 +80,41 @@ function scan_process()
                 dir_niiimg     = strcat(dir_niirun,'images',filesep);
                 file_niirea    = dir([dir_niiimg,'rp_image*.txt']);                       file_niirea = strcat(dir_niiimg,strvcat(file_niirea.name));
                 file_niiimg    = dir([dir_niiimg,sprintf('sw%duimages*.nii',pars_voxs)]); file_niiimg = strcat(dir_niiimg,strvcat(file_niiimg.name));
-                % save regressors
-                reg = struct();
-                reg.names = {};
-                reg.onsets = {};
-                reg.durations = {};
-                reg.participant = {};
-                for i_regs = 1:length(u_regressor)
-                    onsets = [];
-                    for i_reg = 1:length(u_regressor{i_regs})
-                        onset = timeruns{j_run}.(u_regressor{i_regs}.value{i_reg});
-                        onsets = [onsets,onset];
-                    end
-                    reg.names{end+1}      = u_regressor{i_regs}.name;
-                    reg.onsets{end+1}     = sort(onsets);
-                    reg.durations{end+1}  = 0;
+                % create regressors
+                reg = {};
+                for i_reg = 1:length(u_regressor)
+                    onset = get_regonset(timeruns{j_run},u_regressor{i_reg});
+                    reg{end+1} = struct('name',     {u_regressor{i_reg}.name}, ...
+                                        'onset',    {onset}                   , ...
+                                        'duration', {0}                       );
                 end
-                save(file_datreg,'reg');
-                % save realignment
+                % create modulators
+                mod = {};
+                for i_mod1 = 1:length(u_modulator)
+                    onset = get_modonset(timeruns{j_run},u_modulator{i_mod1});
+                    subnames = {};
+                    levels   = {};
+                    for i_mod2 = 1:length(u_modulator{i_mod1}.value)
+                        level = zeros(size(onset));
+                        for i_mod3 = 1:length(u_modulator{i_mod1}.value{i_mod2}.value)
+                            onset_level = timeruns{j_run}.(u_modulator{i_mod1}.value{i_mod2}.value{i_mod3});
+                            ii_level    = ismember(onset,onset_level);
+                            v_level     = u_modulator{i_mod1}.value{i_mod2}.level(i_mod3);
+                            level(ii_level) = v_level;
+                        end
+                        subnames{i_mod2} = u_modulator{i_mod1}.value{i_mod2}.name;
+                        levels{i_mod2}   = level;
+                    end
+                    mod{end+1} = struct('name' ,    {u_modulator{i_mod1}.name}, ...
+                                        'onset',    {onset}                   , ...
+                                        'subname',  {subnames}                 , ...
+                                        'level',    {levels}                   , ...
+                                        'duration', {0}                       );
+                end
+                % load realignment
                 R = load(file_niirea);
+                % save regressors
+                save(file_datreg,'reg','mod');
                 save(file_datrea,'R');
             end
         end
@@ -115,9 +131,9 @@ function scan_process()
         jobs = {};
         j_run = 0;
         for i_sub = u_subject
-            fprintf('GLM first level for: subject %02i\n',i_sub);
             dir_niiepi3 = strtrim(dir_niiepis3(i_sub,:));
             dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
+            fprintf('GLM first level for: %s\n',dir_datglm1);
             if ~exist(dir_datglm1,'dir'); mkdirp(dir_datglm1); end
             job = struct();
             job.spm.stats.fmri_spec.dir = {dir_datglm1};
@@ -135,12 +151,17 @@ function scan_process()
                 file_niiimg = cellstr(spm_select('FPlist', dir_niiimg,['^',sprintf('sw%duimages',pars_voxs),'.*\.nii']));
                 file_datreg = strtrim(file_datregs(j_run,:));
                 file_datrea = strtrim(file_datreas(j_run,:));
-                loadreg = load(file_datreg,'reg');
+                loadreg = load(file_datreg,'reg','mod');
                 % truncate
                 nb_ons = 0;
-                for i_reg = 1:length(loadreg.reg.onsets)
-                    if (nb_ons < max(loadreg.reg.onsets{i_reg})/pars_tr)
-                        nb_ons = max(loadreg.reg.onsets{i_reg})/pars_tr;
+                for i_reg = 1:length(loadreg.reg)
+                    if (nb_ons < max(loadreg.reg{i_reg}.onset)/pars_tr)
+                        nb_ons = max(loadreg.reg{i_reg}.onset)/pars_tr;
+                    end
+                end
+                for i_mod = 1:length(loadreg.mod)
+                    if (nb_ons < max(loadreg.mod{i_mod}.onset)/pars_tr)
+                        nb_ons = max(loadreg.mod{i_mod}.onset)/pars_tr;
                     end
                 end
                 nb_ons = ceil(nb_ons);
@@ -148,20 +169,42 @@ function scan_process()
                 nb_min = min(nb_ons,nb_nii);
                 % job
                 job.spm.stats.fmri_spec.sess(i_run).scans = file_niiimg;
-                for i_reg = 1:length(loadreg.reg.names)
-                    % set
-                    job.spm.stats.fmri_spec.sess(i_run).cond(i_reg).name     = loadreg.reg.names{i_reg};
-                    tmp_onsets = loadreg.reg.onsets{i_reg};
-                    nb_rmons = sum(tmp_onsets/pars_tr > nb_min);
-                    if nb_rmons; fprintf('    warning: (%02i,%02i,%02i) delete %02i onsets \n',i_sub,i_run,i_reg,nb_rmons); end
-                    tmp_onsets(tmp_onsets/pars_tr > nb_min) = [];
-                    job.spm.stats.fmri_spec.sess(i_run).cond(i_reg).onset    = tmp_onsets;
-                    job.spm.stats.fmri_spec.sess(i_run).cond(i_reg).duration = loadreg.reg.durations{i_reg};
-                    job.spm.stats.fmri_spec.sess(i_run).cond(i_reg).tmod     = 0;
-                    job.spm.stats.fmri_spec.sess(i_run).cond(i_reg).pmod     = struct('name', {}, 'param', {}, 'poly', {});
-                end
-                job.spm.stats.fmri_spec.sess(i_run).multi_reg = {file_datrea};
                 job.spm.stats.fmri_spec.sess(i_run).hpf = 128;
+                job.spm.stats.fmri_spec.sess(i_run).cond = struct('name',{},'onset',{},'duration',{},'tmod',{},'pmod',{});
+                % regressors
+                for i_reg = 1:length(loadreg.reg)
+                    tmp_onsets = loadreg.reg{i_reg}.onset;
+                    nb_rmons = sum(tmp_onsets/pars_tr > nb_min);
+                    if nb_rmons; fprintf('    warning: (%02i,%02i,%02i) delete %02i reg onsets \n',i_sub,i_run,i_reg,nb_rmons); end
+                    tmp_onsets(tmp_onsets/pars_tr > nb_min) = [];
+                    cond = struct();
+                    cond.name     = loadreg.reg{i_reg}.name;
+                    cond.onset    = tmp_onsets;
+                    cond.duration = loadreg.reg{i_reg}.duration;
+                    cond.tmod     = 0;
+                    cond.pmod     = struct('name', {}, 'param', {}, 'poly', {});
+                    job.spm.stats.fmri_spec.sess(i_run).cond(end+1) = cond;
+                end
+                % modulators
+                for i_mod1 = 1:length(loadreg.mod)
+                    tmp_onsets = loadreg.mod{i_mod1}.onset;
+                    nb_rmons = sum(tmp_onsets/pars_tr > nb_min);
+                    if nb_rmons; fprintf('    warning: (%02i,%02i,%02i) delete %02i mod onsets \n',i_sub,i_run,i_mod,nb_rmons); end
+                    tmp_onsets(tmp_onsets/pars_tr > nb_min) = [];
+                    cond = struct();
+                    cond.name     = loadreg.mod{i_mod1}.name;
+                    cond.onset    = tmp_onsets;
+                    cond.duration = loadreg.mod{i_mod1}.duration;
+                    cond.tmod     = 0;
+                    for i_mod2 = 1:length(loadreg.mod{i_mod1}.subname)
+                        cond.pmod(i_mod2).name  = loadreg.mod{i_mod1}.subname{i_mod2};
+                        cond.pmod(i_mod2).param = loadreg.mod{i_mod1}.level{i_mod2};
+                        cond.pmod(i_mod2).poly = 1;
+                    end
+                    job.spm.stats.fmri_spec.sess(i_run).cond(end+1) = cond;
+                end
+                % realignment
+                job.spm.stats.fmri_spec.sess(i_run).multi_reg = {file_datrea};
             end
             % others
             job.spm.stats.fmri_spec.fact = struct('name',{},'levels',{});
@@ -181,7 +224,7 @@ function scan_process()
         jobs = {};
         for i_sub = u_subject
             dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
-            fprintf('GLM first level estimate for: subject %02i\n',i_sub);
+            fprintf('GLM first level estimate for: %s\n',dir_datglm1);
             job = struct();
             job.spm.stats.fmri_est.spmmat = {[dir_datglm1,'SPM.mat']};
             job.spm.stats.fmri_est.method.Classical = 1;
@@ -275,4 +318,29 @@ function mkdirp(path)
     rootpath(i_filesep:end) = [];
     if ~exist(rootpath,'dir'); mkdirp(rootpath); end
     mkdir(path);
+end
+
+function y = bin2sign(x)
+    l = logical(x);
+    y = double(x);
+    y( l) = +1;
+    y(~l) = -1;
+end
+
+function reg_onset = get_regonset(timerun,u_reg)
+    reg_onset = [];
+    for i_reg = 1:length(u_reg)
+        reg_onset = [reg_onset,timerun.(u_reg.value{i_reg})];
+    end
+    reg_onset = sort(reg_onset);
+end
+
+function mod_onset = get_modonset(timerun,u_mod)
+    mod_onset = [];
+    for i_mod1 = 1:length(u_mod.value)
+        for i_mod2 = 1:length(u_mod.value{i_mod1}.value)
+            mod_onset = [mod_onset,timerun.(u_mod.value{i_mod1}.value{i_mod2})];
+        end
+    end
+    mod_onset = sort(mod_onset);
 end

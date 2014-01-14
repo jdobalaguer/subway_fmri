@@ -77,37 +77,42 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             time_regular = trial_os(ii_run & ~ii_exchange);
             run.('avatar_regular') = time_regular;
             
-            % face
+            % face/place
             ii_face  = logical([datafile.map.stations(datafile.data.avatar_instation).face]);
             time_face = trial_os(ii_run & ii_face);
-            run.('avatar_face') = time_face;
-                        
-            % place
             time_place = trial_os(ii_run & ~ii_face);
+            run.('avatar_face') = time_face;
             run.('avatar_place') = time_place;
             
-            % switch
+            % switch / no switch (in exchange stations)
             ii_diffline = logical([diff(datafile.data.avatar_insubline),0]);
             ii_stop = logical(datafile.data.exp_stoptrial);
-            time_switch = trial_os(ii_run & ii_exchange & ii_diffline & ~ii_stop);
+            ii_switch = ii_exchange & ii_diffline & ~ii_stop;
+            time_switch = trial_os(ii_run & ii_switch);
+            time_noswitch = trial_os(ii_run & ~ii_switch);
             run.('avatar_switch') = time_switch;
-            
-            % noswitch
-            time_noswitch = trial_os(ii_run & ((ii_exchange & ~ii_diffline & ~ii_stop) | ~ii_exchange));
             run.('avatar_noswitch') = time_noswitch;
             
-            % backwards
+            % forwards/backwards
             ii_start = datafile.data.exp_starttrial;
-            time_backwards = trial_os(ii_run & ii_diffline & ~ii_stop & ~ii_exchange & ~ii_start);
+            ii_backwards = ii_diffline & ~ii_stop & ~ii_exchange & ~ii_start;
+            time_forward   = trial_os(ii_run & ~ii_backwards);
+            time_backwards = trial_os(ii_run &  ii_backwards);
+            run.('avatar_forward'  ) = time_forward;
             run.('avatar_backwards') = time_backwards;
             
-            % achieved
+            % inertia/exertia
+            ii_exertia = ii_diffline | ii_elbow | ii_switch | ii_backwards;
+            time_inertia = trial_os(ii_run & ~ii_exertia);
+            time_exertia = trial_os(ii_run &  ii_exertia);
+            run.('avatar_inertia') = time_inertia;
+            run.('avatar_exertia') = time_exertia;
+            
+            % achieved/bailout
             ii_togoal = (datafile.data.avatar_goalstation(ii_run & ii_stop)==datafile.data.resp_station(ii_run & ii_stop));
             time_achieved = run.screen_rew(ii_togoal(1:length(run.screen_rew)));
-            run.('avatar_achieved') = time_achieved;
-            
-            % bailout
             time_bailout = run.screen_rew(~ii_togoal(1:length(run.screen_rew)));
+            run.('avatar_achieved') = time_achieved;
             run.('avatar_bailout') = time_bailout;
             
             %% remove fields
