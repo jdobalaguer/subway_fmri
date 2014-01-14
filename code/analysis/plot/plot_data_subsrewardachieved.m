@@ -1,6 +1,6 @@
-function plot_data_subsrewardachieved()
+function plot_data_subsrewardachieved(session)
     % load results
-    allresults = load_results();
+    allresults = load_results(session);
     
     % numbers
     u_participant  = unique(allresults.block_data.exp_sub);

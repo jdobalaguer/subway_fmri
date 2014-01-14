@@ -1,6 +1,6 @@
-function plot_data_reltimestations()
+function plot_data_reltimestations(session)
     % load results
-    allresults = load_results();
+    allresults = load_results(session);
     
     % numbers
     u_participant  = unique(allresults.block_data.exp_sub);
