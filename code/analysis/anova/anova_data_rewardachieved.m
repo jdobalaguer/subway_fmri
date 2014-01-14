@@ -1,6 +1,6 @@
-function anova_data_rewardachieved()
+function anova_data_rewardachieved(session)
     % load results
-    allresults = load_results();
+    allresults = load_results(session);
     
     % numbers
     u_participant  = unique(allresults.block_data.exp_sub);
