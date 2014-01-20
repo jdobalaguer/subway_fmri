@@ -77,7 +77,7 @@ function scan_preprocess()
     %% SET SUBJECTS
     function u_subject = set_subjects(prefix)
         u_subject = nan(1,nb_subjects);
-        for i_sub = 1:nb_subjects
+        for i_sub = 2:nb_subjects
             dir_sub = strtrim(dir_subs(i_sub,:));
             dir_epi3 = strtrim(dir_epis3(i_sub,:));
             fprintf('Checking for: %s\n',dir_sub);
@@ -126,6 +126,7 @@ function scan_preprocess()
             end
             if isfield(job.spm.spatial.realign.estwrite,'data'); jobs{end+1} = job; end
         end
+        save
         if ~isempty(jobs); spm_jobman('run',jobs); end
         clear job jobs
     end
@@ -342,7 +343,7 @@ function scan_preprocess()
     %% CLEAN FILES
     function cleanfiles(varargin)
         for i_varargin = 1:length(varargin)
-            for i = 1:nb_subjects
+            for i = u_subject
                 dir_sub = strtrim(dir_subs(i,:));
                 dir_epi3 = strtrim(dir_epis3(i,:));
                 fprintf('Cleaning files for: %s\n',dir_sub);
