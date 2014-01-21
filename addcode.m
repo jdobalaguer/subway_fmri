@@ -1,1 +1,1 @@
-addpath(genpath('code'));
+addpath(genpath([pwd(),filesep(),'code']));
