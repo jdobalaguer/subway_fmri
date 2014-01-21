@@ -38,7 +38,7 @@ function scan_process()
     pars_voxs    = 4;
     
     % FLAGS
-    do_all  = false;
+    do_all  = true;
     do_regs = do_all || ~exist(dir_datcons ,'file');
     do_frst = do_all || ~exist(dir_datglm1s,'file');
     do_scnd = do_all || true;

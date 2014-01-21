@@ -115,6 +115,14 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             timerun.('avatar_achieved') = time_achieved;
             timerun.('avatar_bailout') = time_bailout;
             
+            % reward
+            ii_lowrew     = (datafile.data.avatar_reward==1);
+            ii_highrew    = (datafile.data.avatar_reward==5);
+            time_lowrew   = trial_os(ii_run & ii_lowrew);
+            time_highrew  = trial_os(ii_run & ii_highrew);
+            timerun.('avatar_lowrew' ) = time_lowrew;
+            timerun.('avatar_highrew') = time_highrew;
+            
             %% remove fields
             timerun = rmfield(timerun,'screen_blank');
             timerun = rmfield(timerun,'screen_blockpos');
