@@ -1,1 +1,1 @@
-rmpath(genpath('code'));
+rmpath(genpath([pwd(),filesep(),'code']));
