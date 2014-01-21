@@ -42,22 +42,10 @@ function set_results(session)
         
         %% trial results
         % data
-        %{
-        data.avatar_inexchange = [];
-        for i_trial = 1:length(data.avatar_instation)
-            data.avatar_inexchange(end+1)     = (length(unique(map.links(data.avatar_instation(i_trial),:))) > 3);
-        end
-        %}
         results.trial_data = data;
         
         % quiz
         if parameters.flag_quiz
-            %{
-            quiz.avatar_inexchange = [];
-            for i_trial = 1:length(quiz.avatar_instation)
-                quiz.avatar_inexchange(end+1)     = (length(unique(map.links(quiz.avatar_instation(i_trial),:))) > 3);
-            end
-            %}
             results.trial_quiz  = quiz;
         end
 
@@ -73,6 +61,7 @@ function set_results(session)
         
         %% participant results
         results.participant = participant;
+        results.map         = map;
         
         
         %% save

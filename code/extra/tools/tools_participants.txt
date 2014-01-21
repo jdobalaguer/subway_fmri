@@ -1,0 +1,29 @@
+>> [sex,age] = tools_participants('scanner')
+    alejonevado : 
+    aleksandarivanov : 
+sex aleksandarivanov : m
+age aleksandarivanov : 21
+    caimarshall : 
+sex caimarshall : m
+age caimarshall : 30
+    carloselias : 
+sex carloselias : m
+age carloselias : 30
+    carlosvelasco : 
+    emleykerry : 
+    ericpazo : 
+    janbalaguer : 
+    joannapilch : 
+    lukebarratt : 
+    piotrmarzec : 
+    pradnyatalekar : 
+sex pradnyatalekar : f
+age pradnyatalekar : 23
+    saracaccinelli : 
+sex saracaccinelli : f
+age saracaccinelli : 30
+    tomstewart : 
+sex tomstewart : m
+age tomstewart : 25
+    yurikasakai : 
+ 

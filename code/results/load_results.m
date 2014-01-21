@@ -38,6 +38,7 @@ function allresults = load_results(session)
             end
             % participant
             allresults.participant = {results.participant};
+            allresults.map         = {results.map};
         % then concatenate
         else
             % data
@@ -50,6 +51,7 @@ function allresults = load_results(session)
             end
             % participant
             allresults.participant{end+1} = results.participant;
+            allresults.map{end+1}         = results.map;
         end
     end
 end
