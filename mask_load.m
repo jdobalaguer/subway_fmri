@@ -19,9 +19,9 @@ function ret = mask_load(regions)
         return;
     end
     
-    if ~iscell(regions)
-        regions = {regions};
-    end
+    if strcmp(regions,'Whole');     regions = {'Left Cerebellum','Right Cerebellum','Right Brainstem','Left Brainstem','Left Cerebrum','Right Cerebrum','Inter-Hemispheric'}; end
+    if ~iscell(regions);            regions = {regions}; end
+    
     
     %% generate masks
     mask = load_mask(regions{1});

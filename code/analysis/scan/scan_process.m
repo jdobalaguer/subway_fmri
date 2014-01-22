@@ -63,7 +63,7 @@ function scan_process()
     function build_regressors()
         if ~do_regs; return; end
         % make directory
-        if ~exist(dir_datcons,'dir'); mkdirp(dir_datcons); end
+        if ~exist(dir_datcons,'dir'); tools_mkdirp(dir_datcons); end
         % load regressors
         [timeregs,dataregs] = scan_loadregressors('scanner');
         [timefacs,datafacs] = scan_loadfactors('scanner');        
@@ -147,7 +147,7 @@ function scan_process()
     %% GLM FIRST LEVEL
     function glm_first_level()
         if ~do_frst; return; end
-        if ~exist(dir_datglm1s,'dir'); mkdirp(dir_datglm1s); end
+        if ~exist(dir_datglm1s,'dir'); tools_mkdirp(dir_datglm1s); end
         
         jobs = {};
         j_run = 0;
@@ -155,7 +155,7 @@ function scan_process()
             dir_niiepi3 = strtrim(dir_niiepis3(i_sub,:));
             dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
             fprintf('GLM first level for: %s\n',dir_datglm1);
-            if ~exist(dir_datglm1,'dir'); mkdirp(dir_datglm1); end
+            if ~exist(dir_datglm1,'dir'); tools_mkdirp(dir_datglm1); end
             job = struct();
             job.spm.stats.fmri_spec.dir = {dir_datglm1};
             job.spm.stats.fmri_spec.timing.units  = 'secs';
@@ -265,7 +265,7 @@ function scan_process()
             for i_con = 1:length(u_contrast)
                 dir_datglm1 = sprintf('%ssub_%02i/',dir_datglm1s,i_sub);
                 dir_datglm2 = sprintf('%scon_%s/',dir_datglm2s,u_contrast{i_con}.name);
-                if ~exist(dir_datglm2,'dir'); mkdirp(dir_datglm2); end
+                if ~exist(dir_datglm2,'dir'); tools_mkdirp(dir_datglm2); end
                 copyfile(sprintf('%sspmT_%04i.hdr',dir_datglm1,i_con),sprintf('%sspmT_sub%02i_con%02i.hdr',dir_datglm2,i_sub,i_con));
                 copyfile(sprintf('%sspmT_%04i.img',dir_datglm1,i_con),sprintf('%sspmT_sub%02i_con%02i.img',dir_datglm2,i_sub,i_con));
                 copyfile(sprintf('%scon_%04i.hdr' ,dir_datglm1,i_con),sprintf('%scon_sub%02i_con%02i.hdr' ,dir_datglm2,i_sub,i_con));
@@ -313,19 +313,6 @@ function scan_process()
 end
 
 %% extra functions
-
-% create subdirectories
-function mkdirp(path)
-    assert(~ispc(),'mkdirp: doesnt work under win');
-    if path(1  )~='/'; path = [pwd(),filesep(),path]; end
-    if path(end)=='/'; path(end)=[];                  end
-    i_filesep = find(path=='/',1,'last');
-    rootpath = path;
-    rootpath(i_filesep:end) = [];
-    if ~exist(rootpath,'dir'); mkdirp(rootpath); end
-    mkdir(path);
-end
-
 % convert binary to signed
 function y = bin2sign(x)
     l = logical(x);
