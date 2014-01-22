@@ -108,13 +108,6 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             timerun.('avatar_inertia') = time_inertia;
             timerun.('avatar_exertia') = time_exertia;
             
-            % achieved/bailout
-            ii_togoal = (datafile.data.avatar_goalstation(ii_run & ii_stop)==datafile.data.resp_station(ii_run & ii_stop));
-            time_achieved = timerun.screen_rew(ii_togoal(1:length(timerun.screen_rew)));
-            time_bailout = timerun.screen_rew(~ii_togoal(1:length(timerun.screen_rew)));
-            timerun.('avatar_achieved') = time_achieved;
-            timerun.('avatar_bailout') = time_bailout;
-            
             % reward
             ii_lowrew     = (datafile.data.avatar_reward==1);
             ii_highrew    = (datafile.data.avatar_reward==5);
@@ -122,6 +115,14 @@ function [timeruns,dataruns] = scan_generateregressors(datafiles)
             time_highrew  = trial_os(ii_run & ii_highrew);
             timerun.('avatar_lowrew' ) = time_lowrew;
             timerun.('avatar_highrew') = time_highrew;
+            
+            %% add feedback data
+            % achieved/bailout
+            ii_togoal = (datafile.data.avatar_goalstation(ii_run & ii_stop)==datafile.data.resp_station(ii_run & ii_stop));
+            time_achieved = timerun.screen_rew(ii_togoal(1:length(timerun.screen_rew)));
+            time_bailout = timerun.screen_rew(~ii_togoal(1:length(timerun.screen_rew)));
+            timerun.('feed_achieved') = time_achieved;
+            timerun.('feed_bailout') = time_bailout;
             
             %% remove fields
             timerun = rmfield(timerun,'screen_blank');

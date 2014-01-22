@@ -2,6 +2,7 @@
 function newimg = mask_resample(oldimg,newsize,interpolation)
     
     %% defaults and variables
+    if ischar(oldimg); oldimg = mask_load(oldimg); end
     if ~exist('interpolation','var'); interpolation = 'average'; end
     oldsize = size(oldimg);
     

@@ -1,5 +1,7 @@
 .DS_Store
 *~
+*.mat
+*.nii
 backups/data/*
 data/data/*
 data/error/*
