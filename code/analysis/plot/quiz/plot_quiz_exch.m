@@ -1,6 +1,6 @@
-function values = plot_quiz_exch()
+function values = plot_quiz_exch(session)
     % load results
-    allresults = load_results();
+    allresults = load_results(session);
     
     % numbers
     u_participants = unique(allresults.trial_quiz.exp_sub);

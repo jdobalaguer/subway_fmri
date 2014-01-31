@@ -1,7 +1,7 @@
 
-function subj_condregs = scan_mvpa_randomregressors(workspace)
-    s_x = length(workspace.subj_condfields);
-    s_y = length(workspace.subj_condruns);
+function subj_condregs = scan_mvpa_randomregressors(tmp_workspace)
+    s_x = length(tmp_workspace.subj_condfields);
+    s_y = length(tmp_workspace.subj_condruns);
     
     r = inf;
     while any(sum(r)>1)

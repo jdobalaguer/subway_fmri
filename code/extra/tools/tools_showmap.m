@@ -10,6 +10,7 @@ function tools_showmap(map)
         parameters.time_map = Inf;
         
         % show map
+        map_resize;
         ptb_screen_map;
         
         % close

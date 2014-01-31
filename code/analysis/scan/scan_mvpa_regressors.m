@@ -1,16 +1,16 @@
 
-function subj_condregs = scan_mvpa_regressors(workspace)
+function subj_condregs = scan_mvpa_regressors(tmp_workspace)
     %% variables
-    i_sub           = workspace.i_sub;
-    subj_condfields = workspace.subj_condfields;
-    subj_condruns   = workspace.subj_condruns;
-    nb_runs         = workspace.nb_runs;
+    i_sub           = tmp_workspace.i_sub;
+    subj_condfields = tmp_workspace.subj_condfields;
+    subj_condruns   = tmp_workspace.subj_condruns;
+    nb_runs         = tmp_workspace.nb_runs;
     nb_scans        = length(subj_condruns);
     nb_fields       = length(subj_condfields);
-    pars_TR         = workspace.pars_TR;
+    pars_TR         = tmp_workspace.pars_TR;
 
     %% load times (for this participant)
-    times  = scan_loadregressors('scanner');
+    times  = scan_glm_loadregressors('scanner');
     ii_sub = nb_runs*(i_sub-1) + (1:nb_runs);
     times  = times(ii_sub);
     for i_run = 1:nb_runs
