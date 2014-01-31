@@ -7,6 +7,7 @@ function tools_mkdirp(path)
     rootpath = path;
     rootpath(i_filesep:end) = [];
     if ~exist(rootpath,'dir'); tools_mkdirp(rootpath); end
+    if exist(path,'dir'); return; end
     mkdir(path);
 end
 

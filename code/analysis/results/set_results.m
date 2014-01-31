@@ -65,6 +65,6 @@ function set_results(session)
         
         
         %% save
-        save(['data',filesep,'result',filesep,session,filesep,'results_',participant.name,'_',num2str(participant.id),'.mat'],'results','map','parameters','participant','ptb');
+        save(['data',filesep,'result',filesep,session,filesep,lsdata{i_lsdata}]);
     end
 end

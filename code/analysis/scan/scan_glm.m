@@ -1,8 +1,7 @@
-function scan_process()
+function scan_glm()
     
     %% WARNING
     fprintf('\nmake sure you have same participants in data and nii folders!\n\n')
-    do_all = 0;
 
     %% GENERAL SETTINGS    
     % DIRECTORIES AND FILES
@@ -14,10 +13,10 @@ function scan_process()
     dir_niiruns                    = dir([strtrim(dir_niiepis3(1,:)),'run*']); dir_niiruns = strcat(strvcat(dir_niiruns.name),'/');
     % data
     dir_datsubs                    = [pwd(),filesep,'data',filesep,'data',filesep,'scanner',filesep];
-    dir_process                    = [pwd(),filesep,'data',filesep,'process',filesep,'process',filesep];
-    dir_datcons                    = [dir_process,'conditions',filesep];
-    dir_datglm1s                   = [dir_process,'firstlevel',filesep];
-    dir_datglm2s                   = [dir_process,'secondlevel',filesep];
+    dir_glm                        = [pwd(),filesep,'data',filesep,'glm',filesep,'glm',filesep];
+    dir_datcons                    = [dir_glm,'conditions',filesep];
+    dir_datglm1s                   = [dir_glm,'firstlevel',filesep];
+    dir_datglm2s                   = [dir_glm,'secondlevel',filesep];
     file_datsubs                   = dir([dir_datsubs,'data_*.mat']); file_datsubs = strcat(dir_datsubs,strvcat(file_datsubs.name));
     file_datcons                   = dir([dir_datcons,'condition_*.mat']); file_datcons = strcat(dir_datcons,strvcat(file_datcons.name));
     file_datreas                   = dir([dir_datcons,'realign_*.mat']); file_datreas = strcat(dir_datcons,strvcat(file_datreas.name));
@@ -25,20 +24,21 @@ function scan_process()
     % VARIABLES
     nb_subjects = size(dir_niisubs, 1);
     nb_runs     = size(dir_niiruns, 1);
-    u_subject   = 1:nb_subjects;
+    n_subject   = [6,10];
+    u_subject   = set_subjects();
     u_run       = 1:nb_runs;
     u_regressor = {};
     u_modulator = {};
     u_factor    = {};
     u_contrast  = {};
-    eval(fileread([dir_process,'process.m']));
+    eval(fileread([dir_glm,'glm.m']));
     
     % PARAMETERS
     pars_tr      = 2;
     pars_voxs    = 4;
     
     % FLAGS
-    do_all  = true;
+    do_all  = false;
     do_regs = do_all || ~exist(dir_datcons ,'file');
     do_frst = do_all || ~exist(dir_datglm1s,'file');
     do_scnd = do_all || true;
@@ -52,12 +52,18 @@ function scan_process()
     tic();
     spm_jobman('initcfg');
     build_regressors();         % build regressors
-    glm_first_level();          % GLM first : level
-    glm_first_estimate();       % GLM first : estimate
-    glm_first_contrasts();      % GLM first : contrasts
-    glm_second_copy();          % GLM second: copy
-    glm_second_level();         % GLM second: level
+    glm_first_level();          % first  : level
+    glm_first_estimate();       % first  : estimate
+    glm_second_contrasts();     % second : contrasts
+    glm_second_copy();          % second : copy
+    glm_second_level();         % second : level
     toc();
+    
+    %% SET PARTICIPANTS
+    function u_subject = set_subjects()
+        u_subject = 1:nb_subjects;
+        u_subject(n_subject) = [];
+    end
     
     %% BUILD REGRESSORS
     function build_regressors()
@@ -65,9 +71,8 @@ function scan_process()
         % make directory
         if ~exist(dir_datcons,'dir'); tools_mkdirp(dir_datcons); end
         % load regressors
-        [timeregs,dataregs] = scan_loadregressors('scanner');
-        [timefacs,datafacs] = scan_loadfactors('scanner');        
-        j_run = 0;
+        [timeregs,dataregs] = scan_glm_loadregressors('scanner');
+        [timefacs,datafacs] = scan_glm_loadfactors('scanner');
         for i_sub = u_subject
             dir_niiepi3 = strtrim(dir_niiepis3(i_sub,:));
             fprintf('Building regressors for: %s\n',dir_niiepi3);
@@ -75,7 +80,7 @@ function scan_process()
                 file_datcon = sprintf('%scondition_sub_%02i_run_%02i.mat',dir_datcons,i_sub,i_run);
                 file_datrea = sprintf('%srealign_sub_%02i_run_%02i.mat',  dir_datcons,i_sub,i_run);
                 % index
-                j_run = j_run+1;
+                j_run = (i_sub-1)*nb_runs + i_run;
                 assert(j_run<=length(timeregs),'scan_process: build_regressors: error 1.');
                 % dirs & files
                 dir_niirun     = strcat(dir_niiepi3,strtrim(dir_niiruns(i_run,:)));
@@ -144,7 +149,7 @@ function scan_process()
         file_datreas = dir([dir_datcons,'realign_*.mat']);   file_datreas = strcat(dir_datcons,strvcat(file_datreas.name));
     end
     
-    %% GLM FIRST LEVEL
+    %% FIRST LEVEL
     function glm_first_level()
         if ~do_frst; return; end
         if ~exist(dir_datglm1s,'dir'); tools_mkdirp(dir_datglm1s); end
@@ -191,7 +196,7 @@ function scan_process()
                 for i_cond1 = 1:length(loadcond.cond)
                     % remove onsets out of boundary
                     nb_rmons = sum(loadcond.cond{i_cond1}.onset/pars_tr > nb_min);
-                    if nb_rmons; fprintf('    warning: (%02i,%02i,%02i) delete %02i onsets \n',i_sub,i_run,i_mod,nb_rmons); end
+                    if nb_rmons; fprintf('    warning: (%02i,%02i,%02i) delete %02i onsets %s \n',i_sub,i_run,i_cond1,nb_rmons,loadcond.cond{i_cond1}.name); end
                     loadcond.cond{i_cond1}.onset(loadcond.cond{i_cond1}.onset/pars_tr > nb_min) = [];
                     % save condition
                     cond = struct();
@@ -222,7 +227,7 @@ function scan_process()
         spm_jobman('run',jobs);
     end
     
-    %% GLM FIRST LEVEL: Estimate
+    %% FIRST LEVEL: Estimate
     function glm_first_estimate()
         if ~do_frst; return; end
         jobs = {};
@@ -237,8 +242,8 @@ function scan_process()
         spm_jobman('run',jobs);
     end
     
-    %% GLM FIRST LEVEL: Contrasts
-    function glm_first_contrasts()
+    %% SECOND LEVEL: Contrasts
+    function glm_second_contrasts()
         if ~do_scnd; return; end
         jobs = {};
         for i_sub = u_subject
@@ -257,7 +262,7 @@ function scan_process()
         spm_jobman('run',jobs);
     end
     
-    %% GLM SECOND LEVEL: Copy files
+    %% SECOND LEVEL: Copy files
     function glm_second_copy()
         if ~do_scnd; return; end
         for i_sub = u_subject
@@ -274,7 +279,7 @@ function scan_process()
         end
     end
     
-    %% GLM SECOND LEVEL
+    %% SECOND LEVEL
     function glm_second_level()
         if ~do_scnd; return; end
         jobs = {};

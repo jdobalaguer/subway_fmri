@@ -2,14 +2,8 @@
 *~
 *.mat
 *.nii
+
 backups/data/*
-data/data/*
-data/error/*
-data/maps/*
-data/nii/*
-data/result/*
-data/process/*
-justincase/*
+data/*
+!data/maps/copy
 tmp*
-trash
-trash/*
