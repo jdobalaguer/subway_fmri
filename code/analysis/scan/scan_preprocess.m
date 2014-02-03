@@ -13,7 +13,6 @@ function scan_preprocess()
     dir_epis3                   = strcat(dir_subs,'epi3',filesep);
     dir_epis4                   = strcat(dir_subs,'epi4',filesep);
     expand(); % expand 4D nii to 3D nii
-    dir_runs                    = dir([strtrim(dir_epis3(1,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
     file_T1                     = [dir_spm,'templates/T1.nii,1'];
     
     % PARAMETERS
@@ -24,8 +23,6 @@ function scan_preprocess()
     pars_voxs    = 4;
     
     % VARIABLES
-    nb_runs     = size(dir_runs, 1);
-    u_run       = 1:nb_runs;
     nb_subjects = size(dir_subs, 1); 
     u_subject   = set_subjects(sprintf('sw%du',pars_voxs));
     
@@ -77,9 +74,12 @@ function scan_preprocess()
     %% SET SUBJECTS
     function u_subject = set_subjects(prefix)
         u_subject = nan(1,nb_subjects);
-        for i_sub = 2:nb_subjects
+        for i_sub = 1:nb_subjects
             dir_sub = strtrim(dir_subs(i_sub,:));
             dir_epi3 = strtrim(dir_epis3(i_sub,:));
+            dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+            nb_runs     = size(dir_runs, 1);
+            u_run       = 1:nb_runs;
             fprintf('Checking for: %s\n',dir_sub);
             this_done = 1;
             for i_run = u_run
@@ -100,6 +100,9 @@ function scan_preprocess()
         for i_sub = u_subject
             dir_sub  = strtrim(dir_subs(i_sub,:));
             dir_epi3 = strtrim(dir_epis3(i_sub,:));
+            dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+            nb_runs     = size(dir_runs, 1);
+            u_run       = 1:nb_runs;
             fprintf('Realignment for: %s\n',dir_sub);
             job = struct();
             job.spm.spatial.realign.estwrite.eoptions.quality = 0.9;  % Quality (Default: 0.9)
@@ -120,13 +123,12 @@ function scan_preprocess()
                 if isempty(dir([dir_img,'rp_',prefix,'images*.txt']))
                     spm_select('clearvfiles');
                     raw_func_filenames{i_run}    = spm_select('List', dir_img, '^images.*\.nii$');
-                    filenames_for_realign{i_run} = strcat(dir_img,prefix,raw_func_filenames{i_run}); 
+                    filenames_for_realign{i_run} = strcat(dir_img,prefix,raw_func_filenames{i_run});
                     job.spm.spatial.realign.estwrite.data{i_run} = cellstr(filenames_for_realign{i_run});
                 end
             end
             if isfield(job.spm.spatial.realign.estwrite,'data'); jobs{end+1} = job; end
         end
-        save
         if ~isempty(jobs); spm_jobman('run',jobs); end
         clear job jobs
     end
@@ -137,6 +139,9 @@ function scan_preprocess()
         for i_sub = u_subject
             dir_sub  = strtrim(dir_subs(i_sub,:));
             dir_epi3 = strtrim(dir_epis3(i_sub,:));
+            dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+            nb_runs     = size(dir_runs, 1);
+            u_run       = 1:nb_runs;
             fprintf('Realign and Unwarp for: %s\n',dir_sub);
             job = struct();
             job.spm.spatial.realignunwarp.eoptions.quality = 0.9;  % Quality (Default: 0.9)
@@ -184,11 +189,14 @@ function scan_preprocess()
         for i_sub = u_subject
             dir_sub  = strtrim(dir_subs(i_sub,:));
             dir_epi3 = strtrim(dir_epis3(i_sub,:));
+            dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+            nb_runs     = size(dir_runs, 1);
+            u_run       = 1:nb_runs;
             fprintf('Slice-Timing for: %s\n',dir_sub);
             job = struct();
             job.spm.temporal.st.nslices = pars_nslices;
             job.spm.temporal.st.tr = pars_tr;
-            job.spm.temporal.st.ta = pars_tr- (pars_tr/pars_nslices);
+            job.spm.temporal.st.ta = pars_tr - (pars_tr/pars_nslices);
             job.spm.temporal.st.so = pars_ordsl;
             job.spm.temporal.st.refslice = pars_refsl;
             job.spm.temporal.st.prefix = 'a';
@@ -214,6 +222,9 @@ function scan_preprocess()
         for i_sub = u_subject
             dir_sub   = strtrim(dir_subs(i_sub,:));
             dir_epi3  = strtrim(dir_epis3(i_sub,:));
+            dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+            nb_runs     = size(dir_runs, 1);
+            u_run       = 1:nb_runs;
             dir_run   = strcat(dir_epi3,strtrim(dir_runs(1,:)));
             dir_img   = strcat(dir_run,'images',filesep);
             file_mean = dir(strcat(dir_img,'mean',prefix,'images*'));
@@ -278,6 +289,9 @@ function scan_preprocess()
             dir_sub = strtrim(dir_subs(i_sub,:));
             dir_epi3 = strtrim(dir_epis3(i_sub,:));
             dir_str   = strtrim(dir_strs(i_sub,:));
+            dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+            nb_runs     = size(dir_runs, 1);
+            u_run       = 1:nb_runs;
             fprintf('Writing the normalized epis for: %s\n',dir_sub);
             param_for_normalise_file = dir([dir_str,prefix_str,'*_sn.mat']);
             job = struct();
@@ -315,6 +329,9 @@ function scan_preprocess()
         for i_sub = u_subject
             dir_sub = strtrim(dir_subs(i_sub,:));
             dir_epi3 = strtrim(dir_epis3(i_sub,:));
+            dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+            nb_runs     = size(dir_runs, 1);
+            u_run       = 1:nb_runs;
             fprintf('Smoothing for: %s\n',dir_sub);
             job = struct();
             job.spm.spatial.smooth.fwhm = [8 8 8];
@@ -343,9 +360,12 @@ function scan_preprocess()
     %% CLEAN FILES
     function cleanfiles(varargin)
         for i_varargin = 1:length(varargin)
-            for i = u_subject
-                dir_sub = strtrim(dir_subs(i,:));
-                dir_epi3 = strtrim(dir_epis3(i,:));
+            for i_sub = u_subject
+                dir_sub = strtrim(dir_subs(i_sub,:));
+                dir_epi3 = strtrim(dir_epis3(i_sub,:));
+                dir_runs    = dir([strtrim(dir_epis3(i_sub,:)),'run*']); dir_runs = strcat(strvcat(dir_runs.name),'/');
+                nb_runs     = size(dir_runs, 1);
+                u_run       = 1:nb_runs;
                 fprintf('Cleaning files for: %s\n',dir_sub);
                 for j = u_run
                     dir_run = strcat(dir_epi3,strtrim(dir_runs(j,:)));

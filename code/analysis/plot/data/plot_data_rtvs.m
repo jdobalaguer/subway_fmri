@@ -13,7 +13,7 @@ function plot_data_rtvs(session)
     
     % set mean rts for each participant
     u_par   = unique(data.exp_sub);
-    n_par   = []; %[6,10];
+    n_par   = [6,10,17,18,19];
     u_par(n_par) = [];
     nb_pars = length(u_par);
     
