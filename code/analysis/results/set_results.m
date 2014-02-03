@@ -1,29 +1,17 @@
 function set_results(session)
     %% participant files
-        % ls the 'data' folder
-    if ispc()
-        tmp_lsdata= dir(['data',filesep,'data',filesep,session]);
-        lsdata = {};
-        for i = 1:length(tmp_lsdata)
-            if ~(tmp_lsdata(i).name(1)=='.')
-                lsdata{end+1} = tmp_lsdata(i).name;
-            end
+    % ls the 'data' folder
+    tmp_lsdata= dir(['data',filesep,'data',filesep,session]);
+    lsdata = {};
+    for i = 1:length(tmp_lsdata)
+        if ~(tmp_lsdata(i).name(1)=='.')
+            lsdata{end+1} = tmp_lsdata(i).name;
         end
-        nb_lsdata = length(lsdata);
-    else
-        lsdata = regexp(ls(['data',filesep,'data',filesep,session]),'\s','split');
-        i = 1;
-        while i<=length(lsdata)
-            if isempty(lsdata{i})
-                lsdata(i) = [];
-            else
-                i = i+1;
-            end
-            nb_lsdata = length(lsdata);
-        end
-        clear i;
     end
-        % mkdir the 'results' folder
+    nb_lsdata = length(lsdata);
+    clear i;
+    
+    % mkdir the 'results' folder
     if ~exist(['data',filesep,'result'],'dir');
         mkdir(['data',filesep,'result']);
     end
