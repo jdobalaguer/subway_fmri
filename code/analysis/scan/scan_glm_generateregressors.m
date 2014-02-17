@@ -123,6 +123,16 @@ function [timeruns,dataruns] = scan_glm_generateregressors(datafiles)
             timerun.('avat6_lowrew' ) = trial_os(ii_run & ii_lowrew);
             timerun.('avat6_highrew') = trial_os(ii_run & ii_highrew);
             
+            % line
+            ii_line1 = (datafile.data.avatar_insubline == 1) | (datafile.data.avatar_insubline == 2);
+            ii_line3 = (datafile.data.avatar_insubline == 3) | (datafile.data.avatar_insubline == 4);
+            ii_line5 = (datafile.data.avatar_insubline == 5) | (datafile.data.avatar_insubline == 6);
+            ii_line7 = (datafile.data.avatar_insubline == 6) | (datafile.data.avatar_insubline == 8);
+            timerun.('avat7_line1' ) = trial_os(ii_run & ii_line1);
+            timerun.('avat7_line3' ) = trial_os(ii_run & ii_line3);
+            timerun.('avat7_line5' ) = trial_os(ii_run & ii_line5);
+            timerun.('avat7_line7' ) = trial_os(ii_run & ii_line7);
+            
             %% add feedback data
             % achieved/bailout
             ii_togoal = (datafile.data.avatar_goalstation(ii_run & ii_stop)==datafile.data.resp_station(ii_run & ii_stop));

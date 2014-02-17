@@ -24,7 +24,7 @@ function scan_preprocess()
     
     % VARIABLES
     nb_subjects = size(dir_subs, 1); 
-    u_subject   = set_subjects(sprintf('sw%du',pars_voxs));
+    u_subject   = 1; %set_subjects(sprintf('sw%du',pars_voxs));
     
     %% JOBS
     tic();
@@ -35,7 +35,7 @@ function scan_preprocess()
     normalisation_str_mni('c');             % normalisation  (estimate: anatomical T1 to MNI template)
     normalisation_epi_mni('u','c');         % normalisation  (write:    EPI to MNI template)
     smoothing(sprintf('w%du',pars_voxs));   % smoothing
-    cleanfiles('u',sprintf('w%du',pars_voxs));
+    %cleanfiles('u',sprintf('w%du',pars_voxs));
     toc();
         
 %     tic();
