@@ -48,7 +48,7 @@ function subj_condregs = scan_mvpa_regressors(tmp_workspace)
             cond = times{i_run}.(subj_condfields{i_field});
             dsec = sec-cond;
             dsec(dsec<0)   = nan;
-            dsecs(i_field) = nanmean(dsec,2);
+            dsecs(i_field) = nanmin(dsec,2);
         end
         % pick the closest event
         [~,i_field] = min(dsecs);

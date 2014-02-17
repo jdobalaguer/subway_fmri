@@ -13,9 +13,9 @@ function plot_data_rtvs(session)
     
     % set mean rts for each participant
     u_par   = unique(data.exp_sub);
-    n_par   = [6,10,17,18,19];
-    u_par(n_par) = [];
     nb_pars = length(u_par);
+    n_par   = [17,18,19]; %[6,10];
+    u_par(n_par) = [];
     
     % values
     t_exchyes  = nan(1,nb_pars);
@@ -51,9 +51,9 @@ function plot_data_rtvs(session)
     %% plot
     t = [t_regular',t_elbow',t_exchno',t_exchyes'];
     t(n_par,:) = [];
-    m = reshape( nanmean(t), ...
+    m = reshape( mean(t), ...
                 [2,2]);
-    e = reshape( nanstd( t)./sqrt(sum(~isnan(t))), ...
+    e = reshape( nanstd( t)./sqrt(size(t,1)), ...
                 [2,2]);
     sum(~isnan(t));
     f = figure();
@@ -64,7 +64,7 @@ function plot_data_rtvs(session)
                         '',...                                                 title
                         [],...                                                 xlabel
                         'reaction time (ms)',...                               ylabel
-                        fig_color('white')./255,...                            colour
+                        [1,1,1;.8,.8,.8],...                                   colour
                         'y',...                                                grid
                         {'regular','exchange'},...                             legend
                         2,...                                                  error sides (1, 2)
