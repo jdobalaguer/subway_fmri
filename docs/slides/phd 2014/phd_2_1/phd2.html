@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Neural Mechanisms of Hierarchical Reinforcement Learning during Navigation</title>
+
+		<meta name="description" content="PhD Presentation">
+		<meta name="author" content="Jan del Ojo Balaguer">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/day.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!-- adding stuff -->
+		<link rel="stylesheet" href="css/extension.css">
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<!-- Slide 0 : Cover -->
+				<section>
+					<h3>Neural Mechanisms of</h3>
+          <h3>Hierarchical Reinforcement Learning</h3>
+          <h3>during Navigation</h3>
+					<br/>
+					<p>Jan del Ojo Balaguer</p>
+				</section>
+
+				<!-- Slide 1 : Reinforcement Learning ######################################################################################################################################################### -->
+				<section>
+					<!-- Slide 1.2 : framework -->
+					<section>
+						<h3>Reinforcement Learning (RL)</h3>
+						<img width="639" height="266" src="assets/reinforcement_learning.jpg">
+						<img width="509" height="467" src="assets/striatum.jpg">
+					</section>
+					<!-- Slide 1.5 : issues -->
+					<section>
+						<h3>Difficulties</h3>
+						<br>
+						<p class="fragment highlight-red">scalability</p>
+						<p class="fragment highlight-red">exponentiality</p>
+						<p class="fragment shrink">generalisation</p>
+					</section>
+					<!-- Slide 1.6 : scalability (1) -->
+					<svg>
+						<defs>
+							<marker id = "rm" viewBox = "0 0 40 50" refX = "20" refY = "25" markerUnits = "strokeWidth" markerWidth = "20" markerHeight = "20" fill = "none">
+								<Image x="0" y="0" width="40" height="50" xlink:href="assets/r2d2.png" /></marker>
+							<marker id = "xm" viewBox = "0 0 20 20" refX = "10" refY = "10" markerUnits = "strokeWidth" markerWidth = "5" markerHeight = "5" stroke = "#aaa" stroke-width = "4" fill = "none" orient = "auto">
+								<path d = "M 0 0 L 20 20 M 0 20 L 20 0"/></marker>
+							<marker id = "om" viewBox = "0 0 20 20" refX = "10" refY = "10" markerUnits = "strokeWidth" markerWidth = "10" markerHeight = "10" stroke = "#aaa" stroke-width = "4" fill = "none" orient = "auto">
+								<circle cx="10" cy="10" r="5" />
+							<marker id = "bm" viewBox = "0 0 40 50" refX = "20" refY = "25" markerUnits = "strokeWidth" markerWidth = "20" markerHeight = "20" fill = "none">
+								<Image x="0" y="0" width="40" height="50" xlink:href="assets/battery.png" /></marker>
+  					</defs>
+					</svg>
+				<section data-transition="none">
+						<h2>Scalability</h2>
+						<br>
+						<svgframe><svg width="600" height="400">
+							<rect   x="20" y = "20" width="560" height="360"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+							<line   x1="300" y1="20"  x2="300" y2="180"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+							<line   x1="300" y1="220" x2="300" y2="380"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+  <path 	d="M 150 100           L 150 300" stroke="#aaa" stroke-width="3" marker-start= "url(#rm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 450 100           L 450 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#bm)" />
+  <path 	d="M 150 200 L 300 200 L 450 200" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+						</svg></svgframe>
+					</section>
+					<!-- Slide 1.7 : scalability (2) -->
+					<section data-transition="none">
+						<h2>Scalability</h2>
+						<br>
+						<svgframe><svg width="600" height="400">
+							<rect   x="20" y = "20" width="560" height="360"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+							<line   x1="300" y1="20"  x2="300" y2="180"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+							<line   x1="300" y1="220" x2="300" y2="380"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+  <path 	d="M  75 100 L 150 100 L 225 100" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 200 L 150 200 L 225 200" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 300 L 150 300 L 225 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 100 L  75 200 L  75 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 150 100 L 150 200 L 150 300" stroke="#aaa" stroke-width="3" marker-start= "url(#rm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 225 100 L 225 200 L 225 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+
+  <path 	d="M 375 100 L 450 100 L 525 100" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 375 200 L 450 200 L 525 200" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 375 300 L 450 300 L 525 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 375 100 L 375 200 L 375 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 450 100 L 450 200 L 450 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#bm)" />
+  <path 	d="M 525 100 L 525 200 L 525 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+
+  <path 	d="M  75 200 L 300 200 L 525 200" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+						</svg></svgframe>
+					</section>
+					<!-- Slide 1.8 : scalability (3) -->
+					<section data-transition="none">
+						<h2>Scalability</h2>
+						<br>
+						<svgframe><svg width="600" height="400">
+							<rect   x="20" y = "20" width="560" height="360"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+							<line   x1="300" y1="20"  x2="300" y2="180"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+							<line   x1="300" y1="220" x2="300" y2="380"
+									style="fill:#eeeeee;stroke:black;stroke-width:3;fill-rule:evenodd;" />
+  <path 	d="M  75 100 L 112 100 L 150 100 L 188 100 L 225 100 L 263 100" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 150 L 112 150 L 150 150 L 188 150 L 225 150 L 263 150" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 200 L 112 200 L 150 200 L 188 200 L 225 200 L 263 200" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 250 L 112 250 L 150 250 L 188 250 L 225 250 L 263 250" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 300 L 112 300 L 150 300 L 188 300 L 225 300 L 263 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M  75 100           L  75 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 112 100           L 112 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 150 100           L 150 300" stroke="#aaa" stroke-width="3" marker-start= "url(#rm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 188 100           L 188 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 225 100           L 225 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 263 100           L 263 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+
+  <path 	d="M 338 100 L 375 100 L 412 100 L 450 100 L 488 100 L 525 100" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 338 150 L 375 150 L 412 150 L 450 150 L 488 150 L 525 150" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 338 200 L 375 200 L 412 200 L 450 200 L 488 200 L 525 200" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 338 250 L 375 250 L 412 250 L 450 250 L 488 250 L 525 250" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 338 300 L 375 300 L 412 300 L 450 300 L 488 300 L 525 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 338 100           L 338 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 375 100           L 375 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 412 100           L 412 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 450 100           L 450 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#bm)" />
+  <path 	d="M 488 100           L 488 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+  <path 	d="M 525 100           L 525 300" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+
+  <path 	d="M  75 200 L 300 200 L 525 200" stroke="#aaa" stroke-width="3" marker-start= "url(#xm)" marker-mid="url(#xm)" marker-end="url(#xm)" />
+						</svg></svgframe>
+					</section>
+					<!-- Slide 1.9 : complexity (1) -->
+					<section data-transition="none">
+						<h2>Exponentiality</h2>
+						<br>
+						<svgframe><svg width="600" height="400">
+  <path 	d="M 300 100 L 100 300 " stroke="#aaa" stroke-width="3" marker-start="url(#rm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 300 100 L 500 300 " stroke="#aaa" stroke-width="3" marker-start="url(#rm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 200 200 L 300 300 " stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-end  ="url(#bm)"/>
+  <path 	d="M 400 200 L 300 300 " stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-end  ="url(#bm)"/>
+						</svg></svgframe>
+					</section>
+					<!-- Slide 1.10 : complexity (2) -->
+					<section data-transition="none">
+						<h2>Exponentiality</h2>
+						<br>
+						<svgframe><svg width="600" height="400">
+  <path 	d="M 300 100 L 250 150 L 200 200 L 150 250 L 100 300 " stroke="#aaa" stroke-width="3" marker-start="url(#rm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 350 150 L 300 200 L 250 250 L 200 300 "           stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 400 200 L 350 250 L 300 300 "                     stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#bm)"/>
+  <path 	d="M 450 250 L 400 300 "                               stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 300 100 L 350 150 L 400 200 L 450 250 L 500 300 " stroke="#aaa" stroke-width="3" marker-start="url(#rm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 250 150 L 300 200 L 350 250 L 400 300 "           stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 200 200 L 250 250 L 300 300 "                     stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#bm)"/>
+  <path 	d="M 150 250 L 200 300 "                               stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+						</svg></svgframe>
+					</section>
+					<!-- Slide 1.11 : complexity (3) -->
+					<section data-transition="none">
+						<h2>Exponentiality</h2>
+						<br>
+						<svgframe><svg width="600" height="400">
+  <path 	d="M 300 100 L 275 125 L 250 150 L 225 175 L 200 200 L 175 225 L 150 250 L 125 275 L 100 300 " stroke="#aaa" stroke-width="3" marker-start="url(#rm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 325 125 L 300 150 L 275 175 L 250 200 L 225 225 L 200 250 L 175 275 L 150 300 "           stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 350 150 L 325 175 L 300 200 L 275 225 L 250 250 L 225 275 L 200 300 "                     stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 375 175 L 350 200 L 325 225 L 300 250 L 275 275 L 250 300 "                               stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 400 200 L 375 225 L 350 250 L 325 275 L 300 300 "                                         stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#bm)"/>
+  <path 	d="M 425 225 L 400 250 L 375 275 L 350 300 "                                                   stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 450 250 L 425 275 L 400 300 "                                                             stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 475 275 L 450 300 "                                                                       stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 300 100 L 325 125 L 350 150 L 375 175 L 400 200 L 425 225 L 450 250 L 475 275 L 500 300 " stroke="#aaa" stroke-width="3" marker-start="url(#rm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 275 125 L 300 150 L 325 175 L 350 200 L 375 225 L 400 250 L 425 275 L 450 300 "           stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 250 150 L 275 175 L 300 200 L 325 225 L 350 250 L 375 275 L 400 300 "                     stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 225 175 L 250 200 L 275 225 L 300 250 L 325 275 L 350 300 "                               stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 200 200 L 225 225 L 250 250 L 275 275 L 300 300 "                                         stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#bm)"/>
+  <path 	d="M 175 225 L 200 250 L 225 275 L 250 300 "                                                   stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 150 250 L 175 275 L 200 300 "                                                             stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 125 275 L 150 300 "                                                                       stroke="#aaa" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+						</svg></svgframe>
+					</section>
+					<!-- Slide 1.12 : complexity (4) -->
+					<section data-transition="none">
+						<h2>Exponentiality</h2>
+						<br>
+						<svgframe><svg width="600" height="400">
+  <path 	d="M 300 100 L 275 125 L 250 150 L 225 175 L 200 200 " stroke="#f00" stroke-width="3" marker-start="url(#rm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 325 125 L 300 150 L 275 175 L 250 200 "           stroke="#f00" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 350 150 L 325 175 L 300 200 "                     stroke="#f00" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#om)"/>
+  <path 	d="M 375 175 L 350 200 "                               stroke="#f00" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 300 100 L 325 125 L 350 150 L 375 175 L 400 200 " stroke="#f00" stroke-width="3" marker-start="url(#rm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 275 125 L 300 150 L 325 175 L 350 200 "           stroke="#f00" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 250 150 L 275 175 L 300 200 "                     stroke="#f00" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#om)"/>
+  <path 	d="M 225 175 L 250 200 "                               stroke="#f00" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 300 200 L 275 225 L 250 250 L 225 275 L 200 300 " stroke="#00f" stroke-width="3" marker-start="url(#om)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 325 225 L 300 250 L 275 275 L 250 300 "           stroke="#00f" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 350 250 L 325 275 L 300 300 "                     stroke="#00f" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#bm)"/>
+  <path 	d="M 375 275 L 350 300 "                               stroke="#00f" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 300 200 L 325 225 L 350 250 L 375 275 L 400 300 " stroke="#00f" stroke-width="3" marker-start="url(#om)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 275 225 L 300 250 L 325 275 L 350 300 "           stroke="#00f" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+  <path 	d="M 250 250 L 275 275 L 300 300 "                     stroke="#00f" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#bm)"/>
+  <path 	d="M 225 275 L 250 300 "                               stroke="#00f" stroke-width="3" marker-start="url(#xm)" marker-mid="url(#xm)" marker-end  ="url(#xm)"/>
+						</svg></svgframe>
+					</section>
+				</section>
+
+				<!-- Slide 2 : Subway ######################################################################################################################################################################### -->
+				<section>
+					<!-- Slide 2.1 : map -->
+					<section>
+						<h3>Experiment</h3>
+						<imgframe1><iframe width="960" height="600" src="assets/subway.svg"></iframe></imgframe1>
+					</section>
+					<!-- Slide 2.2 : task ( 0) -->
+					<section data-transition="fade">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_00.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.3 : task ( 1) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_01.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.4 : task ( 2) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_02.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.5 : task ( 3) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_03.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.6 : task ( 4) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_04.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.7 : task ( 5) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_05.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.8 : task ( 6) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_06.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.9 : task ( 7) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_07.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.10 : task ( 8) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_08.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.11 : task ( 9) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_09.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.12 : task (10) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_10.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.13 : task (11) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_11.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.14 : task (12) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_12.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.15 : task (13) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_13.png" /></svg></imgframe1>
+					</section>
+					<!-- Slide 2.16 : task (14) -->
+					<section data-transition="none">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_14.png" /></svg></imgframe1>
+					</section>
+				</section>
+				<!-- Slide 3 : Performance #################################################################################################################################################################### -->
+				<section>
+					<!-- Slide 3.1 : overview -->
+					<section>
+						<h3>Performance</h3>
+						<br>
+						<p class="fragment roll-in">Performance on the quiz</p>
+						<p class="fragment roll-in">Time looking at the map</p>
+					</section>
+					<!-- Slide 3.2 : quiz performance -->
+					<section>
+						<imgframe1><svg width="960" height="600"><Image x="150" y="40" width="600" height="600" xlink:href="assets/train_quizperformance.svg" /></svg></imgframe1>
+					</section>
+					<!-- Slide 3.3 : time looking at the map -->
+					<section>
+						<imgframe1><svg width="960" height="600"><Image x="150" y="40" width="600" height="600" xlink:href="assets/train_maptime.svg" /></svg></imgframe1>
+					</section>
+				</section>
+				<!-- Slide 4 : Scanner ######################################################################################################################################################################## -->
+				<section>
+					<!-- Slide 4.1 : overview -->
+					<section>
+						<h3>Scanner version</h3>
+						<br>
+						<p class="fragment roll-in">No map screen</p>
+						<p class="fragment roll-in">No colours</p>
+						<p class="fragment roll-in">No images</p>
+						<p class="fragment roll-in">No switch action</p>
+						<p class="fragment roll-in">Reward system</p>
+					</section>
+					<!-- Slide 4.2 : task ( 0) -->
+					<section data-transition="fade">
+						<h3>Task design</h3>
+						<imgframe1><svg width="960" height="600"><Image width="960" height="600" xlink:href="assets/task_00.png" /></svg></imgframe1>
+					</section>
+
+				</section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				slideNumber: false,
+				history: true,
+				center: true,
+				viewDistance: 3,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

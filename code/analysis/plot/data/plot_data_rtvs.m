@@ -14,7 +14,7 @@ function plot_data_rtvs(session)
     % set mean rts for each participant
     u_par   = unique(data.exp_sub);
     nb_pars = length(u_par);
-    n_par   = [17,18,19]; %[6,10];
+    n_par   = [6,10,20];
     u_par(n_par) = [];
     
     % values
@@ -60,13 +60,13 @@ function plot_data_rtvs(session)
     set(gca,'position',get(gca,'position')+[0,+.05,0,-.1])
     fig_barweb(m - 600,e,...
                         [],...                                                 width
-                        {'same','switch'},...                                  group names
+                        {'',''},...{'same','switch'},...                                  group names
                         '',...                                                 title
                         [],...                                                 xlabel
                         'reaction time (ms)',...                               ylabel
                         [1,1,1;.8,.8,.8],...                                   colour
                         'y',...                                                grid
-                        {'regular','exchange'},...                             legend
+                        {'',''},...{'regular','exchange'},...                             legend
                         2,...                                                  error sides (1, 2)
                         'axis'...                                              legend ('plot','axis')
                         );
