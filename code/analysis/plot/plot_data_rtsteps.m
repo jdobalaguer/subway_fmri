@@ -37,12 +37,13 @@ e_rts = nanstd(rts) ./ sqrt(sum(~isnan(rts),1));
 f = fig_figure();
 
 % splines plot
-fig_plot(m_rts,e_rts);
+fig_steplot(m_rts,e_rts);
+fig_errplot(m_rts,e_rts);
 
 % axis
 sa_plot.title   = 'RT decreases with #steps';
 sa_plot.xlabel  = 'step';
 sa_plot.ylabel  = 'reaction time';
-sa_plot.ytick   = 800:200:1200;
-sa_plot.ylim    = [750,1250];
+% sa_plot.ytick   = 800:200:1200;
+% sa_plot.ylim    = [750,1250];
 fig_axis(sa_plot);
