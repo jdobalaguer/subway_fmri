@@ -107,9 +107,6 @@ function data = rnm_data_fillin(data,maps)
         @(subject,session,block,trial) (maps(subject).stations(data.resp_station_to(data.expt_subject==subject & data.expt_session==session & data.expt_block==block & data.expt_trial==trial)).position(2)),   ... function
         data.expt_subject,data.expt_session,data.expt_block,data.expt_trial);                                                                                                                                   ... categories
     
-    % direction
-    data.resp_direction_code(isnan(data.resp_direction_code)) = 0;
-    
     %% independant variables (dependent on response)
     
     % direction
@@ -126,7 +123,12 @@ function data = rnm_data_fillin(data,maps)
     %% response
     
     % direction
-    data.resp_direction_back   = data.resp_bool & (data.resp_station_to == [nan,data.vbxi_station_in(2:end)]) & ~data.expt_first;
+    data.resp_direction_code(isnan(data.resp_direction_code)) = 0;
+    data.resp_direction_back   = (  (data.vbxi_direction_code == 1 & data.resp_direction_code == 4) | ...
+                                    (data.vbxi_direction_code == 2 & data.resp_direction_code == 3) | ...
+                                    (data.vbxi_direction_code == 3 & data.resp_direction_code == 2) | ...
+                                    (data.vbxi_direction_code == 4 & data.resp_direction_code == 1)   ...
+                                );
     data.resp_direction_switch = (data.vbxi_direction_code ~= data.resp_direction_code) & data.vbxi_direction_code & data.resp_direction_code & ~data.resp_direction_back;
     
 end
