@@ -15,12 +15,12 @@ function scan3_mvpa_crossvalidation()
     global dire_spm dire_nii dire_nii_subs dire_nii_epi4 dire_nii_epi3 dire_nii_str dire_glm dire_glm_condition dire_glm_firstlevel dire_glm_secondlevel dire_glm_contrast dire_mask;
     global file_mask file_T1;
     global pars_nslices pars_tr pars_ordsl pars_refsl pars_reft0 pars_voxs;
-    global mvpa_partition mvpa_shift;
+    global mvpa_partition mvpa_shift mvpa_nnhidden;
     
     %% CLASSIFIER
     class_args.train_funct_name = 'train_bp_netlab';
     class_args.test_funct_name  = 'test_bp_netlab';
-    class_args.nHidden          = 2;
+    class_args.nHidden          = mvpa_nnhidden;
     
     %% RUN
     mvpa_result = struct('header',{},'iterations',{},'total_perf',{});

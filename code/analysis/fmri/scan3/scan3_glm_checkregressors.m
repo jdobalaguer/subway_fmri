@@ -8,7 +8,7 @@ function scan3_glm_checkregressors()
     %#ok<*NUSED>
     
     %% GLOBAL PARAMETERS
-    global name_glm delete_all name_mask basis_function pars_ordfir pars_lenfir pars_delay pars_marge;
+    global name_glm delete_all name_mask glm_function glm_ordfir glm_lenfir glm_delay glm_marge;
     global n_subject u_subject;
     global u_contrast;
     
@@ -33,7 +33,7 @@ function scan3_glm_checkregressors()
             for i_cond = 1:length(cond)
                 nb_scans_R      = size(R,1);
                 scans_cond      = (cond{i_cond}.onset ./ pars_tr);
-                scans_to_remove = (scans_cond + pars_marge > nb_scans_R);
+                scans_to_remove = (scans_cond + glm_marge > nb_scans_R);
                 if any(scans_to_remove)
                     cond{i_cond}.onset(scans_to_remove) = [];
                     for i_level = 1:length(cond{i_cond}.level)

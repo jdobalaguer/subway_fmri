@@ -55,16 +55,18 @@ function scan_parameters()
     n_subject   = length(u_subject);
     
     %% GLM PARAMETERS
-    global basis_function pars_ordfir pars_lenfir pars_delay pars_marge;
-    basis_function  = 'hrf';    ... "hrf" "fir"
-    pars_ordfir     = 12;       ... order of FIR
-    pars_lenfir     = 12;       ... time length of FIR
-    pars_delay      = 0;        ... delay shift for onsets
-    pars_marge      = 5;        ... marge between onsets and last scan
+    global glm_function glm_ordfir glm_lenfir glm_delay glm_marge glm_regressors;
+    glm_function   = 'hrf';     ... "hrf" "fir"
+    glm_ordfir     = 12;        ... order of FIR
+    glm_lenfir     = 12;        ... time length of FIR
+    glm_delay      = 0;         ... delay shift for onsets
+    glm_marge      = 5;         ... marge between onsets and last scan
+    glm_regressors = struct('subject',{},'session',{},'onset',{},'discard',{},'name',{},'subname',{},'level',{});
     
     %% MVPA PARAMETERS
-    global mvpa_partition mvpa_shift;
-    mvpa_partition = 10;        ... number of partitions for cross-validation (>1)
-    mvpa_shift     = 0;        ... shift regressors aiming for the HRF peak (only if not convolved)  
+    global mvpa_partition mvpa_shift mvpa_nnhidden;
+    mvpa_partition = 4;         ... number of partitions for cross-validation (>1)
+    mvpa_shift     = 0;         ... shift regressors aiming for the HRF peak (only if not convolved)  
+    mvpa_nnhidden  = 50;        ... hidden neurons for the nn-classifier
     
 end

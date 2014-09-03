@@ -8,7 +8,7 @@ function scan3_glm_firstestimate()
     %#ok<*NUSED,*AGROW>
     
     %% GLOBAL PARAMETERS
-    global name_glm delete_all name_mask basis_function pars_ordfir pars_lenfir pars_delay pars_marge;
+    global name_glm delete_all name_mask glm_function glm_ordfir glm_lenfir glm_delay glm_marge;
     global n_subject u_subject;
     
     global dire_spm dire_nii dire_nii_subs dire_nii_epi4 dire_nii_epi3 dire_nii_str dire_glm dire_glm_condition dire_glm_firstlevel dire_glm_secondlevel dire_glm_contrast dire_mask;
