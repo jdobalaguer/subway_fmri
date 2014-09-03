@@ -9,7 +9,7 @@ function scan3_glm_secondcontrasts()
     
 
     %% GLOBAL PARAMETERS
-    global name_glm delete_all name_mask basis_function pars_ordfir pars_lenfir pars_delay pars_marge;
+    global name_glm delete_all name_mask glm_function glm_ordfir glm_lenfir glm_delay glm_marge;
     global n_subject u_subject;
     global u_contrast;
     

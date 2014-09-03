@@ -14,12 +14,12 @@ function scan3_mvpa()
     %% LOCAL PARAMETERS
     global name_glm name_mvpa name_mask name_image r_subject do_pooling;
     
-    delete_all      = 0;
+    delete_all      = 1;
     
-    name_glm        = 'MVPA_hrf_T(AA)';
-    name_mvpa       = 'decode_actions';
-    name_mask       = 'BA4_TS';
-    name_image      = 'smooth'; ... "image" "normalization" "smooth"
+    name_glm        = 'MVPA_hrf_T(LLLL)';
+    name_mvpa       = 'decode_sublines';
+    name_mask       = ''; %'AA'; %'BA4_TS';
+    name_image      = 'normalisation'; ... "image" "normalization" "smooth"
         
     r_subject       = 2:100; %[6,10];
     do_pooling      = 1;
@@ -27,6 +27,27 @@ function scan3_mvpa()
     %% GLOBAL PARAMETERS
     global dire_glm_condition dire_glm_firstlevel dire_mvpa;
     scan_parameters();
+    
+    %% GLM REGRESSORS
+    global glm_regressors;
+    data  = load_data_ext( 'scanner');
+    block = load_block_ext('scanner');
+    
+    glm_regressors = struct('subject', { data.expt_subject   , block.expt_subject       },  ...
+                            'session', { data.expt_session   , block.expt_session       },  ...
+                            'onset',   { data.vbxi_onset     , block.vbxi_onset_reward  },  ...
+                            'discard', { ~data.resp_bool | data.resp_direction_back ,       ...
+                                         isnan(block.vbxi_onset_reward)                 },  ...
+                            'name',    { 'T'                 , 'F'                      },  ...
+                            'subname', { {'TL1','TL2','TL3'} , {'FG'}                   },  ...
+                            'level',   { { data.vbxi_subline_in == 1 ,     ...
+                                           data.vbxi_subline_in == 2 ,     ...
+                                           data.vbxi_subline_in == 3 } ,   ...
+                                        {  block.resp_goal           }                  }   ...
+                            );
+    
+    %% MVPA REGRESSORS
+    
     
     %% FLAGS
     do_regressors = delete_all || ~exist(dire_glm_condition ,'file');
@@ -57,6 +78,6 @@ function scan3_mvpa()
     if do_multivoxel,   scan3_mvpa_regressor();         end     % MVPA: regressor
     if do_multivoxel,   scan3_mvpa_run();               end     % MVPA: run
     if do_multivoxel,   scan3_mvpa_crossvalidation();   end     % MVPA: cross-validation
-    if do_multivoxel,   scan3_mvpa_summarize();   end     % MVPA: cross-validation
+    if do_multivoxel,   scan3_mvpa_summarize();         end     % MVPA: cross-validation
     toc();
 end

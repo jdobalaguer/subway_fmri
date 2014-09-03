@@ -42,7 +42,7 @@ function scan3_mvpa_regressor()
             end
         end
         names_regs = [{'default'},SPM.SPM.Sess.U(1).name(2:end)];
-        value_regs = double(jb_binarymatrix(value_scan + 1));
+        value_regs = double(jb_binaryindex(value_scan + 1));
         
         % set values
         mvpa_subject(i_subject) = init_object(  mvpa_subject(i_subject),'regressors','conds');

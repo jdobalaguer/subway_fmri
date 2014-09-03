@@ -8,7 +8,7 @@ function scan3_glm_setcontrasts()
     %#ok<*NUSED,*AGROW>
     
     %% GLOBAL PARAMETERS
-    global name_glm delete_all name_mask basis_function pars_ordfir pars_lenfir pars_delay pars_marge;
+    global name_glm delete_all name_mask glm_function glm_ordfir glm_lenfir glm_delay glm_marge;
     global n_subject u_subject;
     global u_contrast;
     
@@ -26,9 +26,9 @@ function scan3_glm_setcontrasts()
     end
     n_name = length(u_name);
     % set order
-    switch(basis_function)
+    switch(glm_function)
         case 'hrf', n_order = 1;
-        case 'fir', n_order = pars_ordfir;
+        case 'fir', n_order = glm_ordfir;
     end
     % set contrasts
     j_name = 0;

@@ -1,5 +1,9 @@
 
+** DONE
+GLM:  don't use a mask
 GLM:  set regressors from the scan3_glm.m  file
+
+** TODO
 MVPA: set regressors from the scan3_mvpa.m file
 MVPA: doesn't work with do_pooling = 0
 MVPA: set runs properly
@@ -12,3 +16,8 @@ MVPA: using switch/repeat is not balanced. chance level is not 50% but around 75
       use something better (actions
 
 MVPA: find a way to shut up the princeton-toolbox. and spm, ideally. write a fprintf line in the scan3_mvpa_*.m files
+MVPA: we're ignoring the "name_image" global variable
+
+PREC: re-run preprocessing without subsampling to improve mvpa.
+
+SCI:  try with >0 duration?

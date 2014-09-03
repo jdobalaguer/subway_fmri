@@ -14,7 +14,7 @@ function scan3_glm_firstdesign()
     global dire_spm dire_nii dire_nii_subs dire_nii_epi4 dire_nii_epi3 dire_nii_str dire_glm dire_glm_condition dire_glm_firstlevel dire_glm_secondlevel dire_glm_contrast dire_mask;
     global file_mask file_T1;
     global pars_nslices pars_tr pars_ordsl pars_refsl pars_reft0 pars_voxs;
-    global basis_function pars_ordfir pars_lenfir pars_delay pars_marge;
+    global glm_function glm_ordfir glm_lenfir glm_delay glm_marge;
     
     %% FIRST LEVEL
     if ~exist(dire_glm_firstlevel,'dir'); mkdirp(dire_glm_firstlevel); end
@@ -117,16 +117,16 @@ function scan3_glm_firstdesign()
         
         %% OTHERS
         job.spm.stats.fmri_spec.fact = struct('name',{},'levels',{});
-        switch(basis_function)
+        switch(glm_function)
             case 'hrf'
                 job.spm.stats.fmri_spec.bases.hrf.derivs = [0 0];
             case 'fir'
-                job.spm.stats.fmri_spec.bases.fir.length = pars_lenfir;
-                job.spm.stats.fmri_spec.bases.fir.order  = pars_ordfir;
+                job.spm.stats.fmri_spec.bases.fir.length = glm_lenfir;
+                job.spm.stats.fmri_spec.bases.fir.order  = glm_ordfir;
         end
         job.spm.stats.fmri_spec.volt = 1;
         job.spm.stats.fmri_spec.global = 'None';
-        job.spm.stats.fmri_spec.mask = {file_mask};
+        job.spm.stats.fmri_spec.mask = {''};
         job.spm.stats.fmri_spec.cvi = 'AR(1)';
         
         %% ADD JOB
