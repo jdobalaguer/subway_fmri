@@ -18,5 +18,6 @@ function allmaps = load_maps(path)
     
     % fix
     allmaps = fix_map_subline(allmaps);
+    allmaps = fix_map_face(allmaps);
 
 end

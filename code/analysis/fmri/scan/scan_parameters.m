@@ -57,8 +57,8 @@ function scan_parameters()
     %% GLM PARAMETERS
     global glm_function glm_ordfir glm_lenfir glm_delay glm_marge glm_regressors;
     glm_function   = 'hrf';     ... "hrf" "fir"
-    glm_ordfir     = 12;        ... order of FIR
-    glm_lenfir     = 12;        ... time length of FIR
+    glm_ordfir     = 8;         ... order of FIR
+    glm_lenfir     = 8;         ... time length of FIR
     glm_delay      = 0;         ... delay shift for onsets
     glm_marge      = 5;         ... marge between onsets and last scan
     glm_regressors = struct('subject',{},'session',{},'onset',{},'discard',{},'name',{},'subname',{},'level',{});

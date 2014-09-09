@@ -6,7 +6,7 @@ function scan3_mvpa()
     %          scan3_glm
     
     %% WARNINGS
-    %#ok<*NUSED,*ALIGN>
+    %#ok<*NUSED,*ALIGN,*NASGU>
     
     %% CLEAN
     clearvars -global;
@@ -25,7 +25,7 @@ function scan3_mvpa()
     do_pooling      = 1;
     
     %% GLOBAL PARAMETERS
-    global dire_glm_condition dire_glm_firstlevel dire_mvpa;
+    global dire_glm_condition dire_glm_firstlevel dire_glm_secondlevel dire_mvpa;
     scan_parameters();
     
     %% GLM REGRESSORS
@@ -52,7 +52,12 @@ function scan3_mvpa()
     %% FLAGS
     do_regressors = delete_all || ~exist(dire_glm_condition ,'file');
     do_regression = delete_all || ~exist(dire_glm_firstlevel,'file');
+    do_contrasts  = delete_all || ~exist(dire_glm_secondlevel,'file');
     do_multivoxel = delete_all || true;
+    
+    %% ASSERT
+    global glm_function;
+    assert(strcmp(glm_function,'hrf'),'scan3_mvpa: error. MVPA only works with the canonical hrf function mode');
     
     %% DELETE
     if do_regressors && exist(dire_glm_condition , 'dir'); rmdir(dire_glm_condition , 's'); end
@@ -69,8 +74,16 @@ function scan3_mvpa()
     if do_regressors,   scan3_glm_buildregressors();    end     % REGRESSORS: build
     if do_regressors,   scan3_glm_checkregressors();    end     % REGRESSORS: check
     if do_regressors,   scan3_glm_mergeregressors();    end     % REGRESSORS: merge
+                        scan3_glm_setcontrasts();               % REGRESSORS: set contrasts
+                        
     if do_regression,   scan3_glm_firstdesign();        end     % GLM: design
     if do_regression,   scan3_glm_firstestimate();      end     % GLM: estimate
+    
+    if do_contrasts,    scan3_glm_firstcontrasts();     end     % CONTRASTS:  contrasts first level
+    if length(u_subject)<2, do_contrasts = false;       end
+    if do_contrasts,    scan3_glm_secondcopy();         end     % CONTRASTS:  copy first level contrasts
+    if do_contrasts,    scan3_glm_secondcontrasts();    end     % CONTRASTS:  contrasts second level
+    if do_contrasts,    scan3_glm_copycontrasts();      end     % CONTRASTS:  copy second level contrasts
     
     if do_multivoxel,   scan3_mvpa_initialize();        end     % MVPA: initialize
     if do_multivoxel,   scan3_mvpa_mask();              end     % MVPA: mask
