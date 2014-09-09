@@ -2,22 +2,43 @@
 ** DONE
 GLM:  don't use a mask
 GLM:  set regressors from the scan3_glm.m  file
+DATA: any backwards
+DATA: face regressors
+DATA: subgoal regressors
+SCI:  check if distance to subgoal (U) is back
+SCI:  try 3-way interaction, X*S*Zsubway_
+DATA: distance to elbow
+DATA: distance to subgoal (for real)
+DATA: remake distance to boundary, and boundary
+DATA: block.feedback distance_in_stations to end by the time it was cancelled
+DATA: block.feedback distance_in_sublines to end by the time it was cancelled
+DATA: block.feedback (easy / hard)
+
+** ANALYSIS
+1) add durations
+2) distance to elbow/subgoal/goal (in stations), and distance (in lines) to goal
+3) main effect of reward? interactions?
+4) decoding : which line are you on?
+              are you on a face or a scene?
+              where are you in the map?
+              which subgoal are you aiming for?
 
 ** TODO
+DATA: duration regressors
+GLM:  improve set_contrasts
+
 MVPA: set regressors from the scan3_mvpa.m file
-MVPA: doesn't work with do_pooling = 0
+MVPA: doesn't work with do_pooling = 0 (assert or fix?)
 MVPA: set runs properly
+MVPA: create a mask automatically
 MVPA: complete the scan3_mvpa_summarize.m file
 MVPA: save results
 MVPA: save-to-disk option (not to run out of RAM)
 MVPA: when shifting regressors, it's taking a different name (so you don't use the shifted ones!)
+MVPA: use d-prime to improve evaluation
+MVPA: we're only using betas from the GLM
 
-MVPA: using switch/repeat is not balanced. chance level is not 50% but around 75%
-      use something better (actions
 
-MVPA: find a way to shut up the princeton-toolbox. and spm, ideally. write a fprintf line in the scan3_mvpa_*.m files
-MVPA: we're ignoring the "name_image" global variable
-
+** LONG-TERM TODOs
 PREC: re-run preprocessing without subsampling to improve mvpa.
-
-SCI:  try with >0 duration?
+MVPA: find a way to shut up the princeton-toolbox. and spm, ideally. write a fprintf line in the scan3_mvpa_*.m files

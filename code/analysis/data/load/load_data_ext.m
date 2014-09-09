@@ -21,10 +21,6 @@ function data = load_data_ext(varargin)
     
     %% load
     data  = load_data_rnm(path);
-    maps  = load_maps(path);
-    
-    %% extend
-    % empty
     
     %% sort
     data = struct_sort(data);
