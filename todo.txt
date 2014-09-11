@@ -13,15 +13,23 @@ DATA: remake distance to boundary, and boundary
 DATA: block.feedback distance_in_stations to end by the time it was cancelled
 DATA: block.feedback distance_in_sublines to end by the time it was cancelled
 DATA: block.feedback (easy / hard)
+ANYS: add durations
+ANYS: main effect of reward?
+SCAN: group all global variables into a single struct
 
 ** ANALYSIS
-1) add durations
-2) distance to elbow/subgoal/goal (in stations), and distance (in lines) to goal
-3) main effect of reward? interactions?
-4) decoding : which line are you on?
-              are you on a face or a scene?
-              where are you in the map?
-              which subgoal are you aiming for?
+ANYS: interactions?
+ANYS: distance to elbow/subgoal/goal (in stations), and distance (in lines) to goal
+ANYS: decoding : which line are you on?
+ANYS: decoding : are you on a face or a scene?
+ANYS: decoding : where are you in the map?
+ANYS: decoding : which subgoal are you aiming for?
+
+** READING
+READ: dan salzman (amygdala)
+READ: peter rudebeck (amygdala)
+READ: betsy murray (amygdala)
+READ: keochlin and jubault, neuron, 2006–2008 ventral premotor
 
 ** TODO
 DATA: duration regressors

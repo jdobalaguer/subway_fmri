@@ -1,72 +1,71 @@
 
-function scan_parameters()
+function scan = scan_parameters(scan)
     %% SCAN_PARAMETERS()
-    % declares global variables shared across scan_() and scan3_() functions
+    %set struct shared across scan_() and scan3_() functions
     % see also scan3_preprocess
     %          scan3_glm
     %          scan3_mvpa
     
     %% WARNING
     %#ok<*NBRAK,*FPARK>
-
+    
+    %% SCANNER
+    scan.pars.nslices = 32;                                                                             ... number of slices
+    scan.pars.tr      = 2;                                                                              ... repetition time
+    scan.pars.ordsl   = [scan.pars.nslices:-1:+1];                                                      ... slices scanning order
+    scan.pars.refsl   = scan.pars.ordsl(1);                                                             ... reference slice index
+    scan.pars.reft0   = (find(scan.pars.ordsl==scan.pars.refsl)-1) * (scan.pars.tr/scan.pars.nslices);  ... scan time for reference slice
+    scan.pars.voxs    = 4;                                                                              ... sub-sampling
+    
+    %% GLM
+    if ~isfield(scan,'glm')
+        scan.glm.name       = 'unnamed'; ... identifier
+        scan.glm.image      = 'smooth';  ... "image" "normalization" "smooth"
+        scan.glm.function   = 'hrf';     ... "hrf" "fir"
+        scan.glm.fir.ord    = 8;         ... order of FIR
+        scan.glm.fir.len    = 16;        ... time length of FIR
+        scan.glm.hrf.ord    = [0 0];     ... temporal derivative and sparsity
+        scan.glm.delay      = 0;         ... delay shift for onsets
+        scan.glm.marge      = 5;         ... marge between onsets and last scan
+        scan.glm.regressor  = struct('subject',{},'session',{},'onset',{},'discard',{},'name',{},'subname',{},'level',{});
+        scan.glm.contrast   = struct('name',{},'convec',{});
+    end
+    
+    %% MVPA
+    if ~isfield(scan,'mvpa')
+        scan.mvpa.name = '';
+        scan.mvpa.mask = '';
+        scan.mvpa.partition = 4;         ... number of partitions for cross-validation (>1)
+        scan.mvpa.shift     = 0;         ... shift regressors aiming for the HRF peak (only if not convolved)  
+        scan.mvpa.nn.hidden = 50;        ... hidden neurons for the nn-classifier
+    end
+    
     %% DIRECTORIES
-    % declaration
-    global name_glm name_mvpa;
-    global dire_spm dire_mask dire_nii dire_nii_subs dire_nii_epi4 dire_nii_epi3 dire_nii_str dire_glm dire_glm_condition dire_glm_firstlevel dire_glm_secondlevel dire_glm_contrast dire_mvpa;
-    % values
-    dire_spm                        = [fileparts(which('spm.m')),filesep];
-    dire_mask                       = [pwd(),filesep,'data',filesep,'mask',filesep];
-    dire_nii                        = [pwd(),filesep,'data',filesep,'nii',filesep];
-    dire_nii_subs                   = dir([dire_nii,'sub_*']); dire_nii_subs = strcat(dire_nii,strvcat(dire_nii_subs.name),'/');
-    dire_nii_epi4                   = strcat(dire_nii_subs,'epi4',filesep);
-    dire_nii_epi3                   = strcat(dire_nii_subs,'epi3',filesep);
-    dire_nii_str                    = strcat(dire_nii_subs,'str',filesep);
-    dire_glm                        = [pwd(),filesep,'data',filesep,'glm',filesep,name_glm,filesep];
-    dire_glm_condition              = [dire_glm,'conditions',filesep];
-    dire_glm_firstlevel             = [dire_glm,'firstlevel',filesep];
-    dire_glm_secondlevel            = [dire_glm,'secondlevel',filesep];
-    dire_glm_contrast               = [dire_glm,'contrasts',filesep];
-    dire_mvpa                       = [pwd(),filesep,'data',filesep,'mvpa',filesep,name_mvpa,filesep];
+    scan.dire.root                       = pwd();
+    scan.dire.spm                        = [fileparts(which('spm.m')),filesep];
+    scan.dire.mask                       = [scan.dire.root,filesep,'data',filesep,'mask',filesep];
+    scan.dire.nii                        = [scan.dire.root,filesep,'data',filesep,'nii',filesep];
+    scan.dire.nii_subs                   = dir([scan.dire.nii,'sub_*']); scan.dire.nii_subs = strcat(scan.dire.nii,strvcat(scan.dire.nii_subs.name),'/');
+    scan.dire.nii_epi4                   = strcat(scan.dire.nii_subs,'epi4',filesep);
+    scan.dire.nii_epi3                   = strcat(scan.dire.nii_subs,'epi3',filesep);
+    scan.dire.nii_str                    = strcat(scan.dire.nii_subs,'str',filesep);
+    scan.dire.glm                        = [scan.dire.root,filesep,'data',filesep,'glm',filesep,scan.glm.name,filesep];
+    scan.dire.glm_condition              = [scan.dire.glm,'conditions',filesep];
+    scan.dire.glm_firstlevel             = [scan.dire.glm,'firstlevel',filesep];
+    scan.dire.glm_secondlevel            = [scan.dire.glm,'secondlevel',filesep];
+    scan.dire.glm_contrast               = [scan.dire.glm,'contrasts',filesep];
+    scan.dire.mvpa                       = [scan.dire.root,filesep,'data',filesep,'mvpa',filesep,scan.mvpa.name,filesep];
     
     %% FILES
-    % declaration
-    global name_mask;
-    global file_mask file_T1;
-    % values
-    if isempty(name_mask), file_mask = ''; else file_mask = [dire_mask,name_mask,'.img,1']; end
-    file_T1                          = [dire_spm,'templates/T1.nii,1'];
-    
-    %% SCANNER PARAMETERS
-    % declaration
-    global pars_nslices pars_tr pars_ordsl pars_refsl pars_reft0 pars_voxs;
-    % values
-    pars_nslices = 32;                                                          ... number of slices
-    pars_tr      = 2;                                                           ... repetition time
-    pars_ordsl   = [pars_nslices:-1:+1];                                        ... slices scanning order
-    pars_refsl   = pars_ordsl(1);                                               ... reference slice index
-    pars_reft0   = (find(pars_ordsl==pars_refsl)-1) * (pars_tr/pars_nslices);   ... scan time for reference slice
-    pars_voxs    = 4;                                                           ... sub-sampling
+    if isempty(scan.mvpa.mask), scan.file.mvpa_mask = ''; else scan.file.mvpa_mask = [scan.dire.mask,scan.mvpa.mask,'.img,1']; end
+    scan.file.T1 = [scan.dire.spm,'templates/T1.nii,1'];
     
     %% SUBJECT variables
-    global r_subject;
-    global n_subject u_subject;
-    u_subject   = 1:size(dire_nii_subs, 1);
-    u_subject(jb_anyof(u_subject,r_subject)) = [];
-    n_subject   = length(u_subject);
-    
-    %% GLM PARAMETERS
-    global glm_function glm_ordfir glm_lenfir glm_delay glm_marge glm_regressors;
-    glm_function   = 'hrf';     ... "hrf" "fir"
-    glm_ordfir     = 8;         ... order of FIR
-    glm_lenfir     = 8;         ... time length of FIR
-    glm_delay      = 0;         ... delay shift for onsets
-    glm_marge      = 5;         ... marge between onsets and last scan
-    glm_regressors = struct('subject',{},'session',{},'onset',{},'discard',{},'name',{},'subname',{},'level',{});
-    
-    %% MVPA PARAMETERS
-    global mvpa_partition mvpa_shift mvpa_nnhidden;
-    mvpa_partition = 4;         ... number of partitions for cross-validation (>1)
-    mvpa_shift     = 0;         ... shift regressors aiming for the HRF peak (only if not convolved)  
-    mvpa_nnhidden  = 50;        ... hidden neurons for the nn-classifier
+    if ~isfield(scan,'subject'), scan.subject.r = []; end
+    if ~isfield(scan.subject,'u'),
+        scan.subject.u   = 1:size(scan.dire.nii_subs, 1);
+        scan.subject.u(jb_anyof(scan.subject.u,scan.subject.r)) = [];
+    end
+    scan.subject.n   = length(scan.subject.u);
     
 end
