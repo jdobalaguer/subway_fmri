@@ -1,5 +1,5 @@
 
-function plot_rt()
+function figure_1b()
     %% parameters
     r_subject = [6,10];
     ytick     = 600:200:1400;

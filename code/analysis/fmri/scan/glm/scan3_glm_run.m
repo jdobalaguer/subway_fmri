@@ -38,6 +38,7 @@ function scan3_glm_run(scan)
                         scan = scan3_glm_setcontrasts(scan);    save_scan();         % REGRESSORS: set contrasts
     if do_regression,   scan = scan3_glm_firstdesign(scan);     save_scan(); end     % GLM:        design
     if do_regression,   scan = scan3_glm_firstestimate(scan);   save_scan(); end     % GLM:        estimate
+    if do_regression,   scan = scan3_glm_copybetas(scan);       save_scan(); end     % GLM:        copy betas
     if do_contrasts,    scan = scan3_glm_firstcontrasts(scan);  save_scan(); end     % CONTRASTS:  contrasts first level
     if length(scan.subject.u)<2,     do_contrasts = false;      save_scan(); end
     if do_contrasts,    scan = scan3_glm_secondcopy(scan);      save_scan(); end     % CONTRASTS:  copy first level contrasts
