@@ -1,7 +1,7 @@
 
 function scan = scan3_glm_copycontrasts(scan)
     %% SCAN3_GLM_COPYCONTRASTS()
-    % copy second level contrasts into a new file
+    % copy second level contrasts into a new folder
     % see also scan3_glm
 
     %%  WARNINGS
@@ -10,6 +10,7 @@ function scan = scan3_glm_copycontrasts(scan)
     %% COPY CONTRASTS
     mkdirp(scan.dire.glm_contrast);
     for i_con = 1:length(scan.glm.contrast)
+        fprintf('glm copy :                 contrast "%s" \n',scan.glm.contrast{i_con}.name);
         img_from = sprintf('%scon_%s/spmT_0001.img',scan.dire.glm_secondlevel,scan.glm.contrast{i_con}.name);
         img_to   = sprintf('%s/con_%s.img',scan.dire.glm_contrast,scan.glm.contrast{i_con}.name);
         if exist(img_from,'file'), copyfile(img_from,img_to); end

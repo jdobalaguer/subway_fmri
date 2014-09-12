@@ -23,12 +23,15 @@ function scan = scan_parameters(scan)
         scan.glm.image      = 'smooth';  ... "image" "normalization" "smooth"
         scan.glm.function   = 'hrf';     ... "hrf" "fir"
         scan.glm.fir.ord    = 8;         ... order of FIR
-        scan.glm.fir.len    = 16;        ... time length of FIR
+        scan.glm.fir.len    = 14;        ... time length of FIR
         scan.glm.hrf.ord    = [0 0];     ... temporal derivative and sparsity
         scan.glm.delay      = 0;         ... delay shift for onsets
         scan.glm.marge      = 5;         ... marge between onsets and last scan
         scan.glm.regressor  = struct('subject',{},'session',{},'onset',{},'discard',{},'name',{},'subname',{},'level',{});
         scan.glm.contrast   = struct('name',{},'convec',{});
+        scan.glm.peri.mask  = '';
+        scan.glm.peri.contrast  = '';
+        scan.glm.peri.extension = 'img';
     end
     
     %% MVPA
@@ -53,6 +56,7 @@ function scan = scan_parameters(scan)
     scan.dire.glm_condition              = [scan.dire.glm,'conditions',filesep];
     scan.dire.glm_firstlevel             = [scan.dire.glm,'firstlevel',filesep];
     scan.dire.glm_secondlevel            = [scan.dire.glm,'secondlevel',filesep];
+    scan.dire.glm_beta                   = [scan.dire.glm,'betas',filesep];
     scan.dire.glm_contrast               = [scan.dire.glm,'contrasts',filesep];
     scan.dire.mvpa                       = [scan.dire.root,filesep,'data',filesep,'mvpa',filesep,scan.mvpa.name,filesep];
     

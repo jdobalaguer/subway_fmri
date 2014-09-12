@@ -1,25 +1,16 @@
 
 ** DONE
-GLM:  don't use a mask
-GLM:  set regressors from the scan3_glm.m  file
-DATA: any backwards
-DATA: face regressors
-DATA: subgoal regressors
-SCI:  check if distance to subgoal (U) is back
-SCI:  try 3-way interaction, X*S*Zsubway_
-DATA: distance to elbow
-DATA: distance to subgoal (for real)
-DATA: remake distance to boundary, and boundary
-DATA: block.feedback distance_in_stations to end by the time it was cancelled
-DATA: block.feedback distance_in_sublines to end by the time it was cancelled
-DATA: block.feedback (easy / hard)
-ANYS: add durations
-ANYS: main effect of reward?
 SCAN: group all global variables into a single struct
+ANYS: distance (in lines) to goal
+PERI: fix peri_2
+PERI: fix peri_1
+PERI: fix peri_b
+DOCS: report stuff found so far
+ANYS: plot bars for R,I,C,L
 
 ** ANALYSIS
-ANYS: interactions?
-ANYS: distance to elbow/subgoal/goal (in stations), and distance (in lines) to goal
+ANYS: glm with interactions?
+ANYS: distance to elbow/subgoal/goal (in stations)
 ANYS: decoding : which line are you on?
 ANYS: decoding : are you on a face or a scene?
 ANYS: decoding : where are you in the map?
@@ -32,9 +23,9 @@ READ: betsy murray (amygdala)
 READ: keochlin and jubault, neuron, 2006–2008 ventral premotor
 
 ** TODO
+PLOT: fix plot_bar_2
 DATA: duration regressors
-GLM:  improve set_contrasts
-
+GLM:  improve glm3_setcontrasts
 MVPA: set regressors from the scan3_mvpa.m file
 MVPA: doesn't work with do_pooling = 0 (assert or fix?)
 MVPA: set runs properly
@@ -46,7 +37,7 @@ MVPA: when shifting regressors, it's taking a different name (so you don't use t
 MVPA: use d-prime to improve evaluation
 MVPA: we're only using betas from the GLM
 
-
 ** LONG-TERM TODOs
 PREC: re-run preprocessing without subsampling to improve mvpa.
-MVPA: find a way to shut up the princeton-toolbox. and spm, ideally. write a fprintf line in the scan3_mvpa_*.m files
+MVPA: find a way to shut up the princeton-toolbox. and spm, ideally.
+MVPA: write a fprintf line in the scan3_mvpa_*.m files
