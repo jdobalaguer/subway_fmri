@@ -1,12 +1,12 @@
 # TUBE
 
-##Â I. instructions
+## I. instructions
 
   to set the multiple options, type
-  Â» set_parameters;
+  » set_parameters;
 
   to run the experiment, type
-  Â» main;
+  » main;
 
 
 ## II. parameters

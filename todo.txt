@@ -7,8 +7,18 @@ PERI: fix peri_1
 PERI: fix peri_b
 DOCS: report stuff found so far
 ANYS: plot bars for R,I,C,L
+ANYS: left amygdala > right amygdala. same direction
+GLM:  call "statistics" to the "contrasts" folder, create a new folder called "contrasts"
+PLOT: create plot_bar_c
+PLOT: create plot_peri_c
+PLOT: fix plot_bar_2
+REGS: optm can change line
+REGS: optm must change line
+BHAV: do they change more than they need? as much as possible? where in this range? 50% when they can but don't need to.
 
 ** ANALYSIS
+ANYS: C * length(sub-journey)
+ANYS: sequential C activation
 ANYS: glm with interactions?
 ANYS: distance to elbow/subgoal/goal (in stations)
 ANYS: decoding : which line are you on?
@@ -23,7 +33,9 @@ READ: betsy murray (amygdala)
 READ: keochlin and jubault, neuron, 2006–2008 ventral premotor
 
 ** TODO
-PLOT: fix plot_bar_2
+PLOT: learn how to export 3d brains into blender
+DYCM:  start a dynamic causal modelling branch
+PREC: update/fix DCM2NII and EXPAND functions
 DATA: duration regressors
 GLM:  improve glm3_setcontrasts
 MVPA: set regressors from the scan3_mvpa.m file
