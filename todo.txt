@@ -15,6 +15,9 @@ PLOT: fix plot_bar_2
 REGS: optm can change line
 REGS: optm must change line
 BHAV: do they change more than they need? as much as possible? where in this range? 50% when they can but don't need to.
+PLOT: learn how to export 3d brains into blender
+MVPA: fix glm
+MVPA: force mvpa to use pooling
 
 ** ANALYSIS
 ANYS: C * length(sub-journey)
@@ -33,13 +36,11 @@ READ: betsy murray (amygdala)
 READ: keochlin and jubault, neuron, 2006–2008 ventral premotor
 
 ** TODO
-PLOT: learn how to export 3d brains into blender
 DYCM:  start a dynamic causal modelling branch
 PREC: update/fix DCM2NII and EXPAND functions
 DATA: duration regressors
-GLM:  improve glm3_setcontrasts
+GLM:  improve scan_glm_setcontrasts
 MVPA: set regressors from the scan3_mvpa.m file
-MVPA: doesn't work with do_pooling = 0 (assert or fix?)
 MVPA: set runs properly
 MVPA: create a mask automatically
 MVPA: complete the scan3_mvpa_summarize.m file
