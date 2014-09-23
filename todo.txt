@@ -1,23 +1,5 @@
 
 ** DONE
-SCAN: group all global variables into a single struct
-ANYS: distance (in lines) to goal
-PERI: fix peri_2
-PERI: fix peri_1
-PERI: fix peri_b
-DOCS: report stuff found so far
-ANYS: plot bars for R,I,C,L
-ANYS: left amygdala > right amygdala. same direction
-GLM:  call "statistics" to the "contrasts" folder, create a new folder called "contrasts"
-PLOT: create plot_bar_c
-PLOT: create plot_peri_c
-PLOT: fix plot_bar_2
-REGS: optm can change line
-REGS: optm must change line
-BHAV: do they change more than they need? as much as possible? where in this range? 50% when they can but don't need to.
-PLOT: learn how to export 3d brains into blender
-MVPA: fix glm
-MVPA: force mvpa to use pooling
 
 ** ANALYSIS
 ANYS: C * length(sub-journey)
@@ -30,27 +12,20 @@ ANYS: decoding : where are you in the map?
 ANYS: decoding : which subgoal are you aiming for?
 
 ** READING
-READ: dan salzman (amygdala)
-READ: peter rudebeck (amygdala)
-READ: betsy murray (amygdala)
-READ: keochlin and jubault, neuron, 2006–2008 ventral premotor
+READ: peter rudebeck  (amygdala)
+READ: betsy murray    (amygdala)
 
 ** TODO
-DYCM:  start a dynamic causal modelling branch
+MVPA: searchlight
+MVPA: test voxels individually
+GLM:  ## fix second level analysis
+MVPA: redo only after loading images
+DYCM: start a dynamic causal modelling branch
 PREC: update/fix DCM2NII and EXPAND functions
 DATA: duration regressors
 GLM:  improve scan_glm_setcontrasts
-MVPA: set regressors from the scan3_mvpa.m file
-MVPA: set runs properly
 MVPA: create a mask automatically
-MVPA: complete the scan3_mvpa_summarize.m file
-MVPA: save results
 MVPA: save-to-disk option (not to run out of RAM)
-MVPA: when shifting regressors, it's taking a different name (so you don't use the shifted ones!)
-MVPA: use d-prime to improve evaluation
-MVPA: we're only using betas from the GLM
-
-** LONG-TERM TODOs
-PREC: re-run preprocessing without subsampling to improve mvpa.
+PREC: re-run preprocessing without subsampling, to improve mvpa.
 MVPA: find a way to shut up the princeton-toolbox. and spm, ideally.
-MVPA: write a fprintf line in the scan3_mvpa_*.m files
+MVPA: write a fprintf line in the scan_mvpa_*.m files
