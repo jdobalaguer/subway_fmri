@@ -16,8 +16,8 @@ function scan = mvpa()
     scan.pars.voxs      = 4;
     
     %% SUBJECT
-%     scan.subject.u      = 22;
-    scan.subject.r      = [6,10,18,19,22];
+    scan.subject.u      = 1:5;
+%     scan.subject.r      = [6,10,18,19,22];
     
     %% MVPA
     scan.mvpa.name      = 'pilot';

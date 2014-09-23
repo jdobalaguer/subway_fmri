@@ -16,8 +16,8 @@ function scan = searchlight()
     scan.pars.voxs      = 4;
     
     %% SUBJECT
-    scan.subject.u      = 1;
-%     scan.subject.r      = [6,10,18,19,22];
+%     scan.subject.u      = 22;
+    scan.subject.r      = [6,10,18,19,22];
     
     %% MVPA
     scan.mvpa.name      = 'pilot';
@@ -30,9 +30,11 @@ function scan = searchlight()
           'subject', { data.expt_subject                        ... subject
         },'session', { data.expt_session                        ... session
         },'discard', { ~data.resp_bool                          ... discard
-        },'name',    { {'stay','switch'}                        ... name
-        },'level',   { {data.resp_direction_switch==0,          ... level
-                        data.resp_direction_switch==1}          ... 
+        },'name',    { {'L1','L2','L3','L4'}                    ... name
+        },'level',   { {data.vbxi_subline_in==1,                ... level
+                        data.vbxi_subline_in==2,                ... 
+                        data.vbxi_subline_in==3,                ... 
+                        data.vbxi_subline_in==4}                ... 
         });
     scan.mvpa.classifier = struct('train_funct_name',{'jan'},'test_funct_name',{'jan'});
 
