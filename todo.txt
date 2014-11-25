@@ -1,31 +1,26 @@
 
 ** DONE
 
+** TODO
+PREC: fix dcm2nii
+PREC: fix expand
+
+DATA: duration regressors
+MVPA: verbose
+MVPA: write a fprintf line in the scan_mvpa_*.m files
+MVPA: save subjects outside of scan. create load/save methods
+
+RSA:  start a representation similarity analysis branch
+DYCM: start a dynamic causal modelling branch
+MASK: start a mask handler branch
+
 ** ANALYSIS
+ANYS: re-run preprocessing without subsampling, to improve mvpa.
 ANYS: C * length(sub-journey)
-ANYS: sequential C activation
-ANYS: glm with interactions?
-ANYS: distance to elbow/subgoal/goal (in stations)
+ANYS: sequential Z activation
 ANYS: decoding : which line are you on?
 ANYS: decoding : are you on a face or a scene?
 ANYS: decoding : where are you in the map?
+ANYS: decoding : what direction are you facing? (i.e. what did you move previously)
 ANYS: decoding : which subgoal are you aiming for?
 
-** READING
-READ: peter rudebeck  (amygdala)
-READ: betsy murray    (amygdala)
-
-** TODO
-MVPA: searchlight
-MVPA: test voxels individually
-GLM:  ## fix second level analysis
-MVPA: redo only after loading images
-DYCM: start a dynamic causal modelling branch
-PREC: update/fix DCM2NII and EXPAND functions
-DATA: duration regressors
-GLM:  improve scan_glm_setcontrasts
-MVPA: create a mask automatically
-MVPA: save-to-disk option (not to run out of RAM)
-PREC: re-run preprocessing without subsampling, to improve mvpa.
-MVPA: find a way to shut up the princeton-toolbox. and spm, ideally.
-MVPA: write a fprintf line in the scan_mvpa_*.m files
