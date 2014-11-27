@@ -1,5 +1,5 @@
 
-function scan = mvpa()
+function scan = mvpa_run()
     %% WARNINGS
     %#ok<*NBRAK,*UNRCH,*NASGU>
     
@@ -8,12 +8,7 @@ function scan = mvpa()
     data  = load_data_ext( 'scanner');
     
     %% SCANNER
-    scan.pars.nslices   = 32;
-    scan.pars.tr        = 2;
-    scan.pars.ordsl     = scan.pars.nslices:-1:+1;
-    scan.pars.refsl     = scan.pars.ordsl(1);
-    scan.pars.reft0     = (find(scan.pars.ordsl==scan.pars.refsl)-1) * (scan.pars.tr/scan.pars.nslices);
-    scan.pars.voxs      = 4;
+    scan = parameters();
     
     %% SUBJECT
 %     scan.subject.u      = 1:5;
@@ -48,7 +43,6 @@ function scan = mvpa()
                         data.vbxi_subline_in == 4}              ...
         });
     scan.mvpa.source    = 'beta'; ... "beta" "cont" "spmT"
-    scan.mvpa.verbose   = false; % TODO
     scan.mvpa.zscore    = 0;
 
     %% RUN
