@@ -1,21 +1,22 @@
 
 ** DONE
-
 ** TODO
 PREC: fix dcm2nii
-PREC: fix expand
+
+RSA:  add different kinds of regression (logit/probit/linear)
+RSA:  add MSE distance
+RSA:  do searchlight
+RSA:  improve verbose
 
 DATA: duration regressors
 MVPA: verbose
 MVPA: write a fprintf line in the scan_mvpa_*.m files
 MVPA: save subjects outside of scan. create load/save methods
 
-RSA:  start a representation similarity analysis branch
 DYCM: start a dynamic causal modelling branch
 MASK: start a mask handler branch
 
 ** ANALYSIS
-ANYS: re-run preprocessing without subsampling, to improve mvpa.
 ANYS: C * length(sub-journey)
 ANYS: sequential Z activation
 ANYS: decoding : which line are you on?

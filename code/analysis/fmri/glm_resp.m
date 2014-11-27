@@ -4,12 +4,7 @@ function scan = glm()
     %#ok<*NUSED,*ALIGN,*INUSD>
     
     %% SCANNER
-    scan.pars.nslices = 32;
-    scan.pars.tr      = 2;
-    scan.pars.ordsl   = scan.pars.nslices:-1:+1;
-    scan.pars.refsl   = scan.pars.ordsl(1);
-    scan.pars.reft0   = (find(scan.pars.ordsl==scan.pars.refsl)-1) * (scan.pars.tr/scan.pars.nslices);
-    scan.pars.voxs    = 4;
+    scan = parameters();
     
     %% SET SUBJECTS
     scan.subject.r      = [6,10];
@@ -22,7 +17,7 @@ function scan = glm()
 %     scan.glm.fir.ord    = 8;
 %     scan.glm.fir.len    = 14;
     scan.glm.hrf.ord    = [0,0];
-    scan.glm.image      = 'smooth';
+    scan.glm.image      = 'smooth4';
     scan.glm.marge      = 5;
 %     scan.glm.name       = 'GLMM_fir14-0&8_Cues_Fill_Easy_First_respE_respN_respS_respW_Feed';
     scan.glm.name       = 'GLMM_hrf0_Cues_Fill_Easy_First_respE_respN_respS_respW_Feed';

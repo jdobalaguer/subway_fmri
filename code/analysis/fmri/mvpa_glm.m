@@ -1,5 +1,5 @@
 
-function scan = mvlm()
+function scan = mvpa_glm()
     %% WARNINGS
     %#ok<*NBRAK,*UNRCH,*NASGU>
     
@@ -8,12 +8,7 @@ function scan = mvlm()
     data  = load_data_ext( 'scanner');
     
     %% SCANNER
-    scan.pars.nslices   = 32;
-    scan.pars.tr        = 2;
-    scan.pars.ordsl     = scan.pars.nslices:-1:+1;
-    scan.pars.refsl     = scan.pars.ordsl(1);
-    scan.pars.reft0     = (find(scan.pars.ordsl==scan.pars.refsl)-1) * (scan.pars.tr/scan.pars.nslices);
-    scan.pars.voxs      = 4;
+    scan = parameters();
     
     %% SUBJECT
     scan.subject.r      = [6,10];
@@ -22,8 +17,9 @@ function scan = mvlm()
     scan.glm.delay      = 0;
     scan.glm.function   = 'hrf';
     scan.glm.hrf.ord    = [0,0];
-    scan.glm.image      = 'normalisation';
+    scan.glm.image      = 'realignment';
     scan.glm.marge      = 5;
+    scan.glm.pooling    = true;
     scan.glm.regressor = struct(                                ...
           'subject', { block.expt_subject                       ...
                        data.expt_subject                        ... subject
@@ -43,13 +39,14 @@ function scan = mvlm()
         },'duration',{ 0 });                                    ... duration
     
     %% MVPA
-    scan.mvpa.name          = '';
-    scan.mvpa.image         = '';
-    scan.mvpa.source        = '';
-    scan.mvpa.mask          = '';
-    scan.mvpa.zscore        = nan;
-    scan.mvpa.regressor     = struct('subject',{},'session',{},'discard',{},'name',{},'level',{});
     scan.mvpa.classifier    = struct('train_funct_name',{''},'test_funct_name',{''});
+    scan.mvpa.glm           = scan.glm.image;
+    scan.mvpa.image         = ''; %Trial, Cue, Feedback
+    scan.mvpa.mask          = '';
+    scan.mvpa.name          = '';
+    scan.mvpa.regressor     = struct('subject',{},'session',{},'discard',{},'name',{},'level',{});
+    scan.mvpa.source        = ''; %beta, cont, spmt
+    scan.mvpa.zscore        = nan;
 
     %% RUN
     scan = scan_initialize(scan);
