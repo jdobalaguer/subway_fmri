@@ -21,7 +21,7 @@ function scan = glm()
     scan.glm.marge      = 5;
     scan.glm.name       = 'GLMM_fir14-0&8_Cues_Fill_Easy_First_C_L_I_R_Feed';
 %     scan.glm.name       = 'GLMM_hrf0_Cues_Fill_Easy_First_C_L_I_R_Feed';
-    scan.glm.pooling    = true;
+    scan.glm.pooling    = false;
     scan.glm.redo       = 1; %[1-5] = do from the {regressors,first regression, first contrast, second contrast, dont}
     
     scan.glm.contrasts.generic = false;

@@ -1,12 +1,14 @@
 
 ** DONE
+
 ** TODO
 PREC: fix dcm2nii
 
-RSA:  add different kinds of regression (logit/probit/linear)
-RSA:  add MSE distance
+RSA:  logit / probit / linear regression
 RSA:  do searchlight
 RSA:  improve verbose
+RSA:  not pooling option
+RSA:  save
 
 DATA: duration regressors
 MVPA: verbose

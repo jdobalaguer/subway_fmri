@@ -11,15 +11,17 @@ function scan = mvpa_glm()
     scan = parameters();
     
     %% SUBJECT
-    scan.subject.r      = [6,10];
+%     scan.subject.r      = [6,10];
+    scan.subject.u      = 1;
     
     %% GLM
     scan.glm.delay      = 0;
     scan.glm.function   = 'hrf';
     scan.glm.hrf.ord    = [0,0];
-    scan.glm.image      = 'realignment';
+    scan.glm.image      = 'normalisation4';
     scan.glm.marge      = 5;
     scan.glm.pooling    = true;
+    scan.glm.redo       = 1;
     scan.glm.regressor = struct(                                ...
           'subject', { block.expt_subject                       ...
                        data.expt_subject                        ... subject
