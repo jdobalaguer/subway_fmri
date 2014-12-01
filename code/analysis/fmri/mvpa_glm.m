@@ -11,22 +11,18 @@ function scan = mvpa_glm()
     scan = parameters();
     
     %% SUBJECT
-%     scan.subject.r      = [6,10];
-    scan.subject.u      = 1;
+    scan.subject.r      = [6,10];
+%     scan.subject.u      = 1;
     
     %% GLM
-    scan.glm.delay      = 0;
-    scan.glm.function   = 'hrf';
-    scan.glm.hrf.ord    = [0,0];
-    scan.glm.image      = 'normalisation4';
-    scan.glm.marge      = 5;
-    scan.glm.pooling    = true;
-    scan.glm.redo       = 1;
+    
+    % things you can change
+    scan.glm.image      = 'smooth4'; %'realignment';
     scan.glm.regressor = struct(                                ...
-          'subject', { block.expt_subject                       ...
-                       data.expt_subject                        ... subject
+          'subject', { block.expt_subject                       ... subject
+                       data.expt_subject                        ...
                        block.expt_subject                       ...
-        },'session', { block.expt_session                       ... 
+        },'session', { block.expt_session                       ... sesion
                        data.expt_session                        ... 
                        block.expt_session                       ... 
         },'onset',   { block.vbxi_onset_cue                     ... onset
@@ -39,16 +35,18 @@ function scan = mvpa_glm()
         },'subname', { {},{},{}                                 ... subname
         },'level',   { {},{},{}                                 ... level
         },'duration',{ 0 });                                    ... duration
+    scan.glm.redo       = 1;
+    
+    % things you cannot change
+    scan.glm.delay      = 0;
+    scan.glm.function   = 'hrf';
+    scan.glm.hrf.ord    = [0,0];
+    scan.glm.marge      = 0;
+    scan.glm.pooling    = true;
     
     %% MVPA
-    scan.mvpa.classifier    = struct('train_funct_name',{''},'test_funct_name',{''});
-    scan.mvpa.glm           = scan.glm.image;
-    scan.mvpa.image         = ''; %Trial, Cue, Feedback
-    scan.mvpa.mask          = '';
-    scan.mvpa.name          = '';
-    scan.mvpa.regressor     = struct('subject',{},'session',{},'discard',{},'name',{},'level',{});
-    scan.mvpa.source        = ''; %beta, cont, spmt
-    scan.mvpa.zscore        = nan;
+    scan.mvpa.name = '';
+    scan.mvpa.glm  = scan.glm.image;
 
     %% RUN
     scan = scan_initialize(scan);
