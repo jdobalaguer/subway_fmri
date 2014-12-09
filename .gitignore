@@ -3,6 +3,8 @@
 *.mat
 *.nii
 
+.progress
+
 backups/data/*
 data/*
 !data/maps/copy

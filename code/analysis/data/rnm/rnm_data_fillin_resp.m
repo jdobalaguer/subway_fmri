@@ -7,6 +7,10 @@ function data = rnm_data_fillin_resp(data,maps)
         @(subject,session,block) all(data.resp_bool(data.expt_subject == subject & data.expt_session == session & data.expt_block == block)),   ... function
         data.expt_subject, data.expt_session, data.expt_block);                                                                                 ... categories
         
+    data.resp_correct_all = jb_applyvector( ...
+        @(subject,session,block) all(data.resp_correct(data.expt_subject == subject & data.expt_session == session & data.expt_block == block)),... function
+        data.expt_subject, data.expt_session, data.expt_block);                                                                                 ... categories
+        
     %% away
     data.resp_away     = (data.resp_dist_station_diff > 0);
     data.resp_away_any = jb_applyvector( ...

@@ -35,15 +35,15 @@ function scan = preprocess()
     scan.preprocess{i}.rm  = true;
     
     % slice timing
-    i = i+1;
-    scan.preprocess{i}.job  = 'slicetiming';
-    scan.preprocess{i}.from.path = [pwd(),'/data/nii/sub_%02i/epi3/run%d/images'];
-    scan.preprocess{i}.from.file = '*images*.nii';
-    scan.preprocess{i}.move.path = [pwd(),'/data/nii/sub_%02i/epi3/run%d/slicetime'];
-    scan.preprocess{i}.move.file = {'a*images*.nii'};
-    scan.preprocess{i}.run = runs;
-    scan.preprocess{i}.zip = true;
-    scan.preprocess{i}.rm  = true;
+    % i = i+1;
+    % scan.preprocess{i}.job  = 'slicetiming';
+    % scan.preprocess{i}.from.path = [pwd(),'/data/nii/sub_%02i/epi3/run%d/images'];
+    % scan.preprocess{i}.from.file = '*images*.nii';
+    % scan.preprocess{i}.move.path = [pwd(),'/data/nii/sub_%02i/epi3/run%d/slicetime'];
+    % scan.preprocess{i}.move.file = {'a*images*.nii'};
+    % scan.preprocess{i}.run = runs;
+    % scan.preprocess{i}.zip = true;
+    % scan.preprocess{i}.rm  = true;
     
     % despiking
     i = i+1;

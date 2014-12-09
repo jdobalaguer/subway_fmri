@@ -1,5 +1,5 @@
 
-function scan = mvpa_rsa(scan)
+function scan = mvpa_sdt(scan)
     %% WARNINGS
     %#ok<*NUSED,*ALIGN,*INUSD,*NASGU>
     
@@ -11,8 +11,8 @@ function scan = mvpa_rsa(scan)
     if ~exist('scan','var'), scan = parameters(); end
     
     %% SET SUBJECTS
-    scan.subject.r = [6,10];
-%     scan.subject.u = 1:2;
+%     scan.subject.r = [6,10];
+    scan.subject.u = 1;
     
     %% INDEX
     ii_back  = logical(data.resp_direction_back_any);
@@ -29,36 +29,27 @@ function scan = mvpa_rsa(scan)
     
     %% MVPA SETTINGS
     scan.mvpa.extension  = 'img';            % GLM files
-    scan.mvpa.glm        = 'smooth4'; %'realignment';
+    scan.mvpa.glm        = 'smooth4';
     scan.mvpa.image      = 'Trial';
-    scan.mvpa.mask       = 'voxs4/S_003_miniparietal.img';
-    scan.mvpa.mni        = false; %true;
+    scan.mvpa.mask       = ''; %'voxs4/S_003_miniparietal.img';
+    scan.mvpa.mni        = false;
     scan.mvpa.name       = 'pilot';
-    scan.mvpa.plot.flag      = [1,1,1]; %[rdm,shrinked,model]
-    scan.mvpa.plot.average   = true;
-    scan.mvpa.plot.subject   = 1;
     scan.mvpa.pooling    = false; % merge all session
     scan.mvpa.redo       = 1;
-    scan.mvpa.regressor  = struct(                               ...
+    scan.mvpa.regressor  = struct(                              ...
           'subject', { data.expt_subject                        ... subject
         },'session', { data.expt_session                        ... session
-        },'discard', { ~ii_far                                  ... discard
+        },'discard', { ~ii_then                                 ... discard
         },'name',    { { 'switch',                              ... name
                        }  ...
         },'level',   { { data.resp_direction_switch,            ... level
                         } ...
         });
     scan.mvpa.runmean    = false;
-    
-    % specific to RSA
-    scan.mvpa.deeye      = 10;               % remove diagonal from the regression
-    scan.mvpa.distance   = 'univariate';     % "pearson", "spearman", "dot", "[s]euclidean", "manhattan", "cosine", "univariate"
-    scan.mvpa.shrink    = true;
-    scan.mvpa.within    = false; % remove values between sessions
-        
+
     %% SANITY CHECK
     scan = scan_initialize(scan);
      
     %% RUN
-    scan = scan_mvpa_rsa(scan);
+    scan = scan_mvpa_sdt(scan);
 end

@@ -1,29 +1,34 @@
 
 ** DONE
+MVPA: create SVM classifier
+MVPA: do searchlight
+MVPA: improve verbose
 
 ** TODO
+MVPA: check searchlight
+MVPA: fill in TODOs
+MVPA: resample original mask
+MVPA: rename scan_mvpa_searchlight_save.m
+
+DYCM: start a dynamic causal modelling branch
+
 PREC: fix dcm2nii
 
 RSA:  logit / probit / linear regression
 RSA:  do searchlight
 RSA:  improve verbose
 RSA:  not pooling option
-RSA:  save
 
 DATA: duration regressors
-MVPA: verbose
-MVPA: write a fprintf line in the scan_mvpa_*.m files
-MVPA: save subjects outside of scan. create load/save methods
 
-DYCM: start a dynamic causal modelling branch
-MASK: start a mask handler branch
 
 ** ANALYSIS
 ANYS: C * length(sub-journey)
-ANYS: sequential Z activation
 ANYS: decoding : which line are you on?
 ANYS: decoding : are you on a face or a scene?
 ANYS: decoding : where are you in the map?
 ANYS: decoding : what direction are you facing? (i.e. what did you move previously)
 ANYS: decoding : which subgoal are you aiming for?
 
+ANYS : at cue, in right angular gyrus, if hard but with same lines..
+ANYS : mvpa RLIC, what if you filter based on correct_all or trial > 5 ?
