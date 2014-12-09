@@ -11,13 +11,13 @@ function scan = mvpa_glm()
     scan = parameters();
     
     %% SUBJECT
-    scan.subject.r      = [6,10];
+    scan.subject.r      = [];
 %     scan.subject.u      = 1;
     
     %% GLM
     
     % things you can change
-    scan.glm.image      = 'smooth4'; %'realignment';
+    scan.glm.image      = 'smooth4';
     scan.glm.regressor = struct(                                ...
           'subject', { block.expt_subject                       ... subject
                        data.expt_subject                        ...
