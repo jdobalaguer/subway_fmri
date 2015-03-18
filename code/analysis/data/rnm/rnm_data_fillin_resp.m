@@ -10,7 +10,7 @@ function data = rnm_data_fillin_resp(data,maps)
     data.resp_correct_all = jb_applyvector( ...
         @(subject,session,block) all(data.resp_correct(data.expt_subject == subject & data.expt_session == session & data.expt_block == block)),... function
         data.expt_subject, data.expt_session, data.expt_block);                                                                                 ... categories
-        
+    
     %% station
     data.resp_station_isgoal = (data.resp_station_to == data.vbxi_station_goal);
     
@@ -45,7 +45,7 @@ function data = rnm_data_fillin_resp(data,maps)
     data.resp_dist_subline_journey = jb_applyvector( ...
         @(subject,session,block,trial) length(unique(data.vbxi_subline_in(data.expt_subject == subject & data.expt_session == session & data.expt_block == block)))-1,  ... function
         data.expt_subject, data.expt_session, data.expt_block);                                                                                                         ... categories
-        
+    
     % goaldist
     data.resp_goaldist_station_to = jb_applyvector(...
         @(subject,session,block,trial) (maps(subject).dists.steptimes_stations(data.resp_station_to(data.expt_subject==subject & data.expt_session==session & data.expt_block==block & data.expt_trial==trial),data.vbxi_station_goal(data.expt_subject==subject & data.expt_session==session & data.expt_block==block & data.expt_trial==trial))),   ... function

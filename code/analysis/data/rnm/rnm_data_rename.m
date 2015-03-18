@@ -111,6 +111,7 @@ function newdata = rnm_data_rename(olddata)
     newdata.('resp_dist_station_goal')    = [];
     newdata.('resp_dist_station_journey') = [];
     newdata.('resp_dist_station_diff')    = []; %(olddata.resp_dist - newdata.optm_dist_station_goal);
+
     newdata.('resp_dist_subline_start')   = [];
     newdata.('resp_dist_subline_goal')    = [];
     newdata.('resp_dist_subline_journey') = [];

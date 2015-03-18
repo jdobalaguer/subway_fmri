@@ -11,6 +11,7 @@ function scan = mvpa_dx(scan)
     if isfield(scan.subject,'u'), scan.subject = rmfield(scan.subject,'u'); end
     if isfield(scan.subject,'r'), scan.subject = rmfield(scan.subject,'r'); end
     scan.subject.r = [6,10];
+%     scan.subject.u = 1;
     
     %% DATA
     block = load_block_ext('scanner');

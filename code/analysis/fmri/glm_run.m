@@ -53,6 +53,7 @@ function scan = glm_run()
     
     r_data_Dgoal    = data.optm_dist_station_goal;
     r_data_Tgoal    = data.expt_trial;
+
     
     % regressors
     scan.glm.regressor = struct(                        ...
@@ -122,6 +123,7 @@ function scan = glm_run()
                      }, {                               ...     R
                         r_data_Tgoal(ii_R),             ...
                         r_data_Dgoal(ii_R),             ...
+
                      }, {                               ...     feed
                      } },                               ...
         'duration',{                                    ... duration

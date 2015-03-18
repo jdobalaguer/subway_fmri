@@ -1,6 +1,8 @@
 
 % independant variables (dependent on response)
 function data = rnm_data_fillin_vbxi_2(data)
+    %% data = rnm_data_fillin_vbxi_2(data)
+
     %% direction
     data.vbxi_direction_code = [0,data.resp_direction_code(1:end-1)];
     data.vbxi_direction_code(data.expt_first) = 0;

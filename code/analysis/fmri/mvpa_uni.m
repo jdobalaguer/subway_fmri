@@ -3,6 +3,10 @@ function scan = mvpa_uni(scan)
     %% WARNINGS
     %#ok<*NUSED,*ALIGN,*INUSD,*NASGU>
     
+    %% DATA
+    block = load_block_ext('scanner');
+    data  = load_data_ext( 'scanner');
+    
     %% SCANNER
     if ~exist('scan','var'), scan = parameters(); end
     
@@ -158,7 +162,7 @@ function scan = mvpa_uni(scan)
     
     % optimal distance from exchange (in # stations)
     optm_time_station_exchange = r_data_Dexchange;
-    
+
     %% MVPA SETTINGS
     scan.mvpa.extension  = 'img';            % GLM files
     scan.mvpa.glm        = 'smooth4';
