@@ -30,7 +30,7 @@ beta = cell2mat(scan.mvpa.variable.beta);
 ii.subject = jb_anyof(block.expt_subject, scan.subject.u);
 ii.easy = (block.vbxi_subline_goal == block.vbxi_subline_start);
 ii.same = (jb_displace(ii.easy,1,[block.expt_session + 5*block.expt_subject]) == ii.easy);
-x = jb_getvector(double(beta),double(block.expt_subject(ii.subject)),double(ii.easy(ii.subject)),double(ii.same(ii.subject)));
+x = getm_mean(double(beta),double(block.expt_subject(ii.subject)),double(ii.easy(ii.subject)),double(ii.same(ii.subject)));
 
 %% STATISTICS
 jb_anova(x);

@@ -11,8 +11,8 @@ function scan = mvpa_glm()
     scan = parameters();
     
     %% SUBJECT
-    scan.subject.r      = [];
-%     scan.subject.u      = 1;
+%     scan.subject.r      = [];
+    scan.subject.u      = 1;
     
     %% GLM
     

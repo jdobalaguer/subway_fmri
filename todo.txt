@@ -5,6 +5,7 @@ MVPA: do searchlight
 MVPA: improve verbose
 
 ** TODO
+
 MVPA: check searchlight
 MVPA: fill in TODOs
 MVPA: resample original mask
@@ -21,8 +22,17 @@ RSA:  not pooling option
 
 DATA: duration regressors
 
+** FIX
+scan_plot_peristimulus
+scan_plot_bar
+scan_mvpa_glm
+scan_mvpa_image
 
 ** ANALYSIS
+GLM:  first RT at the time of the cue?
+
+UNI:  distance to exchange station?
+
 ANYS: C * length(sub-journey)
 ANYS: decoding : which line are you on?
 ANYS: decoding : are you on a face or a scene?

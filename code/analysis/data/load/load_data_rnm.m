@@ -1,5 +1,10 @@
 
 function data = load_data_rnm(path)
+    %% load_data_rnm
+    
+    %% warnings
+    
+    %% function
     if ~exist('path','var'); path = 'scanner'; end
 
     % load

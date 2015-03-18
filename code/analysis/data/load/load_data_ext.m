@@ -22,8 +22,9 @@ function data = load_data_ext(varargin)
     %% load
     data  = load_data_rnm(path);
     
-    %% sort
+    %% structure
     data = struct_sort(data);
+    data = struct_transpose(data);
     
     %% save
     if exist(path_fil,'file')

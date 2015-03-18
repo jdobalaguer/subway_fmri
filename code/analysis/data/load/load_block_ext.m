@@ -28,6 +28,7 @@ function block = load_block_ext(varargin)
     
     %% sort
     block = struct_sort(block);
+    block = struct_transpose(block);
     
     %% save
     if exist(path_fil,'file')

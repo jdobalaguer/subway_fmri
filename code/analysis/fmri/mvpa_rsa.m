@@ -11,8 +11,11 @@ function scan = mvpa_rsa(scan)
     if ~exist('scan','var'), scan = parameters(); end
     
     %% SET SUBJECTS
+    if ~isfield(scan,'subject'), scan.subject = struct(); end
+    if isfield(scan.subject,'u'), scan.subject = rmfield(scan.subject,'u'); end
+    if isfield(scan.subject,'r'), scan.subject = rmfield(scan.subject,'r'); end
     scan.subject.r = [6,10];
-%     scan.subject.u = 1:2;
+%     scan.subject.u = 1:5;
     
     %% INDEX
     ii_back  = logical(data.resp_direction_back_any);
@@ -28,33 +31,42 @@ function scan = mvpa_rsa(scan)
     ii = (~data.expt_first & data.resp_bool);
     
     %% MVPA SETTINGS
-    scan.mvpa.extension  = 'img';            % GLM files
-    scan.mvpa.glm        = 'smooth4'; %'realignment';
+    scan.mvpa.extension  = 'img'; % glm files extension
+    scan.mvpa.glm        = 'normalisation4';
     scan.mvpa.image      = 'Trial';
-    scan.mvpa.mask       = 'voxs4/S_003_miniparietal.img';
-    scan.mvpa.mni        = false; %true;
-    scan.mvpa.name       = 'pilot';
-    scan.mvpa.plot.flag      = [1,1,1]; %[rdm,shrinked,model]
-    scan.mvpa.plot.average   = true;
-    scan.mvpa.plot.subject   = 1;
+%     scan.mvpa.mask       = 'voxs4/S_003_miniparietal.img';
+    scan.mvpa.mask       = 'searchlight4/hmap_respcode.img';
+    scan.mvpa.mni        = false;
+    scan.mvpa.name       = 'rsa';
     scan.mvpa.pooling    = false; % merge all session
-    scan.mvpa.redo       = 1;
-    scan.mvpa.regressor  = struct(                               ...
+    scan.mvpa.redo       = 2;
+    scan.mvpa.regressor  = struct(                              ...
           'subject', { data.expt_subject                        ... subject
         },'session', { data.expt_session                        ... session
-        },'discard', { ~ii_far                                  ... discard
-        },'name',    { { 'switch',                              ... name
-                       }  ...
-        },'level',   { { data.resp_direction_switch,            ... level
+        },'discard', { ~ii                                      ... discard
+        },'name',    { {                                        ... name
+                         'switch',                              ...
+                         'response',                            ...
+                         'random',                              ...
+                       }                                        ...
+                       
+        },'level',   { {                                        ... level
+                          data.resp_direction_switch,           ...
+                          data.resp_direction_code,             ...
+                          randi(2,1,length(data.expt_subject)), ...
                         } ...
         });
     scan.mvpa.runmean    = false;
+    scan.mvpa.verbose    = false;                       % verbose
     
     % specific to RSA
-    scan.mvpa.deeye      = 10;               % remove diagonal from the regression
-    scan.mvpa.distance   = 'univariate';     % "pearson", "spearman", "dot", "[s]euclidean", "manhattan", "cosine", "univariate"
-    scan.mvpa.shrink    = true;
-    scan.mvpa.within    = false; % remove values between sessions
+    scan.mvpa.deeye         = 0;               % remove diagonal from the regression
+    scan.mvpa.distance      = 'euclidean';     % "pearson", "spearman", "dot", "[s]euclidean", "manhattan", "cosine", "univariate"
+    scan.mvpa.plot.flag     = [1,1,0];         %[rdm,shrinked,model]
+    scan.mvpa.plot.average  = true;
+    scan.mvpa.plot.subject  = [];
+    scan.mvpa.shrink        = true;
+    scan.mvpa.within        = true; % remove values between sessions
         
     %% SANITY CHECK
     scan = scan_initialize(scan);

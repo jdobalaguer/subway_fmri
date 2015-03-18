@@ -6,7 +6,7 @@ function subs_performance()
     optimal = block.resp_dist_station_journey - block.optm_dist_station_journey;    % find how much long participants took, on average
     optimal = optimal ./ block.optm_dist_station_journey;                           % normalise
     optimal(optimal < 0) = nan;                                                     % remove uncompleted journeys
-    [m,e] = jb_getvector(optimal,block.expt_subject);                               % get average for each participant
+    [m,e] = getm_mean(optimal,block.expt_subject);                               % get average for each participant
 
     %% figure
     fig_figure;             % new figure

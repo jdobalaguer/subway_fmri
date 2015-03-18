@@ -3,7 +3,7 @@ function tmp_back()
     block = load_block_ext('scanner');
 
     %% values
-    m = jb_getvector(block.resp_direction_back_any,block.expt_subject);
+    m = getm_mean(block.resp_direction_back_any,block.expt_subject);
 
     %% figure
     fig_figure;             % new figure

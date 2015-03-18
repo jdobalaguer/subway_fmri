@@ -15,7 +15,7 @@ function scan = mvpa_dx_searchlight(scan)
     if isfield(scan.subject,'u'), scan.subject = rmfield(scan.subject,'u'); end
     if isfield(scan.subject,'r'), scan.subject = rmfield(scan.subject,'r'); end
     scan.subject.r = [6,10];
-%     scan.subject.u = 1:5;
+%     scan.subject.u = 1;
     
     %% INDEX
     ii_back  = logical(data.resp_direction_back_any);
@@ -37,44 +37,32 @@ function scan = mvpa_dx_searchlight(scan)
     ii_exchange  = (data.vbxi_exchange_in);
     ii_switch    = (data.resp_direction_switch);
     
-    ii = (ii_bool);
+    ii = (ii_corr);
 %     ii = (ii_bool & ~ii_switch);
 %     ii = (ii_bool & ii_corr & ii_hard & ~ii_first & ~ii_switch);
     
     %% MVPA SETTINGS
-    scan.mvpa.extension  = 'img';            % GLM files
-    scan.mvpa.glm        = 'normalisation4';
-    scan.mvpa.image      = 'Trial';
-    scan.mvpa.mask       = ''; %'voxs4/S_003_parietal.img';
-    scan.mvpa.mni        = false;
+    scan.mvpa.extension  = 'img';
+    scan.mvpa.glm        = 'realignment';
+    scan.mvpa.image      = {'Trial'};
+    scan.mvpa.mask       = 'xjview4/whole.img';
+    scan.mvpa.mni        = true;
     scan.mvpa.name       = 'pilot';
-    scan.mvpa.pooling    = false; % merge all session
+    scan.mvpa.pooling    = false;
     scan.mvpa.redo       = 2;
     scan.mvpa.regressor  = struct(                              ...
           'subject', { data.expt_subject                        ... subject
         },'session', { data.expt_session                        ... session
         },'discard', { ~ii                                      ... discard
         },'name',    { {                                        ... name
-                          'respswitch',                        ...
-                          'respcode',                          ...
                           'subline',                            ...
-                          'facein',                             ...
-                          'facegoal',                           ...
-                          'posin',                              ...
-                          'posgoal',                            ...
                        }                                        ...
         },'level',   { {                                        ... level
-                           data.resp_direction_switch,          ...
-                           data.resp_direction_code,            ...
                            data.vbxi_subline_in,                ...
-                           data.vbxi_face_in,                   ...
-                           data.vbxi_face_goal,                 ...
-                           in_position_code,                    ...
-                           goal_position_code,                  ...
                         } ...
         });
-    scan.mvpa.runmean    = false;                       % average out each session/condition
-    scan.mvpa.verbose    = false;                       % verbose
+    scan.mvpa.runmean    = false;
+    scan.mvpa.verbose    = false;
     
     % specific to DX
     scan.mvpa.summarize                     = false;
@@ -95,12 +83,18 @@ function scan = mvpa_dx_searchlight(scan)
     scan.mvpa.decoder.evaluate.parameters   = {};
 
     % specific to searchlight
-    scan.mvpa.sphere    = 3;
-    scan.mvpa.template  = 'normalisation4.img';
+    scan.mvpa.sphere    = 5;
 
     %% SANITY CHECK
     scan = scan_initialize(scan);
-     
+    
+    %% COPY SCRIPT
+    file_script = mfilename('fullpath');
+    if ~isempty(file_script)
+        mkdirp(scan.dire.mvpa.root);
+        copyfile(sprintf('%s.m',file_script),sprintf('%smvpa_dx_searchlight.m',scan.dire.mvpa.root));
+    end
+    
     %% RUN
     scan = scan_mvpa_dx_searchlight(scan);
 end
