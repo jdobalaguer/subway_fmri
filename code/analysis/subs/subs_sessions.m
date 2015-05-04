@@ -6,8 +6,8 @@ function session = subs_sessions(subject,session)
     %% load
     if ~exist('subject','var') && ~exist('session','var')
         data = load_data_ext('scanner');
-        subject = data.expt_subject;
-        session = data.expt_session;
+        subject = mat2vec(data.expt_subject)';
+        session = mat2vec(data.expt_session)';
     end
     
     %% get blocks

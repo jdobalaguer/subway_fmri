@@ -1,8 +1,11 @@
 
 ** DONE
-MVPA: create SVM classifier
-MVPA: do searchlight
-MVPA: improve verbose
+
+PLAN OF ACTION
+6) mvpa
+  + exclude lost trials
+  - mvpa on line colour?
+  - mvpa on line change station?
 
 ** TODO
 
@@ -10,8 +13,6 @@ MVPA: check searchlight
 MVPA: fill in TODOs
 MVPA: resample original mask
 MVPA: rename scan_mvpa_searchlight_save.m
-
-DYCM: start a dynamic causal modelling branch
 
 PREC: fix dcm2nii
 

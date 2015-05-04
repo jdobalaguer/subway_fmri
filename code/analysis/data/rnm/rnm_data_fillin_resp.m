@@ -46,11 +46,29 @@ function data = rnm_data_fillin_resp(data,maps)
         @(subject,session,block,trial) length(unique(data.vbxi_subline_in(data.expt_subject == subject & data.expt_session == session & data.expt_block == block)))-1,  ... function
         data.expt_subject, data.expt_session, data.expt_block);                                                                                                         ... categories
     
-    % goaldist
+    %% goaldist
     data.resp_goaldist_station_to = jb_applyvector(...
         @(subject,session,block,trial) (maps(subject).dists.steptimes_stations(data.resp_station_to(data.expt_subject==subject & data.expt_session==session & data.expt_block==block & data.expt_trial==trial),data.vbxi_station_goal(data.expt_subject==subject & data.expt_session==session & data.expt_block==block & data.expt_trial==trial))),   ... function
         data.expt_subject,data.expt_session,data.expt_block,data.expt_trial);                                                                                                                                   ... categories
     data.resp_goaldist_station_diff = data.resp_goaldist_station_to - data.optm_dist_station_goal;
+
+    %% time
+    % boundary
+    function time = time_previous_change(subject,session,block,trial)
+        ii = (data.expt_subject == subject & data.expt_session == session & data.expt_block == block & data.expt_trial >= trial);
+        ff = find(ii & data.resp_subline_change,1,'first');
+        if isempty(ff), time = nan; return; end
+        time = trial - data.expt_trial(ff);
+    end
+    data.resp_dist_prevchange = jb_applyvector(@time_previous_change,data.expt_subject, data.expt_session, data.expt_block, data.expt_trial);
+    function time = time_next_change(subject,session,block,trial)
+        ii = (data.expt_subject == subject & data.expt_session == session & data.expt_block == block & data.expt_trial <= trial);
+        ff = find(ii & data.resp_subline_change,1,'last');
+        if isempty(ff), time = nan; return; end
+        time = trial - data.expt_trial(ff);
+    end
+    data.resp_dist_nextchange = jb_applyvector(@time_next_change,data.expt_subject, data.expt_session, data.expt_block, data.expt_trial);
+
     
     %% correct
     data.resp_correct = (data.resp_goaldist_station_diff < 0);
