@@ -20,7 +20,6 @@ function d = figure_subUNI(roi)
     if exist(f,'file')
         load(f,'data');
     else
-        error('error if file not found. comment this line?');
         % load data
         data = load_data_ext('scanner');
         data = rmfield(data,{'resp_dist_station_diff','resp_dist_station_goal','resp_dist_station_start','resp_dist_subline_goal'});
@@ -76,17 +75,41 @@ function d = figure_subUNI(roi)
 %     sa.ylim    = [-1.5,+2.5];
     fig_axis(sa);
     plot([0,0],get(gca(),'ylim'),'k--');
+    legend('off');
+    set(gca,'YColor','w');
+    fig_rmtext();
 
     %% stats
-    rmz = squeeze(z(:,x==+1,:) - z(:,x==-1,:));
-    cprintf('*black','%s : \n',roi);
-    fprintf('C : '); jb_ttest(rmz(:,1));
-    fprintf('L : '); jb_ttest(rmz(:,2));
-    fprintf('I : '); jb_ttest(rmz(:,3));
-    fprintf('R : '); jb_ttest(rmz(:,4));
-    rmz = reshape(rmz,[size(rmz,1),2,2]);
-    jb_anova(rmz,{'RT','Exchange','Switch'});
+%     cprintf('*black','%s [t+1]-[t-1]: \n',roi);
+%     rmz = squeeze(z(:,x==+1,:) - z(:,x==-1,:));
+%     fprintf('C : '); jb_ttest(rmz(:,1));
+%     fprintf('L : '); jb_ttest(rmz(:,2));
+%     fprintf('I : '); jb_ttest(rmz(:,3));
+%     fprintf('R : '); jb_ttest(rmz(:,4));
+%     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
+%     rmz = reshape(rmz,[size(rmz,1),2,2]);
+%     jb_anova(rmz,{'RT','Exchange','Switch'});
 %     fig_figure(); fig_bare(meeze(rmz),steeze(rmz),'hsv',[],sa.tlegend,0.8);
+
+%     cprintf('*black','%s [t-1]: \n',roi);
+%     rmz = squeeze(z(:,x==-1,:));
+%     fprintf('C : '); jb_ttest(rmz(:,1));
+%     fprintf('L : '); jb_ttest(rmz(:,2));
+%     fprintf('I : '); jb_ttest(rmz(:,3));
+%     fprintf('R : '); jb_ttest(rmz(:,4));
+%     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
+%     rmz = reshape(rmz,[size(rmz,1),2,2]);
+%     jb_anova(rmz,{'RT','Exchange','Switch'});
+
+%     cprintf('*black','%s [t+1]: \n',roi);
+%     rmz = squeeze(z(:,x==+1,:));
+%     fprintf('C : '); jb_ttest(rmz(:,1));
+%     fprintf('L : '); jb_ttest(rmz(:,2));
+%     fprintf('I : '); jb_ttest(rmz(:,3));
+%     fprintf('R : '); jb_ttest(rmz(:,4));
+%     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
+%     rmz = reshape(rmz,[size(rmz,1),2,2]);
+%     jb_anova(rmz,{'RT','Exchange','Switch'});
 end
 
 %% auxiliar

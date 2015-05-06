@@ -25,7 +25,12 @@ function figure_UNI(roi)
     end
     
     % merge figures
-    merger(roi,u_condition)
+    merger(roi,u_condition);
+    
+    % clean
+%     legend('off');
+%     set(gca,'YColor','w');
+%     fig_rmtext();
     
 end
 

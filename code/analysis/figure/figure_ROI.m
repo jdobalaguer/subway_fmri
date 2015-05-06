@@ -14,7 +14,8 @@ function figure_ROI()
     % mask
     p_mask = 'data/mask/';
     p_roi  = 'ROI_gnone/mask/';
-    u_seed = {'dlPFC','PostC','rAmyg','rAngG','rCaud','sParC2','vmPFC'};
+    u_roi  = {'dlPFC','PostC','rAmyg','rAngG','rCaud','sParC2','vmPFC'};
+    u_roi  = {'dlPFC','PostC','rCaud2'};
     u_mask = strcat(p_mask,p_roi,u_roi,'.img');
     l_mask = u_roi;
     n_mask = length(u_mask);
@@ -50,6 +51,7 @@ function figure_ROI()
     jb_parallel_progress(0);
     m = meeze(v,3);
     e = steeze(v,3);
+    assignbase v m e;
     
     % figure vertical
     fig_figure();
@@ -67,25 +69,26 @@ function figure_ROI()
         sa.xlabel = 'regressor';
         sa.ylabel = 'beta value';
         fig_axis(sa);
+        set(gca(),'Visible','off');
     end
     
-    % figure horizontal
-    fig_figure();
-    mm = reshape(m,[n_mask,s_cond]);
-    me = reshape(e,[n_mask,s_cond]);
-    ytick = {-1.0 : 1.0 : +2.0, -1.0 : 1.0 : +3.0, -1.0 : 0.5 : +1.0, -1.5 : 0.5 : +1.0};
-    ylim  = {[-1.2 , +2.7]    , [-1.0 , +3.0]    , [-1.0 , +1.2]    , [-1.5 , +1.3]    };
-    for i_cond2 = 1:s_cond(1)
-        subplot(s_cond(1),1,i_cond2);
-        this_m = squeeze(mm(:,i_cond2,:));
-        this_e = squeeze(me(:,i_cond2,:));
-        fig_bare(this_m,this_e,'hsv',l_mask,l_cond1);
-        sa = struct();
-        sa.title  = l_cond2{i_cond2};
-        sa.ytick  = ytick{i_cond2};
-        sa.ylim   = ylim{i_cond2};
-        sa.xlabel = 'mask';
-        sa.ylabel = 'beta value';
-        fig_axis(sa);
-    end
+%     % figure horizontal
+%     fig_figure();
+%     mm = reshape(m,[n_mask,s_cond]);
+%     me = reshape(e,[n_mask,s_cond]);
+%     ytick = {-1.0 : 1.0 : +2.0, -1.0 : 1.0 : +3.0, -1.0 : 0.5 : +1.0, -1.5 : 0.5 : +1.0};
+%     ylim  = {[-1.2 , +2.7]    , [-1.0 , +3.0]    , [-1.0 , +1.2]    , [-1.5 , +1.3]    };
+%     for i_cond2 = 1:s_cond(1)
+%         subplot(s_cond(1),1,i_cond2);
+%         this_m = squeeze(mm(:,i_cond2,:));
+%         this_e = squeeze(me(:,i_cond2,:));
+%         fig_bare(this_m,this_e,'hsv',l_mask,l_cond1);
+%         sa = struct();
+%         sa.title  = l_cond2{i_cond2};
+%         sa.ytick  = ytick{i_cond2};
+%         sa.ylim   = ylim{i_cond2};
+%         sa.xlabel = 'mask';
+%         sa.ylabel = 'beta value';
+%         fig_axis(sa);
+%     end
 end

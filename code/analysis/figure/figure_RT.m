@@ -21,6 +21,7 @@ function figure_RT()
     
     % convolve
     d    = get_values(data);
+    d.rt = log(d.rt);
     ii = (d.onset==0 | d.subcond==4);
     ii = ii & jb_anyof(d.onset,-3:3);
     d = struct_transpose(struct_filter(struct_transpose(d),ii));
@@ -45,24 +46,47 @@ function figure_RT()
     fig_figure(gcf());
     
     %% axis
-    plot([0,0],[700,1200],'k--');
+%     plot([0,0],[700,1200],'k--');
     sa.xtick   = x;
     sa.tlegend = {'C','L','I','R'};
     sa.ilegend = [h{:}];
     fig_axis(sa);
-    legend('off'); fig_rmtext();
+    legend('off');
+    fig_rmtext();
     
     %% stats
-    rmz = squeeze(z(:,x==+1,:) - z(:,x==-1,:));
-    cprintf('*black','RT : \n');
-    fprintf('C : '); jb_ttest(rmz(:,1));
-    fprintf('L : '); jb_ttest(rmz(:,2));
-    fprintf('I : '); jb_ttest(rmz(:,3));
-    fprintf('R : '); jb_ttest(rmz(:,4));
-    rmz = reshape(rmz,[size(rmz,1),2,2]);
-    jb_anova(rmz,{'RT','Exchange','Switch'});
-%     fig_figure(); fig_bare(meeze(rmz),steeze(rmz),'hsv',[],sa.tlegend,0.8);
+%     rmz = squeeze(z(:,x==+1,:) - z(:,x==-1,:));
+%     cprintf('*black','RT : \n');
+%     fprintf('C : '); jb_ttest(rmz(:,1));
+%     fprintf('L : '); jb_ttest(rmz(:,2));
+%     fprintf('I : '); jb_ttest(rmz(:,3));
+%     fprintf('R : '); jb_ttest(rmz(:,4));
+%     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
+%     srmz = reshape(rmz,[size(rmz,1),2,2]);
+%     jb_anova(srmz,{'RT','Exchange','Switch'});
+%     fig_figure(); m = meeze(rmz); s = steeze(rmz); fig_bare(m,s,'hsv',[],sa.tlegend,0.8);
 
+%     %% stats at t-1
+%     cprintf('*black','RT [t-1]: \n');
+%     rmz = squeeze(z(:,x==-1,:));
+%     fprintf('C : '); jb_ttest(rmz(:,1));
+%     fprintf('L : '); jb_ttest(rmz(:,2));
+%     fprintf('I : '); jb_ttest(rmz(:,3));
+%     fprintf('R : '); jb_ttest(rmz(:,4));
+%     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
+%     rmz = reshape(rmz,[size(rmz,1),2,2]);
+%     jb_anova(rmz,{'RT','Exchange','Switch'});
+% 
+%     % stats at t+1
+%     cprintf('*black','RT [t+1]: \n');
+%     rmz = squeeze(z(:,x==+1,:));
+%     fprintf('C : '); jb_ttest(rmz(:,1));
+%     fprintf('L : '); jb_ttest(rmz(:,2));
+%     fprintf('I : '); jb_ttest(rmz(:,3));
+%     fprintf('R : '); jb_ttest(rmz(:,4));
+%     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
+%     rmz = reshape(rmz,[size(rmz,1),2,2]);
+%     jb_anova(rmz,{'RT','Exchange','Switch'});
 end
 
 %% auxiliar

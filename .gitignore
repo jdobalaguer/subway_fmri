@@ -2,8 +2,7 @@
 *~
 *.mat
 *.nii
-
-.progress
+.*
 
 backups/data/*
 data/*
