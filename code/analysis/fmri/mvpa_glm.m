@@ -11,8 +11,8 @@ function scan = mvpa_glm()
     scan = parameters();
     
     %% SUBJECT
-%     scan.subject.r      = [];
-    scan.subject.u      = 1;
+    scan.subject.r      = [6,10];
+%     scan.subject.u      = 1;
     
     %% GLM
     
@@ -42,6 +42,7 @@ function scan = mvpa_glm()
     scan.glm.function   = 'hrf';
     scan.glm.hrf.ord    = [0,0];
     scan.glm.marge      = 0;
+    scan.glm.name       = 'mvpa';
     scan.glm.pooling    = true;
     
     %% MVPA

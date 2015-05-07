@@ -58,7 +58,7 @@ function launcher(roi,condition)
     end
     ii = ii_line & ii_forw & ii_bool & ii_condition;
     scan.mvpa.extension  = 'img';            % GLM files
-    scan.mvpa.glm        = 'normalisation4';
+    scan.mvpa.glm        = 'smooth4'; %'normalisation4';
     scan.mvpa.image      = {'Trial'};
     scan.mvpa.mask       = sprintf('ROI_gnone/mask/%s.img',roi);
     scan.mvpa.mni        = false;

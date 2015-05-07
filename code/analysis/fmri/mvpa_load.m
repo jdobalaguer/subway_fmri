@@ -11,11 +11,12 @@ function scan = mvpa_load(scan)
     
     %% MVPA SETTINGS
     scan.mvpa.extension  = 'img';            % GLM files
-    scan.mvpa.glm        = 'normalisation4'; %'realignment';
-    scan.mvpa.image      = 'Trial'; %'Cue';
+    scan.mvpa.glm        = 'smooth4'; %'realignment';
+    scan.mvpa.image      = {'Trial'}; %'Cue';
     scan.mvpa.mask       = ''; %'voxs4/Cue(Easy)_RightAngularGyrus.img';
     scan.mvpa.mni        = false;
     scan.mvpa.name       = 'load';
+    scan.mvpa.verbose    = true;
 
     %% SANITY CHECK
     scan = scan_initialize(scan);

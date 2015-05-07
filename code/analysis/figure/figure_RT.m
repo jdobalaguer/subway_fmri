@@ -21,7 +21,6 @@ function figure_RT()
     
     % convolve
     d    = get_values(data);
-    d.rt = log(d.rt);
     ii = (d.onset==0 | d.subcond==4);
     ii = ii & jb_anyof(d.onset,-3:3);
     d = struct_transpose(struct_filter(struct_transpose(d),ii));
@@ -39,8 +38,20 @@ function figure_RT()
     l = {'C','L','I','R'};
     h = [];
     for i = 1:size(m,2)
-        h{i} = fig_errplot(x,m(:,i)',e(:,i)',c(i,:));
-        h{i} = h{i}.errbar;
+%         h{i} = fig_spline(x,m(:,i)',e(:,i)',c(i,:));
+%         h{i} = h{i}.line;
+        
+        h{i} = fig_pipplot(x,m(:,i)',e(:,i)',c(i,:));
+        h{i} = h{i}.line;
+        
+        h{i} = fig_steplot(x,m(:,i)',e(:,i)',c(i,:));
+        h{i} = h{i}.line;
+        
+        plot(x,m(:,i)','color',c(i,:),'linestyle','none','marker','.','markersize',20);
+
+%         h{i} = fig_errplot(x,m(:,i)',e(:,i)',c(i,:));
+%         set(h{i}.errbar,'linestyle','none');
+%         h{i} = h{i}.errbar;
     end
     fig_axis(struct('ilegend',{[h{:}]},'tlegend',{l}));
     fig_figure(gcf());
@@ -48,9 +59,11 @@ function figure_RT()
     %% axis
 %     plot([0,0],[700,1200],'k--');
     sa.xtick   = x;
+    sa.xlim    = [-4,+4];
     sa.tlegend = {'C','L','I','R'};
     sa.ilegend = [h{:}];
     fig_axis(sa);
+    plot([0,0],get(gca(),'ylim'),'k--');
     legend('off');
     fig_rmtext();
     

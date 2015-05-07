@@ -27,12 +27,12 @@ function d = figure_subUNI(roi)
         data = struct_filter(data,ii_subject);
 
         % add beta
-        load('data/mvpa/glm/normalisation4/image_Trial_1_2_3_4_5_7_8_9_11_12_13_14_15_16_17_18_19_20_21_22.mat');
+        load('data/mvpa/glm/smooth4/image_Trial_1_2_3_4_5_7_8_9_11_12_13_14_15_16_17_18_19_20_21_22.mat');
         beta = scan.mvpa.variable.beta;
         beta = cell2mat(beta')';
         mask = logical(scan_nifti_load(sprintf('data/mask/ROI_gnone/mask/%s.img',roi)));
         data.beta = nanmean(beta(:,mask),2);
-        save(f,'data');
+        mkdirp(fileparts(f)); save(f,'data');
     end
     
     % filter data
@@ -51,6 +51,7 @@ function d = figure_subUNI(roi)
     % get values
     x    = unique(d.onset);
     z    = getm_mean(d.beta,d.subject,d.onset,d.condition);
+%     z    = z - repmat(z(:,x==0,4),[1,size(z,2),size(z,3)]);
     m    = meeze(z,1);
     e    = steeze(z,1);
     
@@ -61,55 +62,73 @@ function d = figure_subUNI(roi)
     l = {'C','L','I','R'};
     h = [];
     for i = 1:size(m,2)
-        h{i} = fig_errplot(x,m(:,i)',e(:,i)',c(i,:));
-        h{i} = h{i}.errbar;
+%         h{i} = fig_spline(x,m(:,i)',e(:,i)',c(i,:));
+%         h{i} = h{i}.line;
+        
+        h{i} = fig_pipplot(x,m(:,i)',e(:,i)',c(i,:));
+        h{i} = h{i}.line;
+        
+        h{i} = fig_steplot(x,m(:,i)',e(:,i)',c(i,:));
+        h{i} = h{i}.line;
+
+        plot(x,m(:,i)','color',c(i,:),'linestyle','none','marker','.','markersize',20);
+        
+%         h{i} = fig_errplot(x,m(:,i)',e(:,i)',c(i,:));
+%         set(h{i}.errbar,'linestyle','none');
+%         h{i} = h{i}.errbar;
     end
     fig_axis(struct('ilegend',{[h{:}]},'tlegend',{l}));
     fig_figure(gcf());
     
     %% axis
+    ylim = get(gca(),'ylim');
     sa.tlegend = {'C','L','I','R'};
     sa.ilegend = [h{:}];
     sa.title   = roi;
-%     sa.ytick   = -1:+2;
-%     sa.ylim    = [-1.5,+2.5];
+    sa.ytick   = [];
+    sa.xlim    = [-4,+4];
     fig_axis(sa);
-    plot([0,0],get(gca(),'ylim'),'k--');
+    plot([0,0],min(get(gca(),'ylim'),[0,inf]),'k--');
+    plot(get(gca(),'xlim'),[0,0],'k--');
     legend('off');
+%     set(gca,'XColor','w');
     set(gca,'YColor','w');
+%     set(gca,'Visible','off');
     fig_rmtext();
 
     %% stats
-%     cprintf('*black','%s [t+1]-[t-1]: \n',roi);
-%     rmz = squeeze(z(:,x==+1,:) - z(:,x==-1,:));
+    cprintf('*black','%s [t+1]-[t-1]: \n',roi);
+    rmz = squeeze(z(:,x==+1,:) - z(:,x==-1,:));
 %     fprintf('C : '); jb_ttest(rmz(:,1));
 %     fprintf('L : '); jb_ttest(rmz(:,2));
 %     fprintf('I : '); jb_ttest(rmz(:,3));
 %     fprintf('R : '); jb_ttest(rmz(:,4));
 %     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
-%     rmz = reshape(rmz,[size(rmz,1),2,2]);
-%     jb_anova(rmz,{'RT','Exchange','Switch'});
+    srmz = reshape(rmz,[size(rmz,1),2,2]);
+    jb_anova(srmz,{'RT','Exchange','Switch'});
 %     fig_figure(); fig_bare(meeze(rmz),steeze(rmz),'hsv',[],sa.tlegend,0.8);
 
-%     cprintf('*black','%s [t-1]: \n',roi);
-%     rmz = squeeze(z(:,x==-1,:));
+    cprintf('*black','%s [t-1]: \n',roi);
+    rmz = squeeze(z(:,x==-1,:));
 %     fprintf('C : '); jb_ttest(rmz(:,1));
 %     fprintf('L : '); jb_ttest(rmz(:,2));
 %     fprintf('I : '); jb_ttest(rmz(:,3));
 %     fprintf('R : '); jb_ttest(rmz(:,4));
 %     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
-%     rmz = reshape(rmz,[size(rmz,1),2,2]);
-%     jb_anova(rmz,{'RT','Exchange','Switch'});
+    srmz = reshape(rmz,[size(rmz,1),2,2]);
+    jb_anova(srmz,{'RT','Exchange','Switch'});
+%     fig_figure(); fig_bare(meeze(rmz),steeze(rmz),'hsv',[],sa.tlegend,0.8);
 
-%     cprintf('*black','%s [t+1]: \n',roi);
-%     rmz = squeeze(z(:,x==+1,:));
+    cprintf('*black','%s [t+1]: \n',roi);
+    rmz = squeeze(z(:,x==+1,:));
 %     fprintf('C : '); jb_ttest(rmz(:,1));
 %     fprintf('L : '); jb_ttest(rmz(:,2));
 %     fprintf('I : '); jb_ttest(rmz(:,3));
 %     fprintf('R : '); jb_ttest(rmz(:,4));
 %     fprintf('C>LIR : '); jb_ttest(rmz(:,1) - mean(rmz(:,2:4),2));
-%     rmz = reshape(rmz,[size(rmz,1),2,2]);
-%     jb_anova(rmz,{'RT','Exchange','Switch'});
+    srmz = reshape(rmz,[size(rmz,1),2,2]);
+    jb_anova(srmz,{'RT','Exchange','Switch'});
+%     fig_figure(); fig_bare(meeze(rmz),steeze(rmz),'hsv',[],sa.tlegend,0.8);
 end
 
 %% auxiliar
